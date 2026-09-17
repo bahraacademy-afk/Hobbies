@@ -1918,6 +1918,172 @@ const IG_LAYERS=[{"hex": "#009882", "ar": "النمو", "en": "Growth", "img": "
   addEventListener("error",hide,true);
 })();
 
+
+/* ---------- reports ---------- */
+const MONTHS_AR=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+const MONTHS_EN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+async function paneReports(){
+  $("#aPane").innerHTML=`<div style="text-align:center;padding:60px;color:var(--muted)"><span class="spin" style="border-color:var(--line);border-top-color:var(--blue-600)"></span></div>`;
+  try{regs=await API.listRegs();}catch(e){regs=lget("bla_regs",[]).slice().reverse();}
+  const now=new Date(), list=activePrograms();
+  const total=regs.length;
+  const thisMonth=regs.filter(r=>{const d=new Date(r.createdAt);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()}).length;
+  const pending=regs.filter(r=>!r.status||r.status==="new"||r.status==="wait").length;
+  const accepted=regs.filter(r=>r.status==="ok").length;
+  const waiting=regs.filter(r=>r.status==="waitlist").length;
+
+  const byProg=list.map(p=>{
+    const n=regs.filter(r=>r.programId===p.id).length;
+    const seats=+p.seats||0;
+    return {p,n,seats,pct:seats?Math.min(100,Math.round(n/seats*100)):0};
+  }).sort((a,b)=>b.n-a.n);
+
+  const dep={};regs.forEach(r=>{const d=(r.dept||"").trim()||(EN()?"Unspecified":"غير محدد");dep[d]=(dep[d]||0)+1});
+  const deps=Object.entries(dep).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const depMax=deps.length?deps[0][1]:1;
+
+  const tr=[];
+  for(let i=5;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+    const n=regs.filter(r=>{const x=new Date(r.createdAt);return x.getMonth()===d.getMonth()&&x.getFullYear()===d.getFullYear()}).length;
+    tr.push({label:(EN()?MONTHS_EN:MONTHS_AR)[d.getMonth()],n});}
+  const trMax=Math.max(1,...tr.map(t=>t.n));
+
+  const totalSeats=list.reduce((s,p)=>s+(+p.seats||0),0);
+  const fill=totalSeats?Math.round(total/totalSeats*100):0;
+
+  $("#aPane").innerHTML=`
+   <div class="kpis">
+     <div class="kpi"><div class="v">${total}</div><div class="k">${EN()?"Total requests":"إجمالي طلبات التسجيل"}</div></div>
+     <div class="kpi gold"><div class="v">${pending}</div><div class="k">${EN()?"Awaiting review":"بانتظار المراجعة"}</div></div>
+     <div class="kpi green"><div class="v">${accepted}</div><div class="k">${EN()?"Accepted":"طلبات مقبولة"}</div></div>
+     <div class="kpi red"><div class="v">${thisMonth}</div><div class="k">${EN()?"This month":"طلبات هذا الشهر"}</div></div>
+   </div>
+   ${waiting?`<div class="wl-note" style="margin-bottom:22px">
+     <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5v5.5M12 16.4h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+     <span>${EN()?`${waiting} request(s) are on a waiting list for fully booked programs.`
+       :`لديك ${waiting} طلب في قائمة انتظار برامج مكتملة — راجعها لفتح شُعبة إضافية أو زيادة المقاعد.`}</span></div>`:""}
+
+   <div class="ebox" style="margin-bottom:22px"><div class="eh"><b>${EN()?"Requests over the last 6 months":"الطلبات خلال آخر 6 أشهر"}</b>
+     <span style="font-size:.75rem;color:var(--muted)">${EN()?"Overall seat fill":"نسبة إشغال المقاعد الإجمالية"}: <b style="color:var(--blue-700)">${fill}%</b></span></div>
+     <div class="ec"><div class="trend">${tr.map(t=>`<div class="col">
+       <div class="bx" style="height:${Math.max(3,Math.round(t.n/trMax*100))}%"><span>${t.n}</span></div>
+       <div class="cl">${esc(t.label)}</div></div>`).join("")}</div></div></div>
+
+   <div class="ebox" style="margin-bottom:22px"><div class="eh"><b>${EN()?"Registrations per program":"التسجيل في كل برنامج"}</b>
+     <button class="chip" id="expProg">${EN()?"Export CSV":"تصدير CSV"}</button></div>
+     <div class="ec" style="padding:0">
+     <div class="tblwrap" style="border:0"><table class="at"><thead><tr>
+       <th>${EN()?"Code":"الرمز"}</th><th>${EN()?"Program":"البرنامج"}</th><th>${EN()?"Registered":"المسجّلون"}</th>
+       <th>${EN()?"Seats":"المقاعد"}</th><th style="width:200px">${EN()?"Fill":"نسبة الإشغال"}</th></tr></thead><tbody>
+       ${byProg.length?byProg.map(x=>`<tr>
+         <td dir="ltr">${esc(x.p.id)}</td><td>${esc(pick(x.p,"ar","en"))}</td>
+         <td style="font-weight:600">${x.n}</td><td dir="ltr">${x.seats||"—"}</td>
+         <td><div style="display:flex;align-items:center;gap:10px">
+           <div class="rbar" style="flex:1"><i class="${x.pct>=100?"full":x.pct>=75?"warn":""}" style="width:${x.pct}%"></i></div>
+           <span style="font-size:.75rem;color:var(--muted);min-width:34px">${x.pct}%</span></div></td></tr>`).join("")
+        :`<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:30px">${EN()?"No programs.":"لا توجد برامج."}</td></tr>`}
+     </tbody></table></div></div></div>
+
+   <div class="ebox" style="margin-bottom:22px"><div class="eh"><b>${EN()?"Top departments":"الأقسام الأكثر تسجيلاً"}</b></div>
+     <div class="ec">${deps.length?`<div class="hbars">${deps.map(d=>`<div class="hbar">
+       <span class="lb">${esc(d[0])}</span>
+       <div class="rbar"><i style="width:${Math.round(d[1]/depMax*100)}%"></i></div>
+       <span class="vl">${d[1]}</span></div>`).join("")}</div>`
+       :`<div style="color:var(--muted);font-size:.875rem">${EN()?"No data yet.":"لا توجد بيانات بعد."}</div>`}</div></div>
+
+   <div class="ebox"><div class="eh"><b>${EN()?"Backup & export":"النسخ الاحتياطي والتصدير"}</b></div>
+     <div class="ec" style="display:flex;gap:10px;flex-wrap:wrap">
+       <button class="chip" id="expRegs">${EN()?"All requests (CSV)":"كل الطلبات (CSV)"}</button>
+       <button class="chip" id="expAll2">${EN()?"Full backup (JSON)":"نسخة احتياطية كاملة (JSON)"}</button>
+       <button class="chip" id="recount">${EN()?"Recalculate taken seats":"تحديث المقاعد المشغولة من الطلبات"}</button>
+     </div>
+     <p style="font-size:.75rem;color:var(--muted);margin:12px 0 0">${EN()
+       ?"Recalculating sets each program's taken seats to its number of non-waitlist requests."
+       :"إعادة الحساب تضبط «المقاعد المشغولة» لكل برنامج على عدد طلباته الفعلية (بدون قائمة الانتظار)."}</p></div>`;
+  $("#expRegs").onclick=csv;
+  $("#recount").onclick=async()=>{
+    const b=$("#recount");b.disabled=true;b.innerHTML='<span class="spin" style="border-color:var(--line);border-top-color:var(--blue-600)"></span>';
+    let n=0;
+    for(const p of P){
+      const c=regs.filter(r=>r.programId===p.id&&r.status!=="waitlist").length;
+      if((+p.taken||0)!==c){p.taken=c;try{await API.saveProgram(p);n++;}catch(_){}}
+    }
+    b.disabled=false;b.textContent=EN()?"Recalculate taken seats":"تحديث المقاعد المشغولة من الطلبات";
+    renderSite();paneReports();
+    toast(EN()?(n+" program(s) updated."):("تم تحديث "+n+" برنامج."));
+  };
+  $("#expAll2").onclick=backupJSON;
+  $("#expProg").onclick=()=>{
+    const head=[EN()?"code":"الرمز",EN()?"program":"البرنامج",EN()?"registered":"المسجلون",EN()?"seats":"المقاعد",EN()?"fill%":"نسبة الإشغال"];
+    dl(toCSV(head,byProg.map(x=>[x.p.id,pick(x.p,"ar","en"),x.n,x.seats,x.pct+"%"])),"bla-programs-report.csv","text/csv");
+  };
+}
+function toCSV(head,rows){
+  const q=v=>`"${String(v==null?"":v).replace(/"/g,'""')}"`;
+  return "\uFEFF"+[head.map(q).join(",")].concat(rows.map(r=>r.map(q).join(","))).join("\r\n");
+}
+async function dl(data,fn,type){
+  try{const d=(window.claude&&claude.use)?await claude.use("downloads").catch(()=>null):null;
+    if(d){await d.save({filename:fn,data});toast(EN()?"Exported.":"تم التصدير.");return;}}catch(_){}
+  const u=URL.createObjectURL(new Blob([data],{type:type||"text/plain"}));
+  const a=document.createElement("a");a.href=u;a.download=fn;a.click();URL.revokeObjectURL(u);
+  toast(EN()?"Exported.":"تم التصدير.");
+}
+function backupJSON(){
+  dl(JSON.stringify({content:C,programs:P,registrations:regs,exportedAt:new Date().toISOString()},null,2),
+     "bla-backup-"+new Date().toISOString().slice(0,10)+".json","application/json");
+}
+
+/* ---------- inbox & media ---------- */
+async function paneInbox(){
+  $("#aPane").innerHTML=`<div class="editor">
+    <div class="ebox"><div class="eh"><b>${EN()?"Contact messages":"رسائل تواصل معنا"}</b>
+      <span class="pill" id="msgCount">…</span></div><div class="ec" id="msgBox">
+      <div style="text-align:center;padding:26px"><span class="spin" style="border-color:var(--line);border-top-color:var(--blue-600)"></span></div></div></div>
+    <div class="ebox"><div class="eh"><b>${EN()?"Stored program images":"صور البرامج المخزّنة"}</b>
+      <span style="font-size:.75rem;color:var(--muted)" id="mediaNote"></span></div>
+      <div class="ec" id="mediaBox"><div style="text-align:center;padding:26px"><span class="spin" style="border-color:var(--line);border-top-color:var(--blue-600)"></span></div></div></div>
+  </div>`;
+  let msgs=[];
+  try{msgs=await API.listMessages();}catch(e){msgs=[];}
+  $("#msgCount").textContent=msgs.length;
+  $("#msgBox").innerHTML=msgs.length?msgs.map(m=>`<div class="msg">
+     <div class="mh"><b>${esc(m.name||"—")}</b><span class="mt">${esc((m.createdAt||"").slice(0,10))} · ${esc(m.type||"")}</span></div>
+     <p>${esc(m.msg||"")}</p>
+     <div class="mc">${m.email?`<a href="mailto:${esc(m.email)}" dir="ltr">${esc(m.email)}</a>`:""}
+       ${m.phone?`<span dir="ltr">${esc(m.phone)}</span>`:""}
+       ${m.id!=null?`<button class="del" data-delmsg="${esc(m.id)}" style="margin-inline-start:auto">${EN()?"Delete":"حذف"}</button>`:""}</div></div>`).join("")
+    :`<div style="color:var(--muted);font-size:.875rem;text-align:center;padding:20px">${EN()?"No messages yet.":"لا توجد رسائل بعد."}</div>`;
+  $("#msgBox").addEventListener("click",async e=>{
+    const b=e.target.closest("[data-delmsg]");if(!b)return;
+    if(!confirm(EN()?"Delete this message?":"حذف هذه الرسالة؟"))return;
+    try{await API.deleteMessage(b.dataset.delmsg);b.closest(".msg").remove();
+      $("#msgCount").textContent=Math.max(0,+$("#msgCount").textContent-1);}catch(_){toast(EN()?"Delete failed.":"تعذّر الحذف.")}
+  });
+  if(!API.canManageImages()){
+    $("#mediaBox").innerHTML=`<div style="color:var(--muted);font-size:.875rem">${EN()?"Image management is available when the site is connected to Supabase.":"إدارة الصور متاحة عند ربط الموقع بـ Supabase."}</div>`;
+    return;
+  }
+  let imgs=[];
+  try{imgs=await API.listImages();}catch(e){
+    $("#mediaBox").innerHTML=`<div style="color:var(--red-600);font-size:.875rem">${EN()?"Could not load images.":"تعذّر تحميل الصور."}</div>`;return;}
+  const used=new Set(P.map(p=>p.imgUrl).filter(Boolean));
+  const kb=n=>n>1048576?(n/1048576).toFixed(1)+" MB":Math.round(n/1024)+" KB";
+  $("#mediaNote").textContent=(EN()?"Total: ":"الإجمالي: ")+imgs.length+(EN()?" images":" صورة");
+  $("#mediaBox").innerHTML=imgs.length?`<div class="media">${imgs.map(f=>`<div class="mtile" data-tile="${esc(f.name)}">
+      <img src="${esc(f.url)}" alt="" loading="lazy">
+      <div class="mf"><span>${kb(f.size)}${used.has(f.url)?` · <b style="color:var(--green)">${EN()?"in use":"مستخدمة"}</b>`:""}</span>
+        <button class="del" data-delimg="${esc(f.name)}">${EN()?"Delete":"حذف"}</button></div></div>`).join("")}</div>`
+    :`<div style="color:var(--muted);font-size:.875rem">${EN()?"No images uploaded yet.":"لا توجد صور مرفوعة بعد."}</div>`;
+  $("#mediaBox").addEventListener("click",async e=>{
+    const b=e.target.closest("[data-delimg]");if(!b)return;
+    const name=b.dataset.delimg;
+    if(!confirm(EN()?"Delete this image permanently?":"حذف هذه الصورة نهائياً؟"))return;
+    try{await API.deleteImage(name);$("#mediaBox").querySelector(`[data-tile="${CSS.escape(name)}"]`).remove();
+      toast(EN()?"Image deleted.":"تم حذف الصورة.");}catch(_){toast(EN()?"Delete failed.":"تعذّر الحذف.")}
+  });
+}
+
 /* =========================================================
    10) init
    ========================================================= */
