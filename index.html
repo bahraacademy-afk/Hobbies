@@ -482,6 +482,80 @@ table.at tbody tr:hover td{background:var(--blue-050)}
  animation:sp .7s linear infinite;display:inline-block}
 @keyframes sp{to{transform:rotate(360deg)}}
 
+/* ===== admin dashboard ===== */
+.whobar{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:var(--r);
+ background:var(--panel);padding:10px 16px;margin-bottom:18px}
+.whobar .wav{flex:none;width:34px;height:34px;border-radius:50%;background:var(--blue-800);color:#fff;
+ display:grid;place-items:center;font-size:.75rem;font-weight:700;letter-spacing:.02em}
+.whobar .wtx{flex:1;min-width:0;line-height:1.35}
+.whobar .wtx b{display:block;font-size:.8125rem;font-weight:600;color:var(--ink);
+ overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.whobar .wtx span{font-size:.75rem;color:var(--muted)}
+.whobar .chip{flex:none;color:var(--red-600)}
+.whobar .chip:hover{border-color:var(--red-600);color:var(--red-600)}
+.dash-hi{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
+ border:1px solid var(--line);border-inline-start:4px solid var(--blue-700);border-radius:var(--r);
+ background:var(--card);padding:20px 24px;margin-bottom:22px}
+.dash-hi h3{margin:0 0 3px;font-size:1.125rem;font-weight:600}
+.dash-hi p{margin:0;font-size:.875rem;color:var(--muted)}
+.dash-date{font-size:.8125rem;color:var(--muted);border:1px solid var(--line);
+ padding:6px 14px;border-radius:3px;background:var(--panel)}
+.kpi.act{display:block;width:100%;text-align:start;cursor:pointer;font:inherit}
+.kpi.act:hover{border-color:var(--blue-600);transform:translateY(-2px);
+ box-shadow:0 18px 34px -26px rgba(11,35,80,.55)}
+.kpi.act{transition:.2s var(--ease)}
+.dash-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:22px}
+@media(max-width:900px){.dash-2{grid-template-columns:1fr}}
+.dash-none{color:var(--muted);font-size:.875rem;text-align:center;padding:28px 12px}
+.qacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px}
+.qact{text-align:start;border:1px solid var(--line);border-radius:var(--r);background:var(--panel);
+ padding:15px 17px;transition:.2s var(--ease)}
+.qact:hover{border-color:var(--blue-600);background:var(--blue-050);transform:translateY(-2px)}
+.qact b{display:block;font-size:.9375rem;font-weight:600;color:var(--blue-800);margin-bottom:3px}
+.qact span{font-size:.8125rem;color:var(--muted)}
+
+/* ===== announcements ===== */
+.annbar{border-bottom:1px solid var(--line);background:var(--blue-050);color:var(--blue-800)}
+.annbar.warn{background:rgba(201,162,39,.14);color:#7a5f0c;border-color:rgba(201,162,39,.4)}
+.annbar.urgent{background:rgba(200,16,46,.09);color:var(--red-700);border-color:rgba(200,16,46,.3)}
+.annbar.success{background:rgba(15,138,106,.11);color:#0a6e55;border-color:rgba(15,138,106,.32)}
+.annbar .wrap{display:flex;align-items:center;gap:12px;padding-block:11px;font-size:.875rem}
+.annbar .ic{flex:none;display:grid;place-items:center}
+.annbar .tx{flex:1;min-width:0}
+.annbar .tx b{font-weight:600}
+.annbar .tx span{opacity:.85}
+.annbar a.go{font-weight:600;text-decoration:underline;white-space:nowrap}
+.annbar .x{flex:none;width:26px;height:26px;display:grid;place-items:center;border:0;
+ background:transparent;color:inherit;opacity:.6;border-radius:3px;transition:.18s}
+.annbar .x:hover{opacity:1;background:rgba(0,0,0,.07)}
+@media(max-width:620px){.annbar .wrap{font-size:.8125rem;gap:9px}.annbar .tx span{display:none}}
+.anngrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:980px){.anngrid{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.anngrid{grid-template-columns:1fr}}
+.anncard{border:1px solid var(--line);border-inline-start:3px solid var(--blue-700);border-radius:var(--r);
+ background:var(--card);padding:22px;display:flex;flex-direction:column;transition:.26s var(--ease)}
+.anncard:hover{transform:translateY(-4px);box-shadow:0 22px 40px -28px rgba(11,35,80,.5)}
+.anncard.warn{border-inline-start-color:var(--gold)}
+.anncard.urgent{border-inline-start-color:var(--red-600)}
+.anncard.success{border-inline-start-color:var(--green)}
+.anncard .at{display:flex;align-items:center;gap:9px;margin-bottom:9px;flex-wrap:wrap}
+.anncard h3{margin:0 0 9px;font-size:1rem;font-weight:600;line-height:1.55}
+.anncard p{margin:0 0 16px;font-size:.875rem;color:var(--muted);flex:1;white-space:pre-line}
+.anncard .af{display:flex;align-items:center;justify-content:space-between;gap:10px;
+ border-top:1px solid var(--line-2);padding-top:13px;font-size:.8125rem}
+.anncard .af a{color:var(--blue-700);font-weight:600}
+.badge.info{background:rgba(36,87,180,.13);color:var(--blue-700)}
+.badge.urgent{background:rgba(200,16,46,.12);color:var(--red-600)}
+.badge.pin{background:rgba(11,35,80,.1);color:var(--blue-800)}
+
+/* ===== admin users ===== */
+.urow-role{display:inline-flex;gap:4px}
+.urole{border:1px solid var(--line);background:var(--card);color:var(--ink-2);padding:4px 11px;
+ border-radius:3px;font-size:.75rem;font-weight:600;transition:.16s}
+.urole:hover{border-color:var(--blue-600);color:var(--blue-600)}
+.urole.on{background:var(--blue-800);color:#fff;border-color:var(--blue-800)}
+.you-tag{font-size:.6875rem;color:var(--green);font-weight:700}
+
 /* ===== brand mark (Ignite) + preloader ===== */
 .pre{position:fixed;inset:0;z-index:500;background:var(--preBg);display:flex;flex-direction:column;
  align-items:center;justify-content:center;gap:22px}
@@ -795,6 +869,7 @@ window.BLA_CONFIG = {
     <button class="hbtn" id="menuBtn" aria-label="القائمة"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3.5 6.5h17M3.5 12h17M3.5 17.5h17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
   </div>
 </div></header>
+<div id="annBar"></div>
 </div>
 
 <main id="main">
@@ -816,6 +891,7 @@ window.BLA_CONFIG = {
     </div>
   </div>
   <div class="figures"><div class="wrap stg reveal" id="figs"></div></div>
+  <section class="sec alt" id="annHome" style="display:none"></section>
   <section class="sec"><div class="wrap">
     <div class="shead reveal"><div><div class="rule"></div>
       <h2><span class="ar">البرامج القادمة</span><span class="en">Upcoming programs</span></h2>
@@ -1534,6 +1610,7 @@ function setLang(l){
   document.documentElement.lang=l;document.documentElement.dir=l==="en"?"ltr":"rtl";
   $("#langLbl").textContent=l==="en"?"ع":"EN";
   renderSite();$("#luDate").textContent=fmtDate(new Date());
+  annBarRender();annHomeRender();
   if($("#v-leap")&&$("#v-leap").style.display==="block"&&$("#leapBody"))lrender();
   if($("#adminArea").children.length&&authed)admin();
 }
@@ -1624,6 +1701,17 @@ const empMap=e=>({empNo:String(e.emp_no),nameAr:e.name_ar,nameEn:e.name_en,email
 const certMap=c=>({certNo:c.cert_no,verifyCode:c.verify_code,empNo:String(c.emp_no),name:c.name,
   programId:c.program_id,programAr:c.program_ar,programEn:c.program_en,hours:c.hours,
   issuedAt:c.issued_at,status:c.status});
+const annMap=a=>({id:a.id,titleAr:a.title_ar,titleEn:a.title_en,bodyAr:a.body_ar,bodyEn:a.body_en,
+  kind:a.kind||"info",pinned:!!a.pinned,banner:!!a.banner,linkUrl:a.link_url,linkAr:a.link_ar,
+  linkEn:a.link_en,startsAt:a.starts_at,endsAt:a.ends_at,status:a.status||"active",
+  ord:a.ord||0,createdAt:a.created_at});
+const annRow=a=>({id:a.id,title_ar:a.titleAr,title_en:a.titleEn||null,body_ar:a.bodyAr||null,
+  body_en:a.bodyEn||null,kind:a.kind||"info",pinned:!!a.pinned,banner:!!a.banner,
+  link_url:a.linkUrl||null,link_ar:a.linkAr||null,link_en:a.linkEn||null,
+  starts_at:a.startsAt||null,ends_at:a.endsAt||null,status:a.status||"active",
+  ord:+a.ord||0,updated_at:new Date().toISOString()});
+const admMap=u=>({email:String(u.email||"").toLowerCase(),name:u.name,role:u.role||"editor",
+  status:u.status||"active",note:u.note,createdAt:u.created_at,lastSeen:u.last_seen});
 const regMap=r=>({ref:r.ref,name:r.name,empNo:String(r.emp_no),dept:r.dept,phone:r.phone,email:r.email,
   programId:r.program_id,programAr:r.program_ar,programEn:r.program_en,status:r.status,
   createdAt:r.created_at,completedAt:r.completed_at,certNo:r.cert_no});
@@ -1814,6 +1902,69 @@ const API={
     if(MODE==="gas")return gas("deleteEmployee",{no});
     if(MODE==="artifact"){const db=await DB();if(db)return db.collection("employees").doc(String(no)).delete();}
   },
+  /* ---- الإعلانات ---- */
+  async listAnnouncements(){
+    if(MODE==="supabase"){const r=await sb("announcements?select=*&order=ord.asc,created_at.desc");
+      return (r||[]).map(annMap);}
+    if(MODE==="gas")return (await gas("listAnnouncements"))||[];
+    if(MODE==="artifact"){const db=await DB();if(db){const s=await db.collection("announcements").get();
+      return s.docs.map(d=>d.data());}}
+    return lget("bla_ann",[]);
+  },
+  async saveAnnouncement(a){
+    const all=lget("bla_ann",[]).filter(x=>x.id!==a.id);all.push(a);lset("bla_ann",all);
+    if(MODE==="supabase")return sb("announcements",{method:"POST",
+      headers:{Prefer:"resolution=merge-duplicates,return=minimal"},body:JSON.stringify([annRow(a)])});
+    if(MODE==="gas")return gas("saveAnnouncement",{ann:a});
+    if(MODE==="artifact"){const db=await DB();if(db)return db.collection("announcements").doc(a.id).set(a);}
+  },
+  async deleteAnnouncement(id){
+    lset("bla_ann",lget("bla_ann",[]).filter(x=>x.id!==id));
+    if(MODE==="supabase")return sb("announcements?id=eq."+encodeURIComponent(id),{method:"DELETE"});
+    if(MODE==="gas")return gas("deleteAnnouncement",{id});
+    if(MODE==="artifact"){const db=await DB();if(db)return db.collection("announcements").doc(id).delete();}
+  },
+  /* ---- مستخدمو الإدارة ---- */
+  async listAdmins(){
+    if(MODE==="supabase"){const r=await sb("admins?select=*&order=created_at.asc");return (r||[]).map(admMap);}
+    if(MODE==="gas")return (await gas("listAdmins"))||[];
+    if(MODE==="artifact"){const db=await DB();if(db){const s=await db.collection("admins").get();
+      return s.docs.map(d=>d.data());}}
+    return lget("bla_admins",[]);
+  },
+  async saveAdmin(u){
+    u=Object.assign({},u,{email:String(u.email||"").toLowerCase()});
+    const all=lget("bla_admins",[]).filter(x=>x.email!==u.email);all.push(u);lset("bla_admins",all);
+    if(MODE==="supabase")return sb("admins",{method:"POST",
+      headers:{Prefer:"resolution=merge-duplicates,return=minimal"},
+      body:JSON.stringify([{email:u.email,name:u.name||null,role:u.role||"editor",
+        status:u.status||"active",note:u.note||null}])});
+    if(MODE==="gas")return gas("saveAdmin",{user:u});
+    if(MODE==="artifact"){const db=await DB();if(db)return db.collection("admins").doc(u.email).set(u);}
+  },
+  async deleteAdmin(email){
+    email=String(email||"").toLowerCase();
+    lset("bla_admins",lget("bla_admins",[]).filter(x=>x.email!==email));
+    if(MODE==="supabase")return sb("admins?email=eq."+encodeURIComponent(email),{method:"DELETE"});
+    if(MODE==="gas")return gas("deleteAdmin",{email});
+    if(MODE==="artifact"){const db=await DB();if(db)return db.collection("admins").doc(email).delete();}
+  },
+  /* ينشئ حساب دخول فعلي في Supabase Auth ثم يضيفه لجدول الصلاحيات */
+  async createAuthUser(email,password){
+    if(MODE!=="supabase")return {ok:true,note:"local"};
+    const r=await fetch(SB_BASE+"/auth/v1/signup",{method:"POST",
+      headers:{apikey:CFG.SUPABASE_KEY,"Content-Type":"application/json"},
+      body:JSON.stringify({email,password})});
+    let j={};try{j=await r.json();}catch(_){}
+    if(!r.ok)throw new Error(j.msg||j.error_description||j.error||("signup "+r.status));
+    return {ok:true,needsConfirm:!(j.access_token||(j.user&&j.user.confirmed_at))};
+  },
+  async touchAdmin(email){
+    if(MODE!=="supabase"||!email)return;
+    try{await sb("admins?email=eq."+encodeURIComponent(String(email).toLowerCase()),
+      {method:"PATCH",headers:{Prefer:"return=minimal"},
+       body:JSON.stringify({last_seen:new Date().toISOString()})});}catch(_){}
+  },
   /* ---- الشهادات ---- */
   async addCertificate(c){
     if(MODE==="supabase")return sb("certificates",{method:"POST",headers:{Prefer:"return=minimal"},
@@ -1914,6 +2065,7 @@ async function boot(){
            if(d.programs)P=d.programs; }
   }catch(e){ console.warn("load failed",e); }
   renderSite();
+  annLoad();
   if(MODE==="artifact"){
     const db=await DB();if(!db)return;
     db.doc("content/site").onSnapshot(s=>{if(s.exists&&s.data()&&s.data().data){C=Object.assign(clone(DEF_CONTENT),s.data().data);renderSite();}},()=>{});
@@ -2142,11 +2294,39 @@ document.addEventListener("click",e=>{if(e.target.closest("[data-fb]"))toast(EN(
 /* =========================================================
    9) ADMIN / CMS
    ========================================================= */
-let authed=false,aTab="reqs",regs=[],unsubR=null,W=null,dirty=false;
+let authed=false,aTab="dash",regs=[],unsubR=null,W=null,dirty=false;
+let MYROLE="owner",MYEMAIL="",ADMINS=null;
+
+/* صلاحيات الأدوار — ما الذي يراه كل دور */
+const ROLE_TABS={
+  owner:["dash","reqs","progs","ann","emps","certs","ideas","sat","reports","content","people","inbox","users","set"],
+  editor:["dash","reqs","progs","ann","emps","certs","ideas","sat","reports","content","people","inbox"],
+  viewer:["dash","reqs","certs","ideas","sat","reports"]
+};
+const ROLE_AR={owner:"مالك",editor:"محرّر",viewer:"مطّلع"};
+const ROLE_EN={owner:"Owner",editor:"Editor",viewer:"Viewer"};
+const canEdit=()=>MYROLE!=="viewer";
+
+/* يحدّد دور المستخدم الحالي من جدول admins.
+   الجدول فارغ = وضع التهيئة الأولى، فكل من يدخل مالك. */
+async function resolveRole(){
+  MYEMAIL=(SBA.email||"").toLowerCase();
+  if(API.mode!=="supabase"){MYROLE="owner";return true;}
+  try{ADMINS=await API.listAdmins();}catch(e){ADMINS=[];}
+  if(!ADMINS.length){MYROLE="owner";return true;}
+  const me=ADMINS.find(u=>u.email===MYEMAIL);
+  if(!me||String(me.status).toLowerCase()==="disabled"){MYROLE="";return false;}
+  MYROLE=me.role||"editor";
+  API.touchAdmin(MYEMAIL);
+  return true;
+}
 
 function admin(){
   const a=$("#adminArea");
-  if(!authed&&API.mode==="supabase"&&SBA.signedIn())authed=true;
+  if(!authed&&API.mode==="supabase"&&SBA.signedIn()){authed=true;
+    if(ADMINS===null){resolveRole().then(()=>admin());
+      a.innerHTML=`<div style="text-align:center;padding:70px"><span class="spin" style="border-color:var(--line);border-top-color:var(--blue-600)"></span></div>`;
+      return;}}
   if(!authed&&API.mode==="supabase"){
     a.innerHTML=`<div class="gate"><div class="panel">
       <div style="width:46px;height:46px;border:1px solid var(--line);border-radius:4px;display:grid;place-items:center;margin:0 auto 16px;color:var(--blue-700)">
@@ -2160,7 +2340,8 @@ function admin(){
     </div></div>`;
     const go=async()=>{
       const b=$("#sbGo");b.disabled=true;b.innerHTML='<span class="spin"></span>';$("#sbErr").textContent="";
-      try{ await SBA.signIn($("#sbEmail").value.trim(),$("#sbPass").value); authed=true; admin(); }
+      try{ await SBA.signIn($("#sbEmail").value.trim(),$("#sbPass").value);
+        authed=true; await resolveRole(); admin(); }
       catch(e){ b.disabled=false;b.textContent=EN()?"Sign in":"دخول";
         $("#sbErr").textContent=EN()?"Incorrect email or password.":"البريد الإلكتروني أو كلمة المرور غير صحيحة."; }
     };
@@ -2176,24 +2357,497 @@ function admin(){
       <p style="color:var(--muted);font-size:.875rem">${EN()?"Enter the department code to manage the platform.":"أدخل رمز الإدارة لإدارة محتوى المنصة."}</p>
       <div class="field" style="margin-top:18px"><input id="ac" type="password" style="text-align:center" placeholder="${EN()?"Code":"رمز الإدارة"}"></div>
       <button class="btn btn-s" id="ag" style="width:100%">${EN()?"Sign in":"دخول"}</button></div></div>`;
-    $("#ag").onclick=()=>{if($("#ac").value===(C.adminCode||"bahra2026")){authed=true;admin();}else toast(EN()?"Incorrect code.":"الرمز غير صحيح.")};
+    $("#ag").onclick=()=>{if($("#ac").value===(C.adminCode||"bahra2026")){authed=true;MYROLE="owner";admin();}else toast(EN()?"Incorrect code.":"الرمز غير صحيح.")};
     $("#ac").addEventListener("keydown",e=>{if(e.key==="Enter")$("#ag").click()});
     return;
   }
-  const tabs=[["reqs",EN()?"Requests":"طلبات التسجيل"],["reports",EN()?"Reports":"التقارير"],
-    ["progs",EN()?"Programs":"البرامج"],["content",EN()?"Page content":"محتوى الصفحات"],
-    ["ideas",EN()?"Ideas":"الأفكار"],["sat",EN()?"Satisfaction":"رضا المتدربين"],
-    ["emps",EN()?"Employees":"الموظفون"],["certs",EN()?"Certificates":"الشهادات"],
-    ["people",EN()?"Team & news":"الفريق والأخبار"],["inbox",EN()?"Inbox & media":"الرسائل والصور"],
-    ["set",EN()?"Settings":"الإعدادات"]];
-  a.innerHTML=`<div class="atabs">${tabs.map(t=>`<button class="atab ${t[0]===aTab?"on":""}" data-at="${t[0]}">${esc(t[1])}</button>`).join("")}
-    ${API.mode==="supabase"?`<button class="atab" id="sbOut" style="margin-inline-start:auto;color:var(--red-600)">${EN()?"Sign out":"خروج"}</button>`:""}
+  if(!MYROLE){
+    a.innerHTML=`<div class="gate"><div class="panel" style="text-align:center">
+      <div class="vfy show no" style="justify-content:center;margin-bottom:16px">
+        ${EN()?"This account is not authorised to access the admin portal."
+              :"هذا الحساب غير مخوّل بالدخول إلى بوابة الإدارة."}</div>
+      <p style="color:var(--muted);font-size:.875rem">${EN()?"Ask a platform owner to add your email under Admin users."
+        :"اطلب من أحد مالكي المنصة إضافة بريدك في تبويب مستخدمي الإدارة."}</p>
+      <button class="btn btn-g" id="sbOut2" style="width:100%;margin-top:16px">${EN()?"Sign out":"خروج"}</button>
+    </div></div>`;
+    $("#sbOut2").onclick=()=>{SBA.signOut();authed=false;MYROLE="owner";admin();};
+    return;
+  }
+  const ALL={dash:[EN()?"Dashboard":"لوحة القيادة",paneDash],
+    reqs:[EN()?"Requests":"طلبات التسجيل",paneReqs],
+    progs:[EN()?"Programs":"البرامج",paneProgs],
+    ann:[EN()?"Announcements":"الإعلانات",paneAnn],
+    emps:[EN()?"Employees":"الموظفون",paneEmps],
+    certs:[EN()?"Certificates":"الشهادات",paneCerts],
+    ideas:[EN()?"Ideas":"الأفكار",paneIdeas],
+    sat:[EN()?"Satisfaction":"رضا المتدربين",paneSat],
+    reports:[EN()?"Reports":"التقارير",paneReports],
+    content:[EN()?"Page content":"محتوى الصفحات",paneContent],
+    people:[EN()?"Team & news":"الفريق والأخبار",panePeople],
+    inbox:[EN()?"Inbox & media":"الرسائل والصور",paneInbox],
+    users:[EN()?"Admin users":"مستخدمو الإدارة",paneUsers],
+    set:[EN()?"Settings":"الإعدادات",paneSet]};
+  const allowed=ROLE_TABS[MYROLE]||ROLE_TABS.viewer;
+  if(!allowed.includes(aTab))aTab=allowed[0];
+  const ini=(MYEMAIL||"b").slice(0,2).toUpperCase();
+  a.innerHTML=`<div class="whobar">
+      <span class="wav">${esc(ini)}</span>
+      <span class="wtx">${MYEMAIL?`<b dir="ltr">${esc(MYEMAIL)}</b>`:`<b>${EN()?"Administrator":"مشرف"}</b>`}
+        <span>${esc(EN()?(ROLE_EN[MYROLE]||MYROLE):(ROLE_AR[MYROLE]||MYROLE))}</span></span>
+      ${API.mode==="supabase"?`<button class="chip" id="sbOut">${EN()?"Sign out":"تسجيل الخروج"}</button>`:""}
+    </div>
+    <div class="atabs">${allowed.map(k=>
+      `<button class="atab ${k===aTab?"on":""}" data-at="${k}">${esc(ALL[k][0])}</button>`).join("")}
     </div><div id="aPane"></div>`;
-  if($("#sbOut"))$("#sbOut").onclick=()=>{SBA.signOut();authed=false;admin();};
+  if($("#sbOut"))$("#sbOut").onclick=()=>{SBA.signOut();authed=false;MYROLE="owner";aTab="dash";admin();};
   a.querySelector(".atabs").addEventListener("click",e=>{const b=e.target.closest("[data-at]");if(!b)return;
     if(dirty&&!confirm(EN()?"Unsaved changes will be lost. Continue?":"لديك تغييرات غير محفوظة. هل تريد المتابعة؟"))return;
     dirty=false;aTab=b.dataset.at;admin();});
-  ({reqs:paneReqs,reports:paneReports,progs:paneProgs,ideas:paneIdeas,sat:paneSat,emps:paneEmps,certs:paneCerts,content:paneContent,people:panePeople,inbox:paneInbox,set:paneSet}[aTab])();
+  ALL[aTab][1]();
+}
+
+/* =========================================================
+   مستخدمو الإدارة — من يدخل البوابة وبأي صلاحية
+   ========================================================= */
+async function paneUsers(){
+  $("#aPane").innerHTML=`<div style="text-align:center;padding:60px"><span class="spin" style="border-color:var(--line);border-top-color:var(--blue-600)"></span></div>`;
+  try{ADMINS=await API.listAdmins();}catch(e){ADMINS=lget("bla_admins",[]);}
+  const act=ADMINS.filter(u=>String(u.status||"active")!=="disabled").length;
+  const owners=ADMINS.filter(u=>u.role==="owner").length;
+  $("#aPane").innerHTML=`
+   <div class="kpis">
+     <div class="kpi"><div class="v">${ADMINS.length}</div><div class="k">${EN()?"Admin accounts":"حساب إداري"}</div></div>
+     <div class="kpi green"><div class="v">${act}</div><div class="k">${EN()?"Active":"نشط"}</div></div>
+     <div class="kpi gold"><div class="v">${owners}</div><div class="k">${EN()?"Owners":"مالك"}</div></div>
+     <div class="kpi red"><div class="v">${ADMINS.length-act}</div><div class="k">${EN()?"Disabled":"موقوف"}</div></div>
+   </div>
+   ${ADMINS.length?"":`<div class="wl-note" style="margin-bottom:20px">
+     <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5v5.5M12 16.4h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+     <span>${EN()?"The list is empty, so any account that can sign in has full access. Add yourself first to lock the portal down."
+       :"القائمة فارغة، لذلك أي حساب يستطيع الدخول يملك صلاحية كاملة. أضف نفسك أولاً ليُقفل الوصول على من في القائمة فقط."}</span></div>`}
+   <div class="hint-b">${EN()
+     ?"Roles: an Owner manages everything including this list. An Editor manages content and requests. A Viewer can only read reports and records."
+     :"الأدوار: المالك يدير كل شيء بما فيه هذه القائمة. المحرّر يدير المحتوى والطلبات. المطّلع يقرأ التقارير والسجلات فقط."}</div>
+   <div class="atools">
+     <button class="btn btn-p" id="unew" style="padding:10px 20px;font-size:.875rem">${EN()?"+ Add admin":"+ إضافة مستخدم"}</button>
+     <button class="chip" id="ucsv">${EN()?"Export CSV":"تصدير CSV"}</button>
+   </div>
+   <div class="tblwrap"><table class="at"><thead><tr>
+     <th>${EN()?"Email":"البريد الإلكتروني"}</th><th>${EN()?"Name":"الاسم"}</th>
+     <th>${EN()?"Role":"الدور"}</th><th>${EN()?"State":"الحالة"}</th>
+     <th>${EN()?"Last seen":"آخر دخول"}</th><th></th></tr></thead><tbody id="ubody"></tbody></table></div>`;
+  $("#unew").onclick=userAdd;
+  $("#ucsv").onclick=()=>dl(toCSV(["email","name","role","status"],
+    ADMINS.map(u=>[u.email,u.name,u.role,u.status||"active"])),"bla-admins.csv","text/csv");
+  userRows();
+}
+function userRows(){
+  const b=$("#ubody");if(!b)return;
+  const R=EN()?ROLE_EN:ROLE_AR;
+  b.innerHTML=ADMINS.length?ADMINS.map(u=>{
+    const on=String(u.status||"active")!=="disabled", me=u.email===MYEMAIL;
+    return `<tr><td dir="ltr" style="font-size:.8125rem">${esc(u.email)}
+        ${me?` <span class="you-tag">${EN()?"you":"أنت"}</span>`:""}</td>
+      <td>${esc(u.name||"—")}</td>
+      <td><span class="urow-role">${["owner","editor","viewer"].map(r=>
+        `<button class="urole ${u.role===r?"on":""}" data-urole="${esc(u.email)}|${r}">${esc(R[r])}</button>`).join("")}</span></td>
+      <td><button class="badge ${on?"ok":"rej"}" style="border:0;cursor:pointer" data-ust="${esc(u.email)}">${
+        on?(EN()?"Active":"نشط"):(EN()?"Disabled":"موقوف")}</button></td>
+      <td dir="ltr" style="font-size:.75rem;color:var(--muted)">${esc((u.lastSeen||"").slice(0,10)||"—")}</td>
+      <td>${me?`<span style="font-size:.75rem;color:var(--muted)">${EN()?"—":"—"}</span>`
+        :`<button class="del" data-udel="${esc(u.email)}">${EN()?"Remove":"حذف"}</button>`}</td></tr>`;}).join("")
+   :`<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:34px">${
+     EN()?"No admin accounts listed yet.":"لا توجد حسابات إدارية مسجّلة بعد."}</td></tr>`;
+}
+function userAdd(){
+  const R=EN()?ROLE_EN:ROLE_AR;
+  $("#peTitle").textContent=EN()?"Add an admin":"إضافة مستخدم للإدارة";
+  $("#peBody").innerHTML=`
+   <div class="hint-b">${EN()
+     ?"Two things happen here: a sign-in account is created, and the email is granted a role. If the email already has an account, leave the password empty and only the role is granted."
+     :"هنا يحدث أمران: يُنشأ حساب دخول، ويُمنح البريد دوراً. إذا كان للبريد حساب مسبقاً، اترك كلمة المرور فارغة ليُمنح الدور فقط."}</div>
+   <div class="g2">
+     <div class="field"><label>${EN()?"Email":"البريد الإلكتروني"} <i>*</i></label>
+       <input id="u_em" type="email" dir="ltr" placeholder="name@bahra-cables.com">
+       <div class="err">${EN()?"Enter a valid email":"أدخل بريداً صحيحاً"}</div></div>
+     <div class="field"><label>${EN()?"Full name":"الاسم"}</label><input id="u_nm"></div></div>
+   <div class="g2">
+     <div class="field"><label>${EN()?"Temporary password":"كلمة مرور مؤقتة"}</label>
+       <input id="u_pw" type="text" dir="ltr" autocomplete="off">
+       <div class="hint">${EN()?"At least 6 characters. Leave empty if the account already exists."
+         :"٦ أحرف على الأقل. اتركها فارغة إذا كان الحساب موجوداً."}</div></div>
+     <div class="field"><label>${EN()?"Role":"الدور"}</label><select id="u_rl">
+       <option value="editor">${esc(R.editor)}</option>
+       <option value="viewer">${esc(R.viewer)}</option>
+       <option value="owner">${esc(R.owner)}</option></select></div></div>
+   <div class="field"><label>${EN()?"Note (optional)":"ملاحظة (اختياري)"}</label>
+     <input id="u_nt" placeholder="${EN()?"e.g. Training coordinator":"مثل: منسّق التدريب"}"></div>
+   <div id="u_msg"></div>
+   <div class="wnav">
+     <button class="btn btn-g" id="u_cancel">${EN()?"Cancel":"إلغاء"}</button>
+     <button class="btn btn-p" id="u_save" style="flex:1">${EN()?"Add admin":"إضافة"}</button></div>`;
+  $("#u_cancel").onclick=closeAll;
+  $("#u_save").onclick=async()=>{
+    const em=$("#u_em").value.trim().toLowerCase(), pw=$("#u_pw").value, f=$("#u_em").closest(".field");
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){f.classList.add("bad");return;}
+    f.classList.remove("bad");
+    const b=$("#u_save");b.disabled=true;b.innerHTML='<span class="spin"></span>';
+    let note="";
+    if(pw){
+      if(pw.length<6){b.disabled=false;b.textContent=EN()?"Add admin":"إضافة";
+        toast(EN()?"Password must be at least 6 characters.":"كلمة المرور ٦ أحرف على الأقل.");return;}
+      try{const r=await API.createAuthUser(em,pw);
+        if(r.needsConfirm)note=EN()?"A confirmation email was sent to this address."
+                                   :"أُرسل بريد تأكيد إلى هذا العنوان.";}
+      catch(e){
+        const msg=String(e.message||"");
+        if(/already|registered|exists/i.test(msg))note=EN()?"The account already existed — role granted."
+                                                          :"الحساب موجود مسبقاً — تم منح الدور فقط.";
+        else{b.disabled=false;b.textContent=EN()?"Add admin":"إضافة";
+          $("#u_msg").innerHTML=`<div class="vfy show no" style="margin-bottom:14px">${esc(msg)}</div>`;return;}
+      }
+    }
+    const u={email:em,name:$("#u_nm").value.trim(),role:$("#u_rl").value,
+      status:"active",note:$("#u_nt").value.trim()};
+    try{await API.saveAdmin(u);}
+    catch(e){b.disabled=false;b.textContent=EN()?"Add admin":"إضافة";
+      toast(EN()?"Could not save.":"تعذّر الحفظ.");return;}
+    ADMINS=(ADMINS||[]).filter(x=>x.email!==em).concat([u]);
+    closeAll();paneUsers();
+    toast(note||(EN()?"Admin added.":"تمت إضافة المستخدم."));
+  };
+  closeAll();$("#pov").classList.add("open");document.body.style.overflow="hidden";
+}
+document.addEventListener("click",async e=>{
+  const rl=e.target.closest("[data-urole]");
+  if(rl){
+    const [em,role]=rl.dataset.urole.split("|");
+    const u=(ADMINS||[]).find(x=>x.email===em);if(!u||u.role===role)return;
+    if(em===MYEMAIL&&role!=="owner"&&!confirm(EN()
+      ?"This lowers your own access. Continue?":"هذا يخفّض صلاحيتك أنت. هل تريد المتابعة؟"))return;
+    const prev=u.role;u.role=role;userRows();
+    try{await API.saveAdmin(u);}catch(_){u.role=prev;userRows();toast(EN()?"Update failed.":"تعذّر التحديث.");return;}
+    if(em===MYEMAIL){MYROLE=role;admin();return;}
+    toast(EN()?"Role updated.":"تم تحديث الدور.");return;
+  }
+  const st=e.target.closest("[data-ust]");
+  if(st){
+    const u=(ADMINS||[]).find(x=>x.email===st.dataset.ust);if(!u)return;
+    if(u.email===MYEMAIL){toast(EN()?"You cannot disable your own account.":"لا يمكنك إيقاف حسابك أنت.");return;}
+    const prev=u.status||"active";
+    u.status=prev==="disabled"?"active":"disabled";userRows();
+    try{await API.saveAdmin(u);}catch(_){u.status=prev;userRows();toast(EN()?"Update failed.":"تعذّر التحديث.");}
+    return;
+  }
+  const dl2=e.target.closest("[data-udel]");
+  if(!dl2)return;
+  if(!confirm(EN()?"Remove this admin's access?":"إلغاء صلاحية هذا المستخدم؟"))return;
+  try{await API.deleteAdmin(dl2.dataset.udel);}catch(_){toast(EN()?"Delete failed.":"تعذّر الحذف.");return;}
+  ADMINS=(ADMINS||[]).filter(x=>x.email!==dl2.dataset.udel);userRows();
+});
+
+/* =========================================================
+   الإعلانات
+   ========================================================= */
+let ANNS=[];
+const ANN_KINDS=()=>({
+  info:   [EN()?"General":"عام",        "info"],
+  success:[EN()?"Good news":"خبر سار",  "ok"],
+  warn:   [EN()?"Important":"مهم",      "wait"],
+  urgent: [EN()?"Urgent":"عاجل",        "urgent"]
+});
+const annIcon=k=>k==="urgent"||k==="warn"
+  ? `<svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 3.6l9 15.8H3l9-15.8z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 10v4.1M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`
+  : k==="success"
+  ? `<svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M8.2 12.3l2.6 2.6 5-5.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+  : `<svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 9.5h3.2L13 5.2v13.6L7.2 14.5H4a1 1 0 01-1-1v-3a1 1 0 011-1z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M16.8 9a4.3 4.3 0 010 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>`;
+/* هل الإعلان معروض الآن؟ منشور + ضمن فترة العرض */
+function annLive(a){
+  if(!a||String(a.status||"active")!=="active")return false;
+  const t=new Date().toISOString().slice(0,10);
+  if(a.startsAt&&a.startsAt>t)return false;
+  if(a.endsAt&&a.endsAt<t)return false;
+  return true;
+}
+const annSort=(a,b)=>(b.pinned?1:0)-(a.pinned?1:0)||(a.ord||0)-(b.ord||0)
+  ||String(b.createdAt||"").localeCompare(String(a.createdAt||""));
+const annTitle=a=>EN()?(a.titleEn||a.titleAr):a.titleAr;
+const annBody =a=>EN()?(a.bodyEn||a.bodyAr||""):(a.bodyAr||"");
+const annLink =a=>EN()?(a.linkEn||a.linkAr||""):(a.linkAr||a.linkEn||"");
+
+/* --- شريط التنبيه أعلى الموقع --- */
+function annBarRender(){
+  const host=$("#annBar");if(!host)return;
+  const hid=lget("bla_ann_hidden",[]);
+  const a=ANNS.filter(x=>x.banner&&annLive(x)&&!hid.includes(x.id)).sort(annSort)[0];
+  if(!a){host.innerHTML="";return;}
+  host.innerHTML=`<div class="annbar ${esc(a.kind||"info")}"><div class="wrap">
+    <span class="ic">${annIcon(a.kind)}</span>
+    <span class="tx"><b>${esc(annTitle(a))}</b>${annBody(a)?` <span>— ${esc(annBody(a).split("\n")[0])}</span>`:""}</span>
+    ${a.linkUrl?`<a class="go" href="${esc(a.linkUrl)}">${esc(annLink(a)||(EN()?"Details":"التفاصيل"))}</a>`:""}
+    <button class="x" data-annx="${esc(a.id)}" aria-label="${EN()?"Dismiss":"إخفاء"}">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg></button>
+  </div></div>`;
+  host.querySelector("[data-annx]").onclick=e=>{
+    const id=e.currentTarget.dataset.annx;
+    lset("bla_ann_hidden",lget("bla_ann_hidden",[]).concat([id]));annBarRender();};
+}
+/* --- قسم الإعلانات في الصفحة الرئيسية --- */
+function annHomeRender(){
+  const host=$("#annHome");if(!host)return;
+  const list=ANNS.filter(annLive).sort(annSort).slice(0,3);
+  if(!list.length){host.innerHTML="";host.style.display="none";return;}
+  host.style.display="";
+  const K=ANN_KINDS();
+  host.innerHTML=`<div class="wrap">
+    <div class="shead"><div><div class="rule"></div>
+      <h2>${EN()?"Academy announcements":"إعلانات الأكاديمية"}</h2>
+      <p class="sub">${EN()?"What is new for Bahra Electric employees."
+        :"كل جديد يخصّ منسوبي بحرة إلكتريك."}</p></div></div>
+    <div class="anngrid stg">${list.map(a=>{const k=K[a.kind]||K.info;
+      return `<article class="anncard ${esc(a.kind||"info")}">
+        <div class="at"><span class="badge ${k[1]}">${esc(k[0])}</span>
+          ${a.pinned?`<span class="badge pin">${EN()?"Pinned":"مثبّت"}</span>`:""}</div>
+        <h3>${esc(annTitle(a))}</h3>
+        <p>${esc(annBody(a))}</p>
+        <div class="af"><span class="date" dir="ltr">${esc((a.createdAt||"").slice(0,10))}</span>
+          ${a.linkUrl?`<a href="${esc(a.linkUrl)}">${esc(annLink(a)||(EN()?"Details":"التفاصيل"))} ←</a>`:""}</div>
+      </article>`;}).join("")}</div></div>`;
+  observeReveal();
+}
+async function annLoad(){
+  try{ANNS=await API.listAnnouncements();}catch(e){ANNS=lget("bla_ann",[]);}
+  annBarRender();annHomeRender();
+}
+
+/* --- تبويب الإعلانات في بوابة الإدارة --- */
+async function paneAnn(){
+  $("#aPane").innerHTML=`<div style="text-align:center;padding:60px"><span class="spin" style="border-color:var(--line);border-top-color:var(--blue-600)"></span></div>`;
+  try{ANNS=await API.listAnnouncements();}catch(e){ANNS=lget("bla_ann",[]);}
+  const live=ANNS.filter(annLive).length;
+  $("#aPane").innerHTML=`
+   <div class="kpis">
+     <div class="kpi"><div class="v">${ANNS.length}</div><div class="k">${EN()?"Total announcements":"إجمالي الإعلانات"}</div></div>
+     <div class="kpi green"><div class="v">${live}</div><div class="k">${EN()?"Showing now":"معروض الآن"}</div></div>
+     <div class="kpi gold"><div class="v">${ANNS.filter(a=>a.banner&&annLive(a)).length}</div><div class="k">${EN()?"As a top banner":"كشريط علوي"}</div></div>
+     <div class="kpi red"><div class="v">${ANNS.filter(a=>String(a.status)!=="active").length}</div><div class="k">${EN()?"Drafts & archived":"مسودات ومؤرشفة"}</div></div>
+   </div>
+   <div class="hint-b">${EN()
+     ?"An announcement shows on the home page. Tick “top banner” to also pin it as a strip across every page. Dates are optional — leave them empty to show it until you archive it."
+     :"الإعلان يظهر في الصفحة الرئيسية. فعّل «شريط علوي» ليظهر أيضاً كشريط في كل الصفحات. التواريخ اختيارية — اتركها فارغة ليبقى معروضاً حتى تؤرشفه."}</div>
+   <div class="atools">
+     <button class="btn btn-p" id="anew" style="padding:10px 20px;font-size:.875rem">${EN()?"+ New announcement":"+ إعلان جديد"}</button>
+     <span style="font-size:.8125rem;color:var(--muted)">${EN()?"Newest and pinned appear first.":"المثبّت والأحدث يظهر أولاً."}</span>
+   </div>
+   <div class="tblwrap"><table class="at"><thead><tr>
+     <th>${EN()?"Title":"العنوان"}</th><th>${EN()?"Type":"النوع"}</th>
+     <th>${EN()?"Shown":"العرض"}</th><th>${EN()?"Period":"الفترة"}</th>
+     <th>${EN()?"State":"الحالة"}</th><th></th></tr></thead><tbody id="abody"></tbody></table></div>`;
+  $("#anew").onclick=()=>annEdit(null);
+  annRows();
+}
+function annRows(){
+  const b=$("#abody");if(!b)return;
+  const K=ANN_KINDS();
+  const list=ANNS.slice().sort(annSort);
+  b.innerHTML=list.length?list.map(a=>{const k=K[a.kind]||K.info,on=annLive(a);
+    const per=[a.startsAt||"",a.endsAt||""].filter(Boolean).join(" → ");
+    return `<tr><td><b style="font-size:.875rem">${esc(a.titleAr||"")}</b>
+        ${a.pinned?` <span class="badge pin">${EN()?"Pinned":"مثبّت"}</span>`:""}
+        ${a.titleEn?`<div style="font-size:.75rem;color:var(--muted)" dir="ltr">${esc(a.titleEn)}</div>`:""}</td>
+      <td><span class="badge ${k[1]}">${esc(k[0])}</span></td>
+      <td style="font-size:.8125rem;color:var(--muted)">${a.banner?(EN()?"Banner + home":"شريط + الرئيسية"):(EN()?"Home page":"الرئيسية")}</td>
+      <td dir="ltr" style="font-size:.75rem;color:var(--muted)">${esc(per||"—")}</td>
+      <td><span class="badge ${on?"ok":"rej"}">${on?(EN()?"Live":"معروض"):(String(a.status)==="draft"?(EN()?"Draft":"مسودة"):(EN()?"Hidden":"مخفي"))}</span></td>
+      <td style="white-space:nowrap"><button class="lnk" data-aed="${esc(a.id)}">${EN()?"Edit":"تعديل"}</button>
+        <button class="del" data-adel="${esc(a.id)}">${EN()?"Delete":"حذف"}</button></td></tr>`;}).join("")
+   :`<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:34px">${
+     EN()?"No announcements yet. Create the first one.":"لا توجد إعلانات بعد — أنشئ أول إعلان."}</td></tr>`;
+}
+function annEdit(id){
+  const a=id?ANNS.find(x=>x.id===id):null;
+  const v=a||{id:"an"+Date.now().toString(36),kind:"info",status:"active",pinned:false,banner:false,ord:0};
+  const K=ANN_KINDS();
+  $("#peTitle").textContent=a?(EN()?"Edit announcement":"تعديل إعلان"):(EN()?"New announcement":"إعلان جديد");
+  $("#peBody").innerHTML=`
+   <div class="g2">
+     <div class="field"><label>${EN()?"Title (Arabic)":"العنوان (عربي)"} <i>*</i></label>
+       <input id="a_tar" value="${esc(v.titleAr||"")}"><div class="err">${EN()?"Required":"مطلوب"}</div></div>
+     <div class="field"><label>${EN()?"Title (English)":"العنوان (إنجليزي)"}</label>
+       <input id="a_ten" dir="ltr" value="${esc(v.titleEn||"")}"></div></div>
+   <div class="g2">
+     <div class="field"><label>${EN()?"Body (Arabic)":"النص (عربي)"}</label>
+       <textarea id="a_bar" rows="4">${esc(v.bodyAr||"")}</textarea></div>
+     <div class="field"><label>${EN()?"Body (English)":"النص (إنجليزي)"}</label>
+       <textarea id="a_ben" rows="4" dir="ltr">${esc(v.bodyEn||"")}</textarea></div></div>
+   <div class="g2">
+     <div class="field"><label>${EN()?"Type":"النوع"}</label><select id="a_kind">
+       ${Object.keys(K).map(k=>`<option value="${k}" ${v.kind===k?"selected":""}>${esc(K[k][0])}</option>`).join("")}
+     </select></div>
+     <div class="field"><label>${EN()?"State":"الحالة"}</label><select id="a_st">
+       <option value="active" ${v.status==="active"?"selected":""}>${EN()?"Published":"منشور"}</option>
+       <option value="draft" ${v.status==="draft"?"selected":""}>${EN()?"Draft":"مسودة"}</option>
+       <option value="archived" ${v.status==="archived"?"selected":""}>${EN()?"Archived":"مؤرشف"}</option>
+     </select></div></div>
+   <div class="g2">
+     <div class="field"><label>${EN()?"Show from":"يبدأ العرض"}</label>
+       <input id="a_s" type="date" dir="ltr" value="${esc(v.startsAt||"")}">
+       <div class="hint">${EN()?"Optional":"اختياري"}</div></div>
+     <div class="field"><label>${EN()?"Show until":"ينتهي العرض"}</label>
+       <input id="a_e" type="date" dir="ltr" value="${esc(v.endsAt||"")}">
+       <div class="hint">${EN()?"Optional":"اختياري"}</div></div></div>
+   <div class="g2">
+     <div class="field"><label>${EN()?"Link (optional)":"رابط (اختياري)"}</label>
+       <input id="a_url" dir="ltr" placeholder="#programs" value="${esc(v.linkUrl||"")}">
+       <div class="hint">${EN()?"e.g. #programs or #leap or a full URL":"مثل ‎#programs أو ‎#leap أو رابط كامل"}</div></div>
+     <div class="field"><label>${EN()?"Link label (Arabic)":"نص الرابط (عربي)"}</label>
+       <input id="a_lar" value="${esc(v.linkAr||"")}" placeholder="${EN()?"Details":"التفاصيل"}"></div></div>
+   <div class="chkgrid" style="margin-bottom:6px">
+     <label class="chk ${v.pinned?"on":""}"><input type="checkbox" id="a_pin" ${v.pinned?"checked":""}>
+       <span>${EN()?"Pin to the top":"تثبيت في الأعلى"}</span></label>
+     <label class="chk ${v.banner?"on":""}"><input type="checkbox" id="a_ban" ${v.banner?"checked":""}>
+       <span>${EN()?"Also show as a top banner on every page":"إظهاره كشريط علوي في كل الصفحات"}</span></label>
+   </div>
+   <div class="wnav">
+     <button class="btn btn-g" id="a_cancel">${EN()?"Cancel":"إلغاء"}</button>
+     <button class="btn btn-p" id="a_save" style="flex:1">${EN()?"Save announcement":"حفظ الإعلان"}</button></div>`;
+  $("#peBody").querySelectorAll(".chk input").forEach(i=>
+    i.addEventListener("change",e=>e.target.closest(".chk").classList.toggle("on",e.target.checked)));
+  $("#a_cancel").onclick=closeAll;
+  $("#a_save").onclick=async()=>{
+    const f=$("#a_tar").closest(".field");
+    if(!$("#a_tar").value.trim()){f.classList.add("bad");return;}
+    f.classList.remove("bad");
+    const out={id:v.id,titleAr:$("#a_tar").value.trim(),titleEn:$("#a_ten").value.trim(),
+      bodyAr:$("#a_bar").value.trim(),bodyEn:$("#a_ben").value.trim(),
+      kind:$("#a_kind").value,status:$("#a_st").value,
+      startsAt:$("#a_s").value||null,endsAt:$("#a_e").value||null,
+      linkUrl:$("#a_url").value.trim(),linkAr:$("#a_lar").value.trim(),linkEn:v.linkEn||"",
+      pinned:$("#a_pin").checked,banner:$("#a_ban").checked,
+      ord:+v.ord||0,createdAt:v.createdAt||new Date().toISOString()};
+    const b=$("#a_save");b.disabled=true;b.innerHTML='<span class="spin"></span>';
+    try{await API.saveAnnouncement(out);}
+    catch(e){b.disabled=false;b.textContent=EN()?"Save announcement":"حفظ الإعلان";
+      toast(EN()?"Could not save.":"تعذّر الحفظ.");return;}
+    ANNS=ANNS.filter(x=>x.id!==out.id).concat([out]);
+    closeAll();annRows();annBarRender();annHomeRender();
+    toast(EN()?"Announcement saved.":"تم حفظ الإعلان.");
+  };
+  closeAll();$("#pov").classList.add("open");document.body.style.overflow="hidden";
+}
+document.addEventListener("click",async e=>{
+  const ed=e.target.closest("[data-aed]");
+  if(ed){annEdit(ed.dataset.aed);return;}
+  const dl=e.target.closest("[data-adel]");
+  if(!dl)return;
+  if(!confirm(EN()?"Delete this announcement?":"حذف هذا الإعلان؟"))return;
+  try{await API.deleteAnnouncement(dl.dataset.adel);}
+  catch(_){toast(EN()?"Delete failed.":"تعذّر الحذف.");return;}
+  ANNS=ANNS.filter(x=>x.id!==dl.dataset.adel);
+  annRows();annBarRender();annHomeRender();
+});
+
+/* =========================================================
+   لوحة القيادة — نظرة واحدة على كل أقسام الأكاديمية
+   ========================================================= */
+const dGo=k=>{aTab=k;admin();};
+async function paneDash(){
+  $("#aPane").innerHTML=`<div style="text-align:center;padding:70px"><span class="spin" style="border-color:var(--line);border-top-color:var(--blue-600)"></span></div>`;
+  const [rg,cs,em,id,fb,ms,an]=await Promise.all([
+    API.listRegs().catch(()=>[]), API.listCertificates().catch(()=>[]),
+    API.listEmployees().catch(()=>[]), API.listIdeas().catch(()=>[]),
+    API.listFeedback().catch(()=>[]), API.listMessages().catch(()=>[]),
+    API.listAnnouncements().catch(()=>[])]);
+  regs=rg;
+  const progs=activePrograms();
+  const now=new Date(), mStart=new Date(now.getFullYear(),now.getMonth(),1).toISOString();
+  const St=REG_ST();
+  const pend=rg.filter(r=>r["status"]==="new").length;
+  const wl=rg.filter(r=>r["status"]==="waitlist").length;
+  const done=rg.filter(r=>r["status"]==="completed").length;
+  const thisMonth=rg.filter(r=>(r.createdAt||"")>=mStart).length;
+  const hours=cs.reduce((a,c)=>a+(+c.hours||0),0);
+  const newIdeas=id.filter(i=>(i["status"]||"new")==="new").length;
+  const unread=ms.length;
+  const avg=fb.length?(fb.reduce((a,f)=>a+(+f.overall||0),0)/fb.length):0;
+  const annOn=an.filter(a=>annLive(a)).length;
+  /* البرامج التي تحتاج انتباهاً: ممتلئة أو أوشكت */
+  const seats=progs.map(p=>{
+    const n=rg.filter(r=>r.programId===p.id&&["new","wait","ok","attended","completed"].includes(r["status"])).length;
+    return {p,n,cap:+p.seats||0,pct:p.seats?Math.min(100,Math.round(n/p.seats*100)):0};
+  }).sort((a,b)=>b.pct-a.pct);
+  const hot=seats.filter(s=>s.cap&&s.pct>=70).slice(0,5);
+  const recent=rg.slice(0,6);
+  const kpi=(v,k,cls,tab)=>`<button class="kpi ${cls||""} act" data-dgo="${tab||""}">
+     <div class="v">${v}</div><div class="k">${esc(k)}</div></button>`;
+  $("#aPane").innerHTML=`
+   <div class="dash-hi">
+     <div><h3>${EN()?"Good to see you":"أهلاً بك"}${MYEMAIL?`<span dir="ltr"> · ${esc(MYEMAIL.split("@")[0])}</span>`:""}</h3>
+       <p>${EN()?"Everything that needs your attention today, in one place."
+                :"كل ما يحتاج انتباهك اليوم في مكان واحد."}</p></div>
+     <div class="dash-date" dir="ltr">${new Date().toISOString().slice(0,10)}</div>
+   </div>
+
+   <div class="kpis">
+     ${kpi(pend,EN()?"Requests awaiting review":"طلب بانتظار المراجعة",pend?"red":"","reqs")}
+     ${kpi(wl,EN()?"On the waiting list":"في قائمة الانتظار",wl?"gold":"","reqs")}
+     ${kpi(thisMonth,EN()?"Requests this month":"طلب هذا الشهر","","reports")}
+     ${kpi(done,EN()?"Completed enrollments":"تسجيل منجز","green","certs")}
+   </div>
+   <div class="kpis">
+     ${kpi(progs.length,EN()?"Published programs":"برنامج منشور","","progs")}
+     ${kpi(em.length,EN()?"Employees in directory":"موظف في الدليل","","emps")}
+     ${kpi(cs.length,EN()?"Certificates issued":"شهادة صادرة","green","certs")}
+     ${kpi(hours||"—",EN()?"Certified training hours":"ساعة تدريبية موثّقة","","certs")}
+   </div>
+   <div class="kpis">
+     ${kpi(newIdeas,EN()?"New ideas to review":"فكرة جديدة للمراجعة",newIdeas?"gold":"","ideas")}
+     ${kpi(avg?avg.toFixed(1):"—",EN()?"Average satisfaction (of 5)":"متوسط الرضا (من ٥)","green","sat")}
+     ${kpi(unread,EN()?"Messages received":"رسالة واردة",unread?"red":"","inbox")}
+     ${kpi(annOn,EN()?"Live announcements":"إعلان معروض الآن","","ann")}
+   </div>
+
+   <div class="dash-2">
+     <div class="ebox"><div class="eh"><b>${EN()?"Programs filling up":"برامج تقترب من الاكتمال"}</b>
+       <button class="lnk" data-dgo="progs">${EN()?"All programs":"كل البرامج"}</button></div>
+       <div class="ec">${hot.length?`<div class="hbars">${hot.map(s=>`
+         <div class="hbar"><div class="lb">${esc(EN()?(s.p.titleEn||s.p.titleAr):s.p.titleAr)}</div>
+           <div class="rbar"><i class="${s.pct>=100?"full":s.pct>=80?"warn":""}" style="width:${s.pct}%"></i></div>
+           <div class="vl">${s.n}/${s.cap}</div></div>`).join("")}</div>`
+        :`<div class="dash-none">${EN()?"No programs are close to capacity."
+             :"لا توجد برامج قاربت على الاكتمال."}</div>`}</div></div>
+
+     <div class="ebox"><div class="eh"><b>${EN()?"Latest requests":"آخر الطلبات"}</b>
+       <button class="lnk" data-dgo="reqs">${EN()?"All requests":"كل الطلبات"}</button></div>
+       <div class="ec" style="padding:0">${recent.length?`<div class="tblwrap" style="border:0">
+         <table class="at" style="min-width:0"><tbody>${recent.map(r=>{const s=St[r["status"]]||St.new;
+           return `<tr><td><b style="font-size:.875rem">${esc(r.name||"")}</b>
+             <div style="font-size:.75rem;color:var(--muted)">${esc(EN()?(r.programEn||r.programAr):r.programAr)}</div></td>
+             <td style="text-align:end"><span class="badge ${s[0]}">${esc(s[1])}</span>
+             <div style="font-size:.6875rem;color:var(--muted);margin-top:3px" dir="ltr">${esc((r.createdAt||"").slice(0,10))}</div></td></tr>`;
+           }).join("")}</tbody></table></div>`
+        :`<div class="dash-none">${EN()?"No enrollment requests yet.":"لا توجد طلبات تسجيل بعد."}</div>`}</div></div>
+   </div>
+
+   <div class="ebox"><div class="eh"><b>${EN()?"Quick actions":"إجراءات سريعة"}</b></div>
+     <div class="ec"><div class="qacts">
+       ${canEdit()?`<button class="qact" data-dnew="prog"><b>${EN()?"Add a program":"إضافة برنامج"}</b>
+         <span>${EN()?"Publish a new training program":"انشر برنامجاً تدريبياً جديداً"}</span></button>
+       <button class="qact" data-dnew="ann"><b>${EN()?"Post an announcement":"نشر إعلان"}</b>
+         <span>${EN()?"Reach everyone on the platform":"يصل لكل من يفتح المنصة"}</span></button>
+       <button class="qact" data-dgo="emps"><b>${EN()?"Import employees":"استيراد موظفين"}</b>
+         <span>${EN()?"Update the employee directory":"حدّث دليل الموظفين"}</span></button>`:""}
+       <button class="qact" data-dgo="reports"><b>${EN()?"Open reports":"فتح التقارير"}</b>
+         <span>${EN()?"Attendance, compliance and trends":"الحضور والالتزام والاتجاهات"}</span></button>
+     </div></div></div>`;
+  $("#aPane").addEventListener("click",e=>{
+    const g=e.target.closest("[data-dgo]");
+    if(g&&g.dataset.dgo){dGo(g.dataset.dgo);return;}
+    const n=e.target.closest("[data-dnew]");
+    if(!n)return;
+    if(n.dataset.dnew==="prog"){aTab="progs";admin();setTimeout(()=>{const b=$("#addProg");if(b)b.click();},700);}
+    else{aTab="ann";admin();setTimeout(()=>{const b=$("#anew");if(b)b.click();},700);}
+  });
 }
 
 /* ---------- requests ---------- */
@@ -2498,13 +3152,26 @@ function paneSet(){
      <div class="g2">${F("أوقات العمل (عربي)","contact.hoursAr")}${F("Hours (English)","contact.hoursEn")}</div>
      <div class="g2">${F("نص التذييل (عربي)","footAbout.ar",1)}${F("Footer text (English)","footAbout.en",1)}</div>
      <div class="g2">${F("سطر أسفل التذييل (عربي) — اتركه فارغاً لإخفائه","footNote.ar")}${F("Footer bottom line (English)","footNote.en")}</div></div></div>
+   ${API.mode==="supabase"?`
+   <div class="ebox"><div class="eh"><b>${EN()?"Access":"الدخول"}</b></div><div class="ec">
+     <div class="summary" style="margin-bottom:0">
+       <div class="srow"><span class="k">${EN()?"Sign-in method":"طريقة الدخول"}</span>
+         <span class="v">${EN()?"Supabase account (email + password)":"حساب Supabase (بريد وكلمة مرور)"}</span></div>
+       <div class="srow"><span class="k">${EN()?"Who may enter":"من يملك الدخول"}</span>
+         <span class="v">${EN()?"Managed in the Admin users tab":"يُدار من تبويب مستخدمي الإدارة"}</span></div>
+       <div class="srow"><span class="k">${EN()?"Signed in as":"الحساب الحالي"}</span>
+         <span class="v" dir="ltr">${esc(MYEMAIL||"—")}</span></div>
+     </div></div></div>`:`
    <div class="ebox"><div class="eh"><b>${EN()?"Access":"الدخول"}</b></div><div class="ec">
      ${F(EN()?"Admin code":"رمز الإدارة","adminCode")}
-     <p style="font-size:.8125rem;color:var(--muted);margin:0">${EN()?"This code only hides the admin screens. It is not a security boundary — anyone with the link can view the site."
-       :"هذا الرمز يخفي شاشات الإدارة فقط، وليس حماية أمنية حقيقية. أي شخص لديه الرابط يستطيع تصفّح الموقع."}</p></div></div>
-   <div class="ebox"><div class="eh"><b>${EN()?"Data":"البيانات"}</b></div><div class="ec" style="display:flex;gap:10px;flex-wrap:wrap">
-     <button class="chip" id="expAll">${EN()?"Export content as JSON":"تصدير المحتوى كملف JSON"}</button>
-     <button class="chip" id="resetAll">${EN()?"Restore default content":"استعادة المحتوى الافتراضي"}</button></div></div>
+     <p style="font-size:.8125rem;color:var(--muted);margin:0">${EN()
+       ?"This code only hides the admin screens. Connect Supabase for real accounts and roles."
+       :"هذا الرمز يخفي شاشات الإدارة فقط. اربط Supabase للحصول على حسابات وأدوار حقيقية."}</p></div></div>`}
+   <div class="ebox"><div class="eh"><b>${EN()?"Backup":"النسخ الاحتياطي"}</b></div><div class="ec">
+     <p style="font-size:.8125rem;color:var(--muted);margin:0 0 12px">${EN()
+       ?"Downloads every page text and program as one JSON file you can keep or restore from."
+       :"ينزّل كل نصوص الصفحات والبرامج في ملف JSON واحد تحتفظ به أو تستعيد منه."}</p>
+     <button class="chip" id="expAll">${EN()?"Download a backup":"تنزيل نسخة احتياطية"}</button></div></div>
    ${savebar()}</div>`;
   bindPane();
   $("#expAll").onclick=async()=>{
@@ -2513,8 +3180,6 @@ function paneSet(){
       if(dl){await dl.save({filename:fn,data:out});toast(EN()?"Exported.":"تم التصدير.");return;}}catch(_){}
     const u=URL.createObjectURL(new Blob([out],{type:"application/json"}));
     const a=document.createElement("a");a.href=u;a.download=fn;a.click();URL.revokeObjectURL(u);};
-  $("#resetAll").onclick=()=>{if(!confirm(EN()?"Restore all default content?":"استعادة المحتوى الافتراضي بالكامل؟"))return;
-    W=clone(DEF_CONTENT);dirty=true;rerender();toast(EN()?"Review then publish.":"راجع ثم اضغط نشر التغييرات.");};
 }
 
 
