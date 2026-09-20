@@ -2362,15 +2362,31 @@ function admin(){
     return;
   }
   if(!MYROLE){
-    a.innerHTML=`<div class="gate"><div class="panel" style="text-align:center">
-      <div class="vfy show no" style="justify-content:center;margin-bottom:16px">
-        ${EN()?"This account is not authorised to access the admin portal."
-              :"هذا الحساب غير مخوّل بالدخول إلى بوابة الإدارة."}</div>
-      <p style="color:var(--muted);font-size:.875rem">${EN()?"Ask a platform owner to add your email under Admin users."
-        :"اطلب من أحد مالكي المنصة إضافة بريدك في تبويب مستخدمي الإدارة."}</p>
-      <button class="btn btn-g" id="sbOut2" style="width:100%;margin-top:16px">${EN()?"Sign out":"خروج"}</button>
+    const em=MYEMAIL||"", known=(ADMINS||[]).map(u=>u.email);
+    const fix=`insert into public.admins (email, name, role, status)\nvalues ('${em}', '', 'owner', 'active')\non conflict (email) do update set role = 'owner', status = 'active';`;
+    a.innerHTML=`<div class="gate" style="max-width:620px"><div class="panel">
+      <div class="vfy show no" style="justify-content:center;margin-bottom:18px">
+        ${EN()?"This account is not on the admin list."
+              :"هذا الحساب غير مُدرَج في قائمة الإدارة."}</div>
+      <div class="summary" style="margin-bottom:18px">
+        <div class="srow"><span class="k">${EN()?"You are signed in as":"أنت داخل بالحساب"}</span>
+          <span class="v" dir="ltr">${esc(em||"—")}</span></div>
+        <div class="srow"><span class="k">${EN()?"Emails allowed":"البُرُد المخوّلة"}</span>
+          <span class="v" dir="ltr" style="font-weight:500">${known.length?esc(known.join("، ")):"—"}</span></div>
+      </div>
+      <p style="color:var(--ink-2);font-size:.875rem;margin:0 0 10px">${EN()
+        ?"Either sign in with an allowed email, or ask an owner to add this one. If you are the owner and locked out, run this in the Supabase SQL editor:"
+        :"إمّا تدخل ببريد مخوّل، أو يضيف أحد المالكين هذا البريد. وإذا كنت المالك وانحبست خارجاً، نفّذ هذا في محرّر SQL في Supabase:"}</p>
+      <div class="vcode" style="display:block;padding:13px 15px;white-space:pre;overflow-x:auto;direction:ltr;text-align:left;font-size:.75rem;line-height:1.8">${esc(fix)}</div>
+      <div class="wnav" style="margin-top:18px;padding-top:0;border:0">
+        <button class="btn btn-g" id="sbOut2">${EN()?"Sign in as someone else":"الدخول بحساب آخر"}</button>
+        <button class="btn btn-p" id="cpFix" style="flex:1">${EN()?"Copy the SQL":"نسخ الأمر"}</button></div>
     </div></div>`;
-    $("#sbOut2").onclick=()=>{SBA.signOut();authed=false;MYROLE="owner";admin();};
+    $("#sbOut2").onclick=()=>{SBA.signOut();authed=false;MYROLE="owner";ADMINS=null;admin();};
+    $("#cpFix").onclick=async()=>{
+      try{await navigator.clipboard.writeText(fix);toast(EN()?"Copied.":"تم النسخ.");}
+      catch(_){toast(EN()?"Select the text and copy it manually.":"حدّد النص وانسخه يدوياً.");}
+    };
     return;
   }
   const ALL={dash:[EN()?"Dashboard":"لوحة القيادة",paneDash],
