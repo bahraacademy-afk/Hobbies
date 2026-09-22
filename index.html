@@ -226,7 +226,7 @@ html.no-motion .hero .copy>*{opacity:1;animation:none}
 .plate::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 62%,rgba(11,35,80,.22))}
 .trk{position:absolute;inset-block-start:12px;inset-inline-start:12px;z-index:3;background:var(--blue-800);
  color:#fff;font-size:.75rem;font-weight:600;padding:4px 11px;border-radius:3px}
-.plate .pid{position:absolute;inset-block-end:12px;inset-inline-start:14px;z-index:3;color:#fff;font-size:.6875rem;
+.plate .pid{position:absolute;bottom:12px;left:14px;right:auto;z-index:3;color:#fff;font-size:.6875rem;
  letter-spacing:.06em;direction:ltr;background:rgba(11,35,80,.78);padding:3px 9px;border-radius:3px;font-weight:600}
 .pbody{padding:20px 20px 0;flex:1;display:flex;flex-direction:column}
 .pbody h3{margin:0 0 12px;font-size:1.0625rem;font-weight:600;line-height:1.5}
@@ -249,15 +249,88 @@ html.no-motion .hero .copy>*{opacity:1;animation:none}
 /* علامات الربع لقراءة النسبة بلمحة */
 .seatbar::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:4px;
  background:repeating-linear-gradient(90deg,transparent 0 calc(25% - 1px),var(--seat-tick) calc(25% - 1px),var(--seat-tick) 25%)}
-.seatbar i.warn{background:var(--gold)}
-.seatbar i.full{background:var(--red-600)}
-:root{--seat-track:#e8edf6;--seat-edge:rgba(11,35,80,.05);--seat-tick:rgba(11,35,80,.08);
- --seat-soft:#9cbcec;--seat-deep:#0b2350}
-:root[data-theme="dark"]{--seat-track:#16233d;--seat-edge:rgba(255,255,255,.05);
- --seat-tick:rgba(255,255,255,.07);--seat-soft:#2e5a9e;--seat-deep:#8fb6f2}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--seat-track:#16233d;
+.seatbar i.full{background:var(--seat-full)}
+:root{--seat-full:#6d0718}
+:root[data-theme="dark"]{--seat-full:#ff5f76}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--seat-full:#ff5f76}}
+:root{--seat-track:#f2e6e9;--seat-edge:rgba(200,16,46,.07);--seat-tick:rgba(200,16,46,.10);
+ --seat-soft:#f0a8b4;--seat-deep:#8e0a20}
+:root[data-theme="dark"]{--seat-track:#2a1620;--seat-edge:rgba(255,255,255,.05);
+ --seat-tick:rgba(255,255,255,.07);--seat-soft:#7c2836;--seat-deep:#ff8496}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--seat-track:#2a1620;
  --seat-edge:rgba(255,255,255,.05);--seat-tick:rgba(255,255,255,.07);
- --seat-soft:#2e5a9e;--seat-deep:#8fb6f2}}
+ --seat-soft:#7c2836;--seat-deep:#ff8496}}
+
+/* ===== شارة طريقة التقديم ===== */
+.mode{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;font-weight:600;
+ padding:4px 11px;border-radius:99px;border:1px solid transparent;line-height:1.5;white-space:nowrap}
+.mode svg{width:13px;height:13px;flex:none}
+.mode.onsite{background:rgba(36,87,180,.12);color:var(--blue-700);border-color:rgba(36,87,180,.24)}
+.mode.online{background:rgba(15,138,106,.13);color:#0b7357;border-color:rgba(15,138,106,.26)}
+.mode.hybrid{background:rgba(201,162,39,.16);color:#8a6d10;border-color:rgba(201,162,39,.32)}
+:root[data-theme="dark"] .mode.online{color:#4fd2ab}
+:root[data-theme="dark"] .mode.hybrid{color:#e3c25c}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mode.online{color:#4fd2ab}
+ :root:not([data-theme="light"]) .mode.hybrid{color:#e3c25c}}
+/* فوق صورة البرنامج */
+.mode.on-plate{position:absolute;bottom:12px;right:14px;left:auto;z-index:3;
+ backdrop-filter:blur(6px);box-shadow:0 4px 14px -6px rgba(11,35,80,.5)}
+.mode.on-plate.onsite{background:rgba(255,255,255,.94);color:var(--blue-800);border-color:rgba(11,35,80,.14)}
+.mode.on-plate.online{background:rgba(15,138,106,.95);color:#fff;border-color:transparent}
+.mode.on-plate.hybrid{background:rgba(201,162,39,.96);color:#3a2c00;border-color:transparent}
+.mode.big{font-size:.875rem;padding:7px 15px}
+.mode.big svg{width:16px;height:16px}
+.mode-strip{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 16px;
+ padding:13px 16px;border:1px solid var(--line);border-radius:var(--r);background:var(--panel)}
+.mode-strip .mh{font-size:.8125rem;color:var(--muted)}
+.modepick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:620px){.modepick{grid-template-columns:1fr}}
+.mpick{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:start;
+ border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:13px 15px;transition:.18s var(--ease)}
+.mpick:hover{border-color:var(--blue-600);transform:translateY(-1px)}
+.mpick.on{border-color:var(--blue-700);background:var(--blue-050);box-shadow:inset 0 0 0 1px var(--blue-700)}
+.mpick .mode{pointer-events:none;padding:5px;margin-bottom:3px}
+.mpick .mode svg{width:15px;height:15px}
+.mpick b{font-size:.9375rem;font-weight:600}
+.mpick span{font-size:.75rem;color:var(--muted)}
+
+/* ===== خريطة المسجّلين ===== */
+.mapwrap{display:grid;grid-template-columns:1fr 290px;gap:22px;align-items:start}
+@media(max-width:900px){.mapwrap{grid-template-columns:1fr}}
+.ksa{width:100%;height:auto;display:block;background:var(--map-sea);border-radius:var(--r);
+ border:1px solid var(--line);overflow:visible}
+.ksa .land{fill:var(--map-land);stroke:var(--map-line);stroke-width:1.6;stroke-linejoin:round}
+.ksa .halo{fill:var(--red-600);opacity:.10}
+.ksa .dot{fill:var(--red-600);opacity:.62;stroke:#fff;stroke-width:2}
+.ksa .num{fill:#fff;font-size:26px;font-weight:700;text-anchor:middle;
+ font-family:var(--ar);paint-order:stroke;pointer-events:none}
+.ksa .lab{fill:var(--ink-2);font-size:24px;font-weight:600;text-anchor:middle;
+ font-family:var(--ar);pointer-events:none}
+.ksa .bub{transform-box:fill-box;transform-origin:center;animation:bubin .55s var(--ease) both;
+ animation-delay:var(--d,0ms);transition:opacity .18s}
+@keyframes bubin{from{opacity:0;transform:scale(.25)}}
+html.no-motion .ksa .bub{animation:none}
+.ksa .bub .dot{transition:opacity .18s,r .18s}
+.ksa .bub:hover .dot{opacity:.86}
+.ksa .bub:not(.on){opacity:.22}
+.maplist{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);overflow:hidden}
+.mlh{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 15px;
+ background:var(--card);border-bottom:1px solid var(--line);font-size:.875rem;font-weight:600}
+.mlh span{font-size:.75rem;color:var(--muted);font-weight:500}
+.mlrow{display:grid;grid-template-columns:1fr 62px 34px;gap:10px;align-items:center;width:100%;
+ padding:9px 15px;background:transparent;border:0;border-bottom:1px solid var(--line-2);
+ text-align:start;font-size:.8125rem;color:var(--ink-2);transition:.15s}
+.mlrow:last-of-type{border-bottom:0}
+.mlrow:hover,.mlrow.on{background:var(--blue-050);color:var(--blue-800)}
+.mlrow .mn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mlrow .mb{height:6px;background:var(--line-2);border-radius:3px;overflow:hidden}
+.mlrow .mb i{display:block;height:100%;background:var(--red-600);border-radius:3px;opacity:.72}
+.mlrow .mv{text-align:end;font-weight:700;font-feature-settings:"tnum"}
+.mlnote{padding:11px 15px;font-size:.75rem;color:var(--muted);border-top:1px solid var(--line-2)}
+:root{--map-sea:#f3f7fd;--map-land:#e2eaf7;--map-line:#b7c9e6}
+:root[data-theme="dark"]{--map-sea:#0a1326;--map-land:#16233d;--map-line:#2b3e63}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --map-sea:#0a1326;--map-land:#16233d;--map-line:#2b3e63}}
 .seatline{display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);margin-bottom:6px}
 
 /* ===== search/filters ===== */
@@ -1218,6 +1291,9 @@ window.BLA_CONFIG = {
           <div class="vfy" id="f_vfy"></div></div>
         <div class="field"><label><span class="ar">القسم أو المصنع</span><span class="en">Department</span></label><input id="f_dept" placeholder="خط الإنتاج A"></div>
       </div>
+      <div class="field"><label><span class="ar">موقع العمل</span><span class="en">Work location</span> <i>*</i></label>
+        <select id="f_site"></select>
+        <div class="hint"><span class="ar">المدينة التي تعمل بها — تُستخدم لتخطيط أماكن انعقاد البرامج.</span><span class="en">The city you work in — used to plan where programs are held.</span></div></div>
       <div class="g2">
         <div class="field"><label><span class="ar">رقم الجوال</span><span class="en">Mobile</span></label><input id="f_phone" dir="ltr" placeholder="05XXXXXXXX"></div>
         <div class="field"><label><span class="ar">البريد الإلكتروني</span><span class="en">Email</span></label><input id="f_email" type="email" dir="ltr"></div>
@@ -1337,6 +1413,27 @@ const DEF_PROGRAMS=[
   outAr:"تنظيف بيانات الإنتاج\nبناء جداول محورية\nإعداد لوحة مؤشرات",outEn:"Clean production data\nBuild pivot tables\nCreate a KPI dashboard"}
 ];
 const DEF_CONTENT={
+ /* مواقع العمل — تُستخدم في نموذج التسجيل وفي خريطة المسجّلين */
+ sites:[
+  {id:"bahrah", ar:"بحرة — المقر والمركز التدريبي", en:"Bahrah — HQ & Training Centre", lat:21.4000, lng:39.6000},
+  {id:"jeddah", ar:"جدة",            en:"Jeddah",          lat:21.4858, lng:39.1925},
+  {id:"riyadh", ar:"الرياض",          en:"Riyadh",          lat:24.7136, lng:46.6753},
+  {id:"dammam", ar:"الدمام",          en:"Dammam",          lat:26.4207, lng:50.0888},
+  {id:"jubail", ar:"الجبيل",          en:"Jubail",          lat:27.0046, lng:49.6460},
+  {id:"khobar", ar:"الخبر",           en:"Al Khobar",       lat:26.2794, lng:50.2083},
+  {id:"mecca",  ar:"مكة المكرمة",      en:"Makkah",          lat:21.3891, lng:39.8579},
+  {id:"medina", ar:"المدينة المنورة",  en:"Madinah",         lat:24.5247, lng:39.5692},
+  {id:"yanbu",  ar:"ينبع",            en:"Yanbu",           lat:24.0895, lng:38.0618},
+  {id:"taif",   ar:"الطائف",          en:"Taif",            lat:21.2703, lng:40.4158},
+  {id:"abha",   ar:"أبها",            en:"Abha",            lat:18.2164, lng:42.5053},
+  {id:"jizan",  ar:"جازان",           en:"Jazan",           lat:16.8894, lng:42.5706},
+  {id:"najran", ar:"نجران",           en:"Najran",          lat:17.4924, lng:44.1277},
+  {id:"tabuk",  ar:"تبوك",            en:"Tabuk",           lat:28.3835, lng:36.5662},
+  {id:"hail",   ar:"حائل",            en:"Hail",            lat:27.5114, lng:41.7208},
+  {id:"qassim", ar:"القصيم — بريدة",  en:"Qassim — Buraydah",lat:26.3260, lng:43.9750},
+  {id:"arar",   ar:"عرعر",            en:"Arar",            lat:30.9753, lng:41.0381},
+  {id:"jouf",   ar:"الجوف — سكاكا",   en:"Al Jouf — Sakaka", lat:29.9697, lng:40.2064}
+ ],
  topNote:{ar:"منصة تدريب داخلية — لمنسوبي مجموعة بحرة إلكتريك فقط",en:"Internal training platform — for Bahra Electric employees only"},
  hero:{kick:{ar:"أكاديمية بحرة · إدارة التدريب الفني — مجموعة بحرة إلكتريك",en:"Bahra Academy · Technical Training — Bahra Electric Group"},
    title:{ar:"نبني مهارات\nمنسوبي بحرة إلكتريك",en:"We build the skills\nof Bahra Electric people"},
@@ -1478,6 +1575,36 @@ function seatInfo(p){
   return {seats,taken,left:seats?Math.max(0,seats-taken):null,
     full:!!seats&&taken>=seats, pct:seats?Math.min(100,Math.round(taken/seats*100)):0};
 }
+/* ---------- طريقة التقديم: حضوري / عن بُعد / هجين ---------- */
+const MODE_ICONS={
+  onsite:`<svg viewBox="0 0 24 24" fill="none"><path d="M12 21.5s7-5.7 7-11a7 7 0 10-14 0c0 5.3 7 11 7 11z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="10.3" r="2.6" stroke="currentColor" stroke-width="1.8"/></svg>`,
+  online:`<svg viewBox="0 0 24 24" fill="none"><rect x="2.8" y="4.5" width="18.4" height="12.4" rx="1.8" stroke="currentColor" stroke-width="1.8"/><path d="M8.6 20.5h6.8M12 16.9v3.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M9.7 10.7l4.2-2.1v4.2l-4.2-2.1z" fill="currentColor"/></svg>`,
+  hybrid:`<svg viewBox="0 0 24 24" fill="none"><rect x="2.6" y="5.4" width="9.2" height="10.6" rx="1.6" stroke="currentColor" stroke-width="1.7"/><path d="M17.4 20.6s4-3.3 4-6.4a4 4 0 10-8 0c0 3.1 4 6.4 4 6.4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="17.4" cy="14" r="1.4" stroke="currentColor" stroke-width="1.6"/></svg>`
+};
+const MODES=()=>({
+  onsite:{ar:"حضوري",en:"On-site",hintAr:"داخل مركز الأكاديمية",hintEn:"At the academy centre"},
+  online:{ar:"عن بُعد",en:"Online",hintAr:"عبر الاتصال المرئي",hintEn:"Live via video"},
+  hybrid:{ar:"هجين",en:"Hybrid",hintAr:"حضوري وعن بُعد",hintEn:"On-site and online"}
+});
+/* يستنتج الطريقة من الحقل المنظّم، وإلا من النص القديم */
+function modeOf(p){
+  const m=String(p.mode||"").toLowerCase();
+  if(m==="onsite"||m==="online"||m==="hybrid")return m;
+  const t=((p.modeAr||"")+" "+(p.modeEn||"")).toLowerCase();
+  if(/هجين|مدمج|مزيج|hybrid|blended/.test(t))return "hybrid";
+  if(/بعد|بُعد|افتراض|اونلاين|أونلاين|online|virtual|remote|distance/.test(t))return "online";
+  return "onsite";
+}
+function modeLabel(p){
+  const k=modeOf(p), M=MODES()[k];
+  /* نصّ الإدارة المخصّص يسبق التسمية الافتراضية */
+  const custom=EN()?(p.modeEn||""):(p.modeAr||"");
+  return custom.trim()||(EN()?M.en:M.ar);
+}
+function modeBadge(p,cls){
+  const k=modeOf(p);
+  return `<span class="mode ${k}${cls?" "+cls:""}">${MODE_ICONS[k]}<b>${esc(modeLabel(p))}</b></span>`;
+}
 function activePrograms(){return P.filter(p=>p.active!==false).sort((a,b)=>(a.order||99)-(b.order||99));}
 function pcard(p){
   const tk=TRACKS[p.trk]||TRACKS.tech, s=seatInfo(p);
@@ -1485,20 +1612,19 @@ function pcard(p){
   const flag=s.full?`<span class="soldout">${EN()?"Fully booked":"اكتمل العدد"}</span>`
     :few?`<span class="soldout few">${EN()?"Last "+s.left+" seats":"بقيت "+s.left+" مقاعد"}</span>`:"";
   return `<article class="pcard${s.full?" is-full":""}">
-   <div class="plate">${imgOf(p)}<span class="trk">${esc(pick(tk,"ar","en"))}</span>${flag}<span class="pid">${esc(p.id)}</span></div>
+   <div class="plate">${imgOf(p)}<span class="trk">${esc(pick(tk,"ar","en"))}</span>${flag}<span class="pid">${esc(p.id)}</span>${modeBadge(p,"on-plate")}</div>
    <div class="pbody"><h3>${esc(pick(p,"ar","en"))}</h3>
     <div class="meta">
      <span class="mi"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 3v4M16 3v4M3.5 10h17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>${esc(pick(p,"dateAr","dateEn"))}</span>
      <span class="mi">${esc(pick(p,"durAr","durEn"))}</span>
-     <span class="mi">${esc(p.hrs||0)} ${EN()?"hrs":"ساعة"}</span>
-     <span class="mi">${esc(pick(p,"modeAr","modeEn"))}</span></div>
+     <span class="mi">${esc(p.hrs||0)} ${EN()?"hrs":"ساعة"}</span></div>
     <p>${esc(pick(p,"dAr","dEn"))}</p>
     ${s.seats?`<div class="seatline">
       <span class="st ${s.full?"full":few?"few":""}">${s.full?(EN()?"Fully booked":"اكتمل العدد")
         :few?(EN()?"Few seats left":"مقاعد محدودة"):(EN()?"Seats filled":"المقاعد المشغولة")}</span>
       <span dir="ltr">${s.taken}/${s.seats}</span></div>
       <div class="seatbar" role="progressbar" aria-valuenow="${s.pct}" aria-valuemin="0" aria-valuemax="100"
-        aria-label="${EN()?"Seats filled":"المقاعد المشغولة"}"><i class="${s.full?"full":few?"warn":""}"
+        aria-label="${EN()?"Seats filled":"المقاعد المشغولة"}"><i class="${s.full?"full":""}"
         style="--p:${s.pct};--w:${s.pct}%"></i></div>`:""}
    </div>
    <div class="pfoot"><button class="btn ${s.full?"btn-g":"btn-s"}" data-enroll="${esc(p.id)}">${
@@ -1737,7 +1863,7 @@ async function sb(path,opts){
   const txt=await r.text();return txt?JSON.parse(txt):null;
 }
 const UP={Prefer:"resolution=merge-duplicates,return=minimal"};
-const empMap=e=>({empNo:String(e.emp_no),nameAr:e.name_ar,nameEn:e.name_en,email:e.email,
+const empMap=e=>({empNo:String(e.emp_no),nameAr:e.name_ar,nameEn:e.name_en,email:e.email,site:e.site,
   deptAr:e.dept_ar,deptEn:e.dept_en,jobAr:e.job_ar,jobEn:e.job_en,managerNo:e.manager_no,
   grade:e.grade,status:e.status,hireDate:e.hire_date});
 const certMap=c=>({certNo:c.cert_no,verifyCode:c.verify_code,empNo:String(c.emp_no),name:c.name,
@@ -1755,7 +1881,7 @@ const annRow=a=>({id:a.id,title_ar:a.titleAr,title_en:a.titleEn||null,body_ar:a.
 const admMap=u=>({email:String(u.email||"").toLowerCase(),name:u.name,role:u.role||"editor",
   status:u.status||"active",note:u.note,createdAt:u.created_at,lastSeen:u.last_seen});
 const regMap=r=>({ref:r.ref,name:r.name,empNo:String(r.emp_no),dept:r.dept,phone:r.phone,email:r.email,
-  managerNo:r.manager_no?String(r.manager_no):"",managerName:r.manager_name||"",
+  managerNo:r.manager_no?String(r.manager_no):"",managerName:r.manager_name||"",site:r.site||"",
   programId:r.program_id,programAr:r.program_ar,programEn:r.program_en,status:r.status,
   createdAt:r.created_at,completedAt:r.completed_at,certNo:r.cert_no});
 
@@ -1811,7 +1937,7 @@ const API={
     if(MODE==="supabase")return sb("registrations",{method:"POST",headers:{Prefer:"return=minimal"},
       body:JSON.stringify([{ref:rec.ref,name:rec.name,emp_no:rec.empNo,dept:rec.dept,phone:rec.phone,
         email:rec.email,program_id:rec.programId,program_ar:rec.programAr,program_en:rec.programEn,
-        manager_no:rec.managerNo||null,manager_name:rec.managerName||null,
+        manager_no:rec.managerNo||null,manager_name:rec.managerName||null,site:rec.site||null,
         status:rec.status||"new",created_at:rec.createdAt}])});
     if(MODE==="gas")return gas("addReg",{reg:rec});
     if(MODE==="artifact"){const db=await DB();if(db)return db.collection("registrations").doc(rec.ref).set(rec);}
@@ -1934,7 +2060,7 @@ const API={
       headers:{Prefer:"resolution=merge-duplicates,return=minimal"},
       body:JSON.stringify(list.map(e=>({emp_no:String(e.empNo),name_ar:e.nameAr,name_en:e.nameEn||null,
         email:e.email||null,dept_ar:e.deptAr||null,dept_en:e.deptEn||null,job_ar:e.jobAr||null,
-        job_en:e.jobEn||null,manager_no:e.managerNo||null,grade:e.grade||null,
+        job_en:e.jobEn||null,manager_no:e.managerNo||null,grade:e.grade||null,site:e.site||null,
         status:e.status||"active",updated_at:new Date().toISOString()})))});
     if(MODE==="gas")return gas("saveEmployees",{list});
     if(MODE==="artifact"){const db=await DB();if(db)for(const e of list)
@@ -2200,6 +2326,11 @@ function openModal(pre){
   const mb=$("#f_mvfy");if(mb)mb.className="vfy";
   ["f_name","f_emp","f_dept","f_phone","f_email","f_mno","f_mname"].forEach(id=>{
     const el=$("#"+id);el.value="";el.closest(".field").classList.remove("bad")});
+  const sel=$("#f_site");
+  if(sel){sel.innerHTML=siteList().map(x=>`<option value="${esc(x.id)}">${esc(siteName(x))}</option>`).join("");
+    sel.dataset.touched="0";
+    if(!sel.dataset.bound){sel.dataset.bound="1";
+      sel.addEventListener("change",()=>{sel.dataset.touched="1";});}}
   const me=$("#f_mno").closest(".field").querySelector(".err");
   if(me)me.innerHTML=`<span class="ar">أدخل الرقم الوظيفي لمديرك المباشر</span><span class="en">Enter your manager's employee ID</span>`;
   ov.classList.add("open");document.body.style.overflow="hidden";setTimeout(()=>$("#f_name").focus(),80);
@@ -2222,6 +2353,9 @@ bindVerify("#f_emp","#f_vfy",async e=>{
     n.closest(".field").classList.remove("bad");}
   if(d&&!d.value.trim())d.value=EN()?(e.deptEn||e.deptAr||""):(e.deptAr||"");
   if(m&&!m.value.trim()&&e.email)m.value=e.email;
+  const sv=$("#f_site");
+  /* لا نغيّر اختيار المستخدم إن كان قد اختار بنفسه */
+  if(sv&&e.site&&siteById(e.site)&&sv.dataset.touched!=="1")sv.value=e.site;
   /* المدير المباشر من سجل الموظف */
   const mn=$("#f_mno"),mnm=$("#f_mname");
   if(mn&&e.managerNo&&!mn.value.trim()){
@@ -2259,13 +2393,14 @@ $("#toReview").onclick=()=>{
   const p=P.find(x=>x.id===$("#f_prog").value)||P[0];
   const si=seatInfo(p);
   draft={name,empNo:emp,dept:$("#f_dept").value.trim(),phone:$("#f_phone").value.trim(),email:$("#f_email").value.trim(),
-    managerNo:mno,managerName:mname,
+    managerNo:mno,managerName:mname,site:($("#f_site")&&$("#f_site").value)||"",
     programId:p.id,programAr:p.ar,programEn:p.en,status:si.full?"waitlist":"new"};
   const rows=[[EN()?"Program":"البرنامج",pick(p,"ar","en")],[EN()?"Code":"الرمز",p.id],[EN()?"Dates":"الفترة",pick(p,"dateAr","dateEn")],
     [EN()?"Request type":"نوع الطلب",si.full?(EN()?"Waiting list":"قائمة انتظار"):(EN()?"Enrollment":"تسجيل مباشر")],
     [EN()?"Name":"الاسم",draft.name],[EN()?"Employee ID":"الرقم الوظيفي",draft.empNo],[EN()?"Department":"القسم",draft.dept||"—"],
     [EN()?"Mobile":"الجوال",draft.phone||"—"],[EN()?"Email":"البريد",draft.email||"—"],
-    [EN()?"Direct manager":"المدير المباشر",draft.managerName+" · "+draft.managerNo]];
+    [EN()?"Direct manager":"المدير المباشر",draft.managerName+" · "+draft.managerNo],
+    [EN()?"Work location":"موقع العمل",(siteById(draft.site)&&siteName(siteById(draft.site)))||"—"]];
   $("#sumBox").innerHTML=rows.map(r=>`<div class="srow"><span class="k">${esc(r[0])}</span><span class="v">${esc(r[1])}</span></div>`).join("");
   $("#mStep1").style.display="none";$("#mStep2").style.display="block";
 };
@@ -2302,9 +2437,11 @@ function showDetail(id){
   $("#dSub").textContent=p.id+" · "+pick(tk,"ar","en");
   const outs=(EN()?(p.outEn||p.outAr):(p.outAr||"")).split("\n").filter(Boolean);
   $("#dBody").innerHTML=`<div style="border-radius:var(--r);overflow:hidden;position:relative;aspect-ratio:16/6;margin-bottom:20px">${imgOf(p)}</div>
+   <div class="mode-strip">${modeBadge(p,"big")}
+     <span class="mh">${esc(EN()?MODES()[modeOf(p)].hintEn:MODES()[modeOf(p)].hintAr)}</span></div>
    <p style="color:var(--ink-2);margin:0 0 18px">${esc(pick(p,"dAr","dEn"))}</p>
    <div class="summary">
-    ${[[EN()?"Dates":"الفترة",pick(p,"dateAr","dateEn")],[EN()?"Delivery":"طريقة التقديم",pick(p,"modeAr","modeEn")],
+    ${[[EN()?"Dates":"الفترة",pick(p,"dateAr","dateEn")],
       [EN()?"Type":"نوع البرنامج",pick(p,"durAr","durEn")],[EN()?"Hours":"عدد الساعات",(p.hrs||0)+""],
       [EN()?"Seats":"المقاعد",(p.seats||"—")+""]].map(r=>`<div class="srow"><span class="k">${esc(r[0])}</span><span class="v">${esc(r[1])}</span></div>`).join("")}
    </div>
@@ -3086,7 +3223,14 @@ function progEditor(id){
    <div class="g2">${f("اسم البرنامج (عربي)","ar")}${f("Program title (English)","en")}</div>
    <div class="g2">${f("الوصف (عربي)","dAr","ta")}${f("Description (English)","dEn","ta")}</div>
    <div class="g2">${f("الفترة (عربي)","dateAr","t","05 – 09 يوليو 2026")}${f("Dates (English)","dateEn","t","5 – 9 Jul 2026")}</div>
-   <div class="g2">${f("طريقة التقديم (عربي)","modeAr","t","حضوري")}${f("Delivery (English)","modeEn","t","On-site")}</div>
+   <div class="field"><label>${EN()?"Delivery mode":"طريقة التقديم"}</label>
+     <div class="modepick" id="pmodepick">${Object.entries(MODES()).map(([k,v])=>
+       `<button type="button" class="mpick ${modeOf(w)===k?"on":""}" data-mode="${k}">
+          <span class="mode ${k}">${MODE_ICONS[k]}</span>
+          <b>${esc(EN()?v.en:v.ar)}</b><span>${esc(EN()?v.hintEn:v.hintAr)}</span></button>`).join("")}</div>
+     <div class="hint">${EN()?"This sets the badge shown on the program card."
+       :"هذا يحدّد الشارة التي تظهر على بطاقة البرنامج."}</div></div>
+   <div class="g2">${f("نص مخصّص بدل التسمية (عربي) — اختياري","modeAr","t","حضوري")}${f("Custom label (English) — optional","modeEn","t","On-site")}</div>
    <div class="g2">${f("نوع البرنامج (عربي)","durAr","t","برنامج قصير")}${f("Type (English)","durEn","t","Short")}</div>
    <div class="g2">${f(EN()?"Training hours":"عدد الساعات","hrs","num")}${f(EN()?"Display order":"ترتيب العرض","order","num")}</div>
    <div class="g2">${f(EN()?"Total seats":"إجمالي المقاعد","seats","num")}${f(EN()?"Seats taken":"المقاعد المشغولة","taken","num")}</div>
@@ -3097,6 +3241,19 @@ function progEditor(id){
      <button class="btn btn-p" id="peSave" style="flex:1">${EN()?"Save program":"حفظ البرنامج"}</button></div>`;
   $("#peBody").addEventListener("input",e=>{const el=e.target.closest("[data-w]");if(!el)return;
     const v=el.type==="number"?(+el.value||0):el.value;setPath(w,el.dataset.w,v);});
+  /* اختيار طريقة التقديم */
+  if(!w.mode)w.mode=modeOf(w);
+  $("#pmodepick").addEventListener("click",e=>{
+    const b=e.target.closest("[data-mode]");if(!b)return;
+    w.mode=b.dataset.mode;
+    /* لو كان النص المخصّص هو التسمية الافتراضية القديمة، حدّثه مع الاختيار */
+    const M=MODES(), olds=Object.values(M);
+    if(!w.modeAr||olds.some(v=>v.ar===w.modeAr)||w.modeAr==="افتراضي")w.modeAr=M[w.mode].ar;
+    if(!w.modeEn||olds.some(v=>v.en===w.modeEn)||w.modeEn==="Virtual")w.modeEn=M[w.mode].en;
+    const ia=$('[data-w="modeAr"]'),ie=$('[data-w="modeEn"]');
+    if(ia)ia.value=w.modeAr; if(ie)ie.value=w.modeEn;
+    $$("#pmodepick .mpick").forEach(x=>x.classList.toggle("on",x.dataset.mode===w.mode));
+  });
   const file=$("#ffile"),drop=$("#drop");
   drop.onclick=()=>file.click();
   drop.addEventListener("dragover",e=>{e.preventDefault();drop.classList.add("over")});
@@ -3263,6 +3420,21 @@ function paneSet(){
      <p style="font-size:.8125rem;color:var(--muted);margin:0">${EN()
        ?"This code only hides the admin screens. Connect Supabase for real accounts and roles."
        :"هذا الرمز يخفي شاشات الإدارة فقط. اربط Supabase للحصول على حسابات وأدوار حقيقية."}</p></div></div>`}
+   <div class="ebox"><div class="eh"><b>${EN()?"Work locations":"مواقع العمل"}</b>
+       <span style="font-size:.75rem;color:var(--muted)">${(W.sites||[]).length} ${EN()?"location(s)":"موقعاً"}</span></div>
+     <div class="ec">
+       <p style="font-size:.8125rem;color:var(--muted);margin:0 0 12px">${EN()
+         ?"These fill the location list on the enrollment form and the map in Reports. One per line: id | Arabic name | English name | latitude | longitude."
+         :"تظهر هذه في قائمة موقع العمل داخل نموذج التسجيل وفي خريطة التقارير. سطر لكل موقع: المعرّف | الاسم بالعربي | الاسم بالإنجليزي | خط العرض | خط الطول."}</p>
+       <textarea class="imp-area" id="sitesTxt" style="min-height:190px" dir="ltr">${
+         esc((W.sites||[]).map(x=>[x.id,x.ar,x.en||"",x.lat,x.lng].join(" | ")).join("\n"))}</textarea>
+       <div id="sitesMsg" style="font-size:.8125rem;margin-top:10px"></div>
+       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+         <button class="chip" id="sitesApply">${EN()?"Apply to the list":"تطبيق على القائمة"}</button>
+         <button class="chip" id="sitesReset">${EN()?"Restore the default locations":"استعادة المواقع الافتراضية"}</button></div>
+       <div class="hint" style="margin-top:10px">${EN()
+         ?"Changing an id detaches past enrollments from that location — rename the label instead."
+         :"تغيير المعرّف يفصل التسجيلات السابقة عن الموقع — غيّر الاسم بدل المعرّف."}</div></div></div>
    <div class="ebox"><div class="eh"><b>${EN()?"Backup":"النسخ الاحتياطي"}</b></div><div class="ec">
      <p style="font-size:.8125rem;color:var(--muted);margin:0 0 12px">${EN()
        ?"Downloads every page text and program as one JSON file you can keep or restore from."
@@ -3270,6 +3442,33 @@ function paneSet(){
      <button class="chip" id="expAll">${EN()?"Download a backup":"تنزيل نسخة احتياطية"}</button></div></div>
    ${savebar()}</div>`;
   bindPane();
+  /* محرّر المواقع */
+  const sitesParse=txt=>String(txt||"").split(/\r?\n/).map(l=>l.trim()).filter(Boolean).map(l=>{
+    const c=l.split("|").map(x=>x.trim());
+    const lat=parseFloat(c[3]), lng=parseFloat(c[4]);
+    if(!c[0]||!c[1]||!isFinite(lat)||!isFinite(lng))return null;
+    if(lat<16||lat>33||lng<34||lng>56)return {bad:l};
+    return {id:c[0].replace(/[^a-z0-9_-]/gi,"").toLowerCase(),ar:c[1],en:c[2]||c[1],lat,lng};
+  });
+  const sitesMsg=(txt,ok)=>{const m=$("#sitesMsg");if(m)m.innerHTML=
+    `<span class="vfy show ${ok?"ok":"no"}" style="display:inline-flex">${esc(txt)}</span>`;};
+  $("#sitesApply").onclick=()=>{
+    const parsed=sitesParse($("#sitesTxt").value);
+    const bad=parsed.filter(x=>!x||x.bad).length;
+    const good=parsed.filter(x=>x&&!x.bad);
+    if(!good.length){sitesMsg(EN()?"No valid line was found.":"لم يُقرأ أي سطر صحيح.",0);return;}
+    const ids=new Set(); const dup=good.filter(x=>ids.size===ids.add(x.id).size).length;
+    if(dup){sitesMsg(EN()?"Duplicate ids — each location needs its own.":"معرّفات مكرّرة — لكل موقع معرّف خاص.",0);return;}
+    W.sites=good;dirty=true;
+    sitesMsg((EN()?`${good.length} location(s) ready.`:`${good.length} موقعاً جاهزاً.`)
+      +(bad?(EN()?` ${bad} line(s) skipped — check the coordinates.`:` وتُخطّي ${bad} سطراً — تحقّق من الإحداثيات.`):"")
+      +(EN()?" Press Publish changes to save.":" اضغط «نشر التغييرات» للحفظ."),!bad);
+  };
+  $("#sitesReset").onclick=()=>{
+    if(!confirm(EN()?"Restore the default location list?":"استعادة قائمة المواقع الافتراضية؟"))return;
+    W.sites=clone(DEF_CONTENT.sites);dirty=true;rerender();
+    toast(EN()?"Review then publish.":"راجع ثم اضغط نشر التغييرات.");
+  };
   $("#expAll").onclick=async()=>{
     const out=JSON.stringify({content:C,programs:P},null,2),fn="bla-content.json";
     try{const dl=(window.claude&&claude.use)?await claude.use("downloads").catch(()=>null):null;
@@ -3382,6 +3581,7 @@ async function paneReports(){
 
    <div class="ebox" style="margin-bottom:22px" id="cmpBox"></div>
    <div class="ebox" style="margin-bottom:22px" id="mgrBox"></div>
+   <div class="ebox" style="margin-bottom:22px" id="mapBox"></div>
 
    <div class="ebox"><div class="eh"><b>${EN()?"Backup & export":"النسخ الاحتياطي والتصدير"}</b></div>
      <div class="ec" style="display:flex;gap:10px;flex-wrap:wrap">
@@ -3393,7 +3593,7 @@ async function paneReports(){
        ?"Recalculating sets each program's taken seats to its number of non-waitlist requests."
        :"إعادة الحساب تضبط «المقاعد المشغولة» لكل برنامج على عدد طلباته الفعلية (بدون قائمة الانتظار)."}</p></div>`;
   $("#expRegs").onclick=csv;
-  compliance();managersReport();
+  compliance();managersReport();mapReport();
   $("#recount").onclick=async()=>{
     const b=$("#recount");b.disabled=true;b.innerHTML='<span class="spin" style="border-color:var(--line);border-top-color:var(--blue-600)"></span>';
     let n=0;
@@ -3411,6 +3611,110 @@ async function paneReports(){
     dl(toCSV(head,byProg.map(x=>[x.p.id,pick(x.p,"ar","en"),x.n,x.seats,x.pct+"%"])),"bla-programs-report.csv","text/csv");
   };
 }
+/* =========================================================
+   خريطة المسجّلين — فقاعة لكل موقع، حجمها بعدد المسجّلين
+   ========================================================= */
+const KSA_PATH="M116.9 354.5 L115.7 354.5 L112.4 351 L110.5 348.5 L108.5 346.8 L99.6 343.3 L98.3 341.1 L99.8 338.9 L100.6 341.1 L102.3 342.3 L109.7 345.5 L117.9 352.3 L119.4 352.9 L116.9 354.5 Z M354.6 798.8 L358.2 799 L356.6 797.3 L356.3 796.5 L358 794.2 L363 799.1 L362.9 804.8 L362.5 806.1 L361.2 804.9 L360.2 803.7 L359.8 802.4 L358.5 801 L353.4 801.9 L350.4 800.4 L345.9 795.5 L344.7 792 L346.6 791.3 L348.6 789.6 L349.7 786.8 L348.6 784 L351.3 784.4 L352.8 787.4 L352.9 794 L353.4 795.5 L352.6 797 L354.6 798.8 Z M821.5 681.8 L810.4 683.4 L799.8 685.1 L787.8 686.8 L773.3 689 L762.1 690.6 L745.6 693.1 L730.8 695.2 L717 697.2 L703 699.3 L691.2 701.1 L684.2 703.1 L675.9 707.5 L663.2 714.3 L650.2 721.3 L643.6 724.8 L636.6 734.1 L633 738.7 L626.5 747.2 L621.6 753.6 L615.9 761.1 L613.4 768 L609.5 778.4 L606.1 781.1 L600.6 784.4 L595.5 786.8 L587.6 786.6 L583.2 780.1 L578.4 773.3 L576 770.6 L574 770.4 L566.1 771.3 L556.5 772.3 L545.4 771.2 L532.4 769.8 L520.3 768.7 L514.3 767.8 L506.4 763.3 L504.3 762.5 L502.2 762.3 L492.9 762.1 L483.5 762 L474.1 763.4 L465.2 762.9 L455.9 763.7 L452.5 765.4 L449 765.3 L446.6 766.8 L444.8 767.5 L442.3 766.2 L439.4 766.5 L435.2 765.4 L432.3 762.5 L429.8 760 L427.1 758.5 L424.1 757.7 L421.4 757.7 L418 759.3 L416 760.8 L410.8 765.7 L410.6 767.5 L413 770.5 L412.2 771.9 L409.1 773.7 L408.3 778.4 L407.8 781 L407.3 787.1 L408.6 792 L410.5 793.8 L410.6 795.9 L409.6 800.1 L406.8 801.3 L404.8 805.3 L403.4 807.2 L401.2 809.3 L392.5 816.4 L392 812.3 L389.3 806.2 L389.1 801.9 L387.8 797.6 L385.4 794.3 L381 790.9 L380.5 786.2 L377.3 781.6 L373.1 777.8 L370.6 771 L368.9 761.8 L357.7 749.8 L343.5 738.8 L339.2 732.5 L332.1 719.8 L328.6 709.7 L319.1 698.1 L318.8 693.7 L317.3 688.3 L315.1 682.2 L313.9 677.4 L304.3 656.5 L301.3 653.2 L298.6 648.5 L297.9 644.9 L297.1 643 L290.5 639.5 L284.1 630.7 L265.5 616.7 L256.2 615.4 L249 610.4 L243.6 603.8 L237.9 592.6 L227.8 580.5 L219.4 563.2 L222.1 556.9 L221.9 552.6 L219.2 545.1 L216.3 539.4 L214.3 534 L216 526.1 L216.5 517.4 L218.2 512.8 L219.4 507.7 L217.9 497.5 L215 492.1 L215.3 488.4 L212.1 486.6 L209.4 482.6 L212.1 482.7 L207.3 477.2 L205.4 474.2 L203.6 466.7 L201.2 461 L193.6 448 L189.9 440.1 L181.7 430 L172.8 422.4 L167.2 419 L164.5 415.9 L159.8 415.7 L154.8 411.3 L151.2 411.2 L146.9 410.5 L141.7 401.9 L137.3 393.8 L129.9 383.3 L131.7 380.6 L133.9 376.1 L132.9 370.4 L131.7 366.4 L128.5 359.2 L117.8 341.3 L114.9 338.7 L110.4 335.7 L107.7 327.8 L106.3 320.9 L98.9 317.5 L86.5 292.4 L79.1 283.6 L76.2 277.7 L67.8 268 L63.8 258.3 L55.2 249.4 L47.8 234.1 L36.5 218.6 L31.6 215.9 L20 214.8 L15 213.7 L10.4 217.1 L10.1 212.8 L13.3 206.8 L17.7 194.4 L18.7 183.4 L25.7 151 L35.7 152.6 L43.9 154.1 L55.9 156.1 L68.3 158.2 L75.5 159.4 L77.9 158.9 L88 150.9 L97.1 143.7 L102.5 135 L107.7 126.5 L110 124.7 L118.1 123.2 L130.9 120.6 L143.5 118.1 L144.3 117.3 L147.4 110.5 L151.1 101.8 L151.9 100.9 L152.8 100.1 L161.8 95.2 L167.2 92.2 L159.5 83.6 L152.1 75.4 L143.8 66.2 L136.9 59.1 L126.3 48.5 L119.6 41.4 L131.6 38.1 L144.5 34.6 L157.6 30.9 L173.4 26.6 L185.7 23.2 L204.2 18.1 L213.1 15.6 L214.8 15 L221.7 8.9 L232.2 10.6 L247.8 13.2 L262.9 15.6 L278.9 18.5 L284.1 20.9 L299.4 29.4 L309.5 35 L321.2 41.6 L335.8 49.7 L345.7 55.3 L358.7 62.5 L368.6 70.7 L381.4 81.1 L395.2 92.5 L406.6 101.4 L422.4 113.6 L438.1 125.6 L453.2 137.4 L465.5 146.9 L480.8 158.8 L482.1 159.2 L497.6 160.6 L518.6 162.4 L539.7 164.2 L558.7 165.9 L566.9 164.2 L575.8 165.3 L588 166.8 L595.2 167.8 L609 169.6 L613.2 177.5 L614.7 182.9 L616.1 188.2 L620.1 193 L629.5 192.9 L637.8 192.9 L648 192.7 L656.3 192.6 L658.8 197.4 L660 202.2 L664.8 213.6 L671.7 222.5 L673.2 225.7 L674.4 230.6 L673.2 232.4 L672.7 234.5 L677.8 239.4 L686.4 243.5 L689.6 244.5 L693.3 246.4 L690.4 249.2 L695.5 255.8 L701.2 262.3 L707.4 263.9 L715.8 273.9 L728.3 280.4 L736 288.9 L735.3 289.1 L733 288.2 L730.3 287.1 L729.4 288.1 L729.4 291.7 L730.3 295.9 L734.1 299.5 L737.7 302.1 L739 307.1 L736.2 317.8 L735.3 317.7 L733.5 316.8 L731.5 316.6 L730.4 317.2 L732.8 324.9 L735 330.8 L737.8 335.4 L740.2 342.2 L742.1 345.1 L750.3 352.4 L752.6 358.4 L755 369.7 L760.1 376 L762.9 380.9 L766.6 384.9 L769 390.6 L772.3 394.9 L774.2 396 L776.7 396.4 L780.1 396.4 L783.9 395.4 L788.1 394.3 L791.5 396.4 L794.9 396.2 L795.2 398.2 L793 401 L790.2 407.9 L794.2 409.1 L797.9 409.6 L800.8 410.7 L802.3 410.7 L802.3 412.2 L802.4 418.8 L803.5 421.3 L805.1 423.6 L807.7 426.9 L810.2 430.3 L812.9 433.7 L815.4 437 L817.9 440.4 L820.6 443.8 L823.1 447.1 L825.7 450.4 L828.2 453.8 L830.9 457.2 L833.4 460.5 L835.9 463.9 L838.6 467.2 L841.1 470.6 L843.7 473.9 L846.2 477.3 L848.4 480.1 L852.2 480.6 L853.6 480.8 L857.1 481.2 L862.5 482 L869.7 482.9 L878.1 484.1 L887.6 485.3 L897.7 486.6 L908.1 488.1 L918.5 489.5 L928.4 490.8 L937.9 492.1 L946.4 493.2 L953.5 494.2 L959.1 494.9 L962.6 495.4 L963.8 495.5 L967.5 496.1 L971.3 491.8 L974.7 497.6 L977.6 502.4 L981.4 509.1 L985.6 516.1 L989.7 522.8 L992.5 527.8 L991 533 L989.3 538.7 L987.7 544.3 L985.8 550 L984.1 555.7 L982.4 561.4 L980.8 567.1 L979.1 572.7 L977.2 578.4 L975.5 584.1 L973.9 589.8 L972.2 595.4 L970.5 601.1 L968.8 606.8 L967 612.4 L965.3 618.1 L963.6 623.7 L961.6 630.6 L956.5 632.4 L948.6 635.3 L940.6 638.3 L932.5 641.2 L924.4 644.2 L916.3 647.1 L908.4 650.1 L900.4 653 L892.3 656 L884.2 658.9 L876.1 661.8 L868.2 664.8 L860.1 667.7 L852.1 670.6 L844 673.6 L836.1 676.5 L828 679.4 L821.5 681.8 Z M102.6 337.6 L100.1 336.5 L100.3 332.5 L102 330.3 L101.8 333.3 L102.6 336.5 L102.6 337.6 Z";
+const KSA={W:1000,H:825,MINLON:34.4,MAXLAT:32.3,COS:0.911762,K:51.2513};
+const ksaXY=(lng,lat)=>[ (lng-KSA.MINLON)*KSA.COS*KSA.K, (KSA.MAXLAT-lat)*KSA.K ];
+const siteList=()=>(C.sites&&C.sites.length?C.sites:DEF_CONTENT.sites);
+const siteById=id=>siteList().find(s=>s.id===id)||null;
+const siteName=s=>EN()?(s.en||s.ar):s.ar;
+/* اسم قصير للخريطة — أول جزء قبل الشرطة */
+const siteShort=s=>String(siteName(s)).split(/\s+[—–-]\s+/)[0].trim();
+
+function mapReport(){
+  const box=$("#mapBox");if(!box)return;
+  const sites=siteList();
+  const counts={};
+  let noSite=0;
+  regs.forEach(r=>{ if(r.site&&siteById(r.site))counts[r.site]=(counts[r.site]||0)+1; else noSite++; });
+  const rows=Object.keys(counts).map(id=>({s:siteById(id),n:counts[id]}))
+    .sort((a,b)=>b.n-a.n);
+  const total=rows.reduce((a,x)=>a+x.n,0);
+  if(!total){
+    box.innerHTML=`<div class="eh"><b>${EN()?"Where trainees enroll from":"من أين يسجّل المتدربون"}</b></div>
+      <div class="ec"><div style="color:var(--muted);font-size:.875rem">${EN()
+        ?"No request carries a work location yet. The location is chosen on new enrollment requests."
+        :"لا يوجد طلب مرتبط بموقع عمل بعد. يُختار الموقع في طلبات التسجيل الجديدة."}</div></div>`;
+    return;
+  }
+  const max=rows[0].n;
+  const R_MIN=11, R_MAX=42;
+  const rOf=n=>R_MIN+(R_MAX-R_MIN)*Math.sqrt(n/max);
+  /* الأكبر يُرسم أولاً حتى لا يحجب الأصغر */
+  const draw=rows.slice().sort((a,b)=>b.n-a.n)
+    .map(x=>{const [cx,cy]=ksaXY(x.s.lng,x.s.lat);return {...x,cx,cy,r:rOf(x.n)};});
+  /* الرقم يُخفى إذا ابتلعت فقاعةٌ أكبر مركزَ هذه الفقاعة */
+  draw.forEach((x,i)=>{
+    x.num = x.r>=22 && !draw.slice(0,i).some(o=>
+      Math.hypot(o.cx-x.cx,o.cy-x.cy) < o.r*0.9);
+  });
+  const bubbles=draw.map((x,i)=>{
+    const pct=Math.round(x.n/total*100);
+    return `<g class="bub" data-site="${esc(x.s.id)}" style="--d:${i*70}ms">
+      <circle class="halo" cx="${x.cx.toFixed(1)}" cy="${x.cy.toFixed(1)}" r="${(x.r*1.45).toFixed(1)}"/>
+      <circle class="dot" cx="${x.cx.toFixed(1)}" cy="${x.cy.toFixed(1)}" r="${x.r.toFixed(1)}"/>
+      ${x.num?`<text class="num" x="${x.cx.toFixed(1)}" y="${(x.cy+7).toFixed(1)}">${x.n}</text>`:""}
+      <title>${esc(siteName(x.s))} — ${x.n} ${EN()?"enrollment(s)":"تسجيلاً"} (${pct}%)</title>
+    </g>`;
+  }).join("");
+  /* المسمّيات: فوق الفقاعة، وإن تعارضت فتحتها، وإلا تُترك للقائمة */
+  const placed=[];
+  const clash=(a,b)=>Math.abs(a.x-b.x)<(a.w+b.w)/2 && Math.abs(a.y-b.y)<(a.h+b.h)/2;
+  const labels=draw.slice(0,6).map(x=>{
+    const t=siteShort(x.s);
+    const box={w:t.length*13+16,h:30,x:x.cx,y:0};
+    for(const y of [x.cy-x.r-14, x.cy+x.r+27]){
+      const c={...box,y};
+      if(placed.some(q=>clash(c,q)))continue;
+      placed.push(c);
+      return `<text class="lab" x="${x.cx.toFixed(1)}" y="${y.toFixed(1)}">${esc(t)}</text>`;
+    }
+    return "";
+  }).join("");
+  box.innerHTML=`<div class="eh"><b>${EN()?"Where trainees enroll from":"من أين يسجّل المتدربون"}</b>
+      <button class="chip" id="mapCsv">${EN()?"Export CSV":"تصدير CSV"}</button></div>
+    <div class="ec">
+      <div class="mapwrap">
+        <svg class="ksa" viewBox="0 0 ${KSA.W} ${KSA.H}" role="img"
+          aria-label="${EN()?"Map of enrollments by location":"خريطة التسجيلات حسب الموقع"}">
+          <path class="land" d="${KSA_PATH}"/>
+          ${labels}${bubbles}
+        </svg>
+        <div class="maplist">
+          <div class="mlh">${EN()?"By location":"حسب الموقع"}<span>${total} ${EN()?"total":"إجمالاً"}</span></div>
+          ${rows.map(x=>`<button class="mlrow" data-site="${esc(x.s.id)}">
+             <span class="mn">${esc(siteName(x.s))}</span>
+             <span class="mb"><i style="width:${Math.round(x.n/max*100)}%"></i></span>
+             <span class="mv">${x.n}</span></button>`).join("")}
+          ${noSite?`<div class="mlnote">${EN()
+            ?`${noSite} request(s) predate the location field.`
+            :`${noSite} طلباً قُدّم قبل إضافة حقل الموقع.`}</div>`:""}
+        </div>
+      </div>
+    </div>`;
+  $("#mapCsv").onclick=()=>dl(toCSV(
+    [EN()?"location":"الموقع",EN()?"enrollments":"التسجيلات",EN()?"share":"النسبة",
+     "lat","lng"],
+    rows.map(x=>[siteName(x.s),x.n,Math.round(x.n/total*100)+"%",x.s.lat,x.s.lng])),
+    "bla-locations.csv","text/csv");
+  /* تمييز متبادل بين القائمة والخريطة */
+  const hi=id=>{
+    box.querySelectorAll(".bub").forEach(g=>g.classList.toggle("on",!id||g.dataset.site===id));
+    box.querySelectorAll(".mlrow").forEach(r=>r.classList.toggle("on",r.dataset.site===id));
+  };
+  box.querySelectorAll(".mlrow").forEach(r=>{
+    r.addEventListener("mouseenter",()=>hi(r.dataset.site));
+    r.addEventListener("mouseleave",()=>hi(null));
+    r.addEventListener("click",()=>hi(r.classList.contains("on")?null:r.dataset.site));
+  });
+  box.querySelectorAll(".bub").forEach(g=>{
+    g.addEventListener("mouseenter",()=>hi(g.dataset.site));
+    g.addEventListener("mouseleave",()=>hi(null));
+  });
+}
+
 /* ---------- تقرير المدراء — من يدفع موظفيه للتدريب ---------- */
 function managersReport(){
   const box=$("#mgrBox");if(!box)return;
@@ -4570,8 +4874,8 @@ async function paneEmps(){
   $("#eq").addEventListener("input",drawEmps);
   $("#eimp").onclick=impOpen;
   $("#ecsv").onclick=()=>dl(toCSV(
-    ["emp_no","name_ar","name_en","email","dept_ar","job_ar","manager_no","status"],
-    emps.map(e=>[e.empNo,e.nameAr,e.nameEn,e.email,e.deptAr,e.jobAr,e.managerNo,e.status||"active"])),
+    ["emp_no","name_ar","name_en","email","dept_ar","job_ar","manager_no","status","site"],
+    emps.map(e=>[e.empNo,e.nameAr,e.nameEn,e.email,e.deptAr,e.jobAr,e.managerNo,e.status||"active",e.site||""])),
     "bla-employees.csv","text/csv");
   drawEmps();
 }
@@ -4607,8 +4911,8 @@ function impOpen(){
      :"الصق الصفوف كما نسختها من Excel مباشرة (مفصولة بـ Tab) أو ملف CSV. يمكن أن يكون الصف الأول عناوين — يُكتشف تلقائياً."}</div>
    <div class="field"><label>${EN()?"Column order":"ترتيب الأعمدة"}</label>
      <div class="vcode" style="display:block;padding:10px 13px;line-height:2;font-weight:500">
-       ${EN()?"emp_no · name · department · job title · email · manager no · status"
-             :"الرقم الوظيفي · الاسم · الإدارة · المسمى الوظيفي · البريد · رقم المدير · الحالة"}</div>
+       ${EN()?"emp_no · name · department · job title · email · manager no · status · location id"
+             :"الرقم الوظيفي · الاسم · الإدارة · المسمى الوظيفي · البريد · رقم المدير · الحالة · معرّف الموقع"}</div>
      <div class="hint">${EN()?"Only the first two are required; leave the rest empty if unavailable."
        :"الأول والثاني فقط إلزاميان، واترك الباقي فارغاً إن لم يتوفّر."}</div></div>
    <textarea class="imp-area" id="impText" placeholder="10457	براء خالد الفران	إدارة التدريب الفني	مشرف الأكاديمية	baraa@bahra-cables.com"></textarea>
@@ -4663,7 +4967,8 @@ function impParse(txt){
     .filter((c,i)=>!(i===0&&(HEAD.test(c[0])||!/^\d+$/.test(c[0]))))
     .filter(c=>/^\d{2,12}$/.test(c[0])&&(c[1]||"").length>1)
     .map(c=>({empNo:c[0],nameAr:c[1],deptAr:c[2]||"",jobAr:c[3]||"",email:c[4]||"",
-      managerNo:c[5]||"",status:(c[6]||"active").toLowerCase().includes("غير")?"inactive":(c[6]||"active")}));
+      managerNo:c[5]||"",status:(c[6]||"active").toLowerCase().includes("غير")?"inactive":(c[6]||"active"),
+      site:(c[7]||"").trim().toLowerCase()}));
 }
 
 const logoSrc=(sel,fb)=>{const el=document.querySelector(sel);return el?el.src:(fb||"");};
