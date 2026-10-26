@@ -1,3 +1,4 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" data-theme="light">
 <head>
@@ -223,16 +224,18 @@ html.no-motion .hero .copy>*{opacity:1;animation:none}
 .plate img,.plate svg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
  transition:transform .5s var(--ease)}
 .pcard:hover .plate img{transform:scale(1.06)}
-.plate::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 62%,rgba(11,35,80,.22))}
+.plate:has(img)::after{content:"";position:absolute;inset:0;
+ background:linear-gradient(180deg,transparent 62%,rgba(11,35,80,.22))}
 .trk{position:absolute;inset-block-start:12px;inset-inline-start:12px;z-index:3;background:var(--blue-800);
  color:#fff;font-size:.75rem;font-weight:600;padding:4px 11px;border-radius:3px}
-.plate .pid{position:absolute;bottom:12px;left:14px;right:auto;z-index:3;color:#fff;font-size:.6875rem;
+.plate .pid{position:absolute;bottom:17px;left:14px;right:auto;z-index:3;color:#fff;font-size:.6875rem;
  letter-spacing:.06em;direction:ltr;background:rgba(11,35,80,.78);padding:3px 9px;border-radius:3px;font-weight:600}
 .pbody{padding:20px 20px 0;flex:1;display:flex;flex-direction:column}
 .pbody h3{margin:0 0 12px;font-size:1.0625rem;font-weight:600;line-height:1.5}
 .meta{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
 .mi{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;color:var(--ink-2);border:1px solid var(--line);
  padding:4px 10px;border-radius:3px;background:var(--panel)}
+.mi.soon{color:var(--muted);border-style:dashed}
 .pbody p{margin:0 0 18px;font-size:.875rem;color:var(--muted);flex:1}
 .pfoot{padding:0 20px 20px;display:flex;gap:10px}
 .pfoot .btn{padding:10px 18px;font-size:.875rem;flex:1}
@@ -273,7 +276,7 @@ html.no-motion .hero .copy>*{opacity:1;animation:none}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mode.online{color:#4fd2ab}
  :root:not([data-theme="light"]) .mode.hybrid{color:#e3c25c}}
 /* فوق صورة البرنامج */
-.mode.on-plate{position:absolute;bottom:12px;right:14px;left:auto;z-index:3;
+.mode.on-plate{position:absolute;bottom:17px;right:14px;left:auto;z-index:3;
  backdrop-filter:blur(6px);box-shadow:0 4px 14px -6px rgba(11,35,80,.5)}
 .mode.on-plate.onsite{background:rgba(255,255,255,.94);color:var(--blue-800);border-color:rgba(11,35,80,.14)}
 .mode.on-plate.online{background:rgba(15,138,106,.95);color:#fff;border-color:transparent}
@@ -283,6 +286,47 @@ html.no-motion .hero .copy>*{opacity:1;animation:none}
 .mode-strip{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 16px;
  padding:13px 16px;border:1px solid var(--line);border-radius:var(--r);background:var(--panel)}
 .mode-strip .mh{font-size:.8125rem;color:var(--muted)}
+/* ===== صفحة التشخيص ===== */
+.hhero{display:flex;align-items:center;gap:20px;flex-wrap:wrap;border:1px solid var(--line);
+ border-inline-start:4px solid var(--green);border-radius:var(--r);background:var(--card);
+ padding:20px 24px;margin-bottom:22px}
+.hhero.warn{border-inline-start-color:var(--gold)}
+.hhero .hn{font-size:2.25rem;font-weight:700;color:var(--green);line-height:1;font-feature-settings:"tnum"}
+.hhero.warn .hn{color:#8a6d10}
+.hhero .hn span{font-size:1.125rem;font-weight:600;color:var(--muted)}
+.hhero h3{margin:0 0 3px;font-size:1.0625rem;font-weight:600}
+.hhero p{margin:0;font-size:.875rem;color:var(--muted)}
+.hhero .chip{margin-inline-start:auto}
+.hlist{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--card)}
+.hrow{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;
+ padding:13px 18px;border-bottom:1px solid var(--line-2)}
+.hrow:last-child{border-bottom:0}
+.hrow.bad{background:rgba(201,162,39,.06)}
+.hok,.hno{width:24px;height:24px;display:grid;place-items:center;border-radius:50%;flex:none}
+.hok{background:rgba(15,138,106,.14);color:var(--green)}
+.hno{background:rgba(201,162,39,.18);color:#8a6d10}
+.hl{min-width:0;line-height:1.45}
+.hl b{display:block;font-size:.9375rem;font-weight:600}
+.hl span{font-size:.75rem;color:#8a6d10}
+.hv{font-size:.8125rem;color:var(--muted);text-align:end;white-space:nowrap;font-feature-settings:"tnum"}
+@media(max-width:620px){.hrow{grid-template-columns:auto 1fr}.hv{grid-column:2;text-align:start}}
+.mats{display:grid;gap:9px;margin-bottom:20px}
+.mat{display:flex;align-items:center;gap:13px;border:1px solid var(--line);border-radius:var(--r);
+ background:var(--card);padding:12px 15px;transition:.18s var(--ease)}
+.mat:hover{border-color:var(--blue-600);background:var(--blue-050);transform:translateY(-1px)}
+.mat .mi-ic{flex:none;width:34px;height:34px;display:grid;place-items:center;
+ border:1px solid var(--line);border-radius:var(--r);background:var(--panel)}
+.mat .mi-ic svg{width:18px;height:18px}
+.mat .mt{flex:1;min-width:0;line-height:1.4}
+.mat .mt b{display:block;font-size:.9375rem;font-weight:600;overflow:hidden;
+ text-overflow:ellipsis;white-space:nowrap}
+.mat .mt span{font-size:.75rem;color:var(--muted)}
+.mat .go{flex:none;color:var(--muted)}
+.mat:hover .go{color:var(--blue-600)}
+.dplate{border-radius:var(--r);overflow:hidden;position:relative;aspect-ratio:16/9;
+ margin-bottom:20px;border:1px solid var(--line);background:var(--plate)}
+.dplate img,.dplate svg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+@media(max-width:620px){.dplate{aspect-ratio:16/10}}
 .modepick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 @media(max-width:620px){.modepick{grid-template-columns:1fr}}
 .mpick{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:start;
@@ -1374,6 +1418,9 @@ window.BLA_CONFIG = {
    1) DEFAULT CONTENT  (used until the admin saves changes)
    ========================================================= */
 const TRACKS={
+ core:{ar:"لجميع الموظفين",en:"All employees",c:"#0f8a6a"},
+ sup:{ar:"الإشراف وقيادة الفرق",en:"Supervisors & team leaders",c:"#b06a16"},
+ lead:{ar:"الإدارة والقيادة العليا",en:"Management & leadership",c:"#1b4392"},
  tech:{ar:"تقني وفني",en:"Technical",c:"#2457b4"},
  safe:{ar:"سلامة مهنية",en:"Safety",c:"#c9a227"},
  lang:{ar:"لغات ومهارات",en:"Languages & skills",c:"#0f8a6a"},
@@ -1381,36 +1428,72 @@ const TRACKS={
  digi:{ar:"تحوّل رقمي",en:"Digital",c:"#0e7fb8"}
 };
 const DEF_PROGRAMS=[
- {id:"BAE-204",trk:"tech",ar:"أساسيات الكابلات وأنظمة التوصيل",en:"Cable & Wiring Systems Fundamentals",dateAr:"05 – 09 يوليو 2026",dateEn:"5 – 9 Jul 2026",modeAr:"حضوري",modeEn:"On-site",durAr:"برنامج قصير",durEn:"Short",hrs:30,seats:20,taken:11,active:true,order:1,
-  dAr:"برنامج عملي لفنّيي خطوط الإنتاج في أنواع الكابلات ومعايير التوصيل وإجراءات الفحص المطبّقة في مصانع بحرة إلكتريك.",dEn:"A practical program for production technicians on cable types, wiring standards and inspection at Bahra Electric plants.",
-  outAr:"تمييز أنواع الكابلات واستخداماتها\nتطبيق معايير التوصيل المعتمدة\nإجراء فحوصات الجودة الأساسية",outEn:"Identify cable types\nApply approved wiring standards\nRun basic quality checks"},
- {id:"BAE-215",trk:"tech",ar:"صيانة المعدّات الكهربائية الصناعية",en:"Industrial Electrical Maintenance",dateAr:"19 – 23 يوليو 2026",dateEn:"19 – 23 Jul 2026",modeAr:"حضوري",modeEn:"On-site",durAr:"برنامج قصير",durEn:"Short",hrs:30,seats:18,taken:7,active:true,order:2,
-  dAr:"الصيانة الوقائية والتشخيصية للمحرّكات ولوحات التحكم ومعدّات خطوط الإنتاج داخل المصانع.",dEn:"Preventive and diagnostic maintenance of motors, panels and production-line equipment.",
-  outAr:"جدولة الصيانة الوقائية\nتشخيص أعطال المحرّكات\nتوثيق أعمال الصيانة",outEn:"Plan preventive maintenance\nDiagnose motor faults\nDocument maintenance work"},
- {id:"BAE-310",trk:"safe",ar:"السلامة المهنية في البيئة الصناعية (OSHA)",en:"Occupational Safety in Industry (OSHA)",dateAr:"12 – 14 يوليو 2026",dateEn:"12 – 14 Jul 2026",modeAr:"حضوري",modeEn:"On-site",durAr:"برنامج قصير",durEn:"Short",hrs:18,seats:25,taken:19,active:true,order:3,
-  dAr:"مبادئ السلامة وتقييم المخاطر وإجراءات الوقاية داخل خطوط الإنتاج والمعامل، إلزامي لمنسوبي المصانع.",dEn:"Safety principles, risk assessment and prevention on production lines — mandatory for plant staff.",
-  outAr:"تحديد مخاطر بيئة العمل\nاستخدام معدّات الوقاية الشخصية\nالتعامل مع الحوادث والبلاغات",outEn:"Identify workplace hazards\nUse PPE correctly\nHandle incidents and reports"},
- {id:"BAE-320",trk:"safe",ar:"الاستجابة للطوارئ والإسعافات الأولية",en:"Emergency Response & First Aid",dateAr:"06 – 07 سبتمبر 2026",dateEn:"6 – 7 Sep 2026",modeAr:"حضوري",modeEn:"On-site",durAr:"برنامج قصير",durEn:"Short",hrs:12,seats:24,taken:9,active:true,order:4,
-  dAr:"إجراءات الإخلاء والتعامل مع الحوادث وتقديم الإسعافات الأولية داخل مواقع العمل.",dEn:"Evacuation procedures, incident handling and on-site first aid.",
-  outAr:"تنفيذ خطة الإخلاء\nتقديم الإسعافات الأولية\nالتبليغ عن الحوادث",outEn:"Run an evacuation plan\nProvide first aid\nReport incidents"},
- {id:"BAE-228",trk:"tech",ar:"القياس والمعايرة لأجهزة المعامل",en:"Metrology & Lab Calibration",dateAr:"02 – 04 أغسطس 2026",dateEn:"2 – 4 Aug 2026",modeAr:"حضوري",modeEn:"On-site",durAr:"برنامج قصير",durEn:"Short",hrs:18,seats:15,taken:5,active:true,order:5,
-  dAr:"معايرة العدّادات وأجهزة القياس للحفاظ على دقة القراءات وجودة نتائج معامل المصنع.",dEn:"Calibrating meters and instruments to keep plant-lab readings accurate.",
-  outAr:"إجراء المعايرة الدورية\nتوثيق شهادات المعايرة\nحساب نسب الخطأ",outEn:"Run periodic calibration\nDocument certificates\nCompute error margins"},
- {id:"BAE-402",trk:"lang",ar:"اللغة الإنجليزية التقنية",en:"Technical English",dateAr:"على مدار العام",dateEn:"Year-round",modeAr:"افتراضي",modeEn:"Virtual",durAr:"برنامج طويل",durEn:"Long",hrs:120,seats:40,taken:28,active:true,order:6,
-  dAr:"رفع كفاءة الموظفين في الإنجليزية التقنية اللازمة لقراءة المواصفات والتقارير والتعامل مع الموردين.",dEn:"Building the technical English needed for specifications, reports and supplier communication.",
-  outAr:"قراءة المواصفات الفنية\nكتابة تقارير قصيرة\nالتواصل مع الموردين",outEn:"Read technical specifications\nWrite short reports\nCommunicate with suppliers"},
- {id:"BAE-501",trk:"mgmt",ar:"إدارة المشاريع الاحترافية — تمهيدي PMP",en:"Project Management — PMP Prep",dateAr:"09 – 13 أغسطس 2026",dateEn:"9 – 13 Aug 2026",modeAr:"حضوري",modeEn:"On-site",durAr:"برنامج قصير",durEn:"Short",hrs:35,seats:22,taken:16,active:true,order:7,
-  dAr:"أساسيات إدارة المشاريع وفق إطار PMI لموظفي الإدارات المساندة والمشاريع الداخلية.",dEn:"PMI-framework project management for support departments and internal projects.",
-  outAr:"بناء خطة المشروع\nإدارة النطاق والوقت\nمتابعة المخاطر",outEn:"Build a project plan\nManage scope and time\nTrack risks"},
- {id:"BAE-512",trk:"mgmt",ar:"الإشراف الميداني وقيادة الفرق الفنية",en:"Field Supervision & Team Leadership",dateAr:"23 – 25 أغسطس 2026",dateEn:"23 – 25 Aug 2026",modeAr:"حضوري",modeEn:"On-site",durAr:"برنامج قصير",durEn:"Short",hrs:18,seats:20,taken:6,active:true,order:8,
-  dAr:"مهارات الإشراف على الفرق الفنية وتوزيع المهام ومتابعة الأداء داخل بيئة المصنع.",dEn:"Supervising technical teams, assigning tasks and tracking performance on the floor.",
-  outAr:"توزيع المهام اليومية\nمتابعة الأداء\nمعالجة مشكلات الفريق",outEn:"Assign daily tasks\nTrack performance\nResolve team issues"},
- {id:"BAE-601",trk:"digi",ar:"التحوّل الرقمي في القطاع الصناعي",en:"Digital Transformation in Industry",dateAr:"16 – 17 أغسطس 2026",dateEn:"16 – 17 Aug 2026",modeAr:"افتراضي",modeEn:"Virtual",durAr:"برنامج قصير",durEn:"Short",hrs:12,seats:50,taken:12,active:true,order:9,
-  dAr:"مفاهيم الصناعة 4.0 وتطبيقات الأتمتة وتحليل بيانات الإنتاج داخل مصانع بحرة إلكتريك.",dEn:"Industry 4.0 concepts, automation and production-data analytics at Bahra Electric.",
-  outAr:"فهم مفاهيم الصناعة 4.0\nتحديد فرص الأتمتة\nقراءة لوحات المؤشرات",outEn:"Understand Industry 4.0\nSpot automation opportunities\nRead dashboards"},
- {id:"BAE-608",trk:"digi",ar:"تحليل بيانات الإنتاج باستخدام Excel",en:"Production Data Analysis with Excel",dateAr:"30 – 31 أغسطس 2026",dateEn:"30 – 31 Aug 2026",modeAr:"افتراضي",modeEn:"Virtual",durAr:"برنامج قصير",durEn:"Short",hrs:12,seats:35,taken:14,active:true,order:10,
-  dAr:"بناء تقارير ولوحات متابعة لمؤشرات الإنتاج والجودة من بيانات المصنع.",dEn:"Building reports and dashboards for production and quality indicators.",
-  outAr:"تنظيف بيانات الإنتاج\nبناء جداول محورية\nإعداد لوحة مؤشرات",outEn:"Clean production data\nBuild pivot tables\nCreate a KPI dashboard"}
+ {id:"BG-101",trk:"core",ar:"تملّك المسؤولية: فكّر وتصرّف كصاحب العمل",en:"Taking Ownership: Think and Act Like an Owner",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"ورشة قصيرة",durEn:"Short workshop",hrs:2,seats:25,taken:0,active:true,order:1,
+  dAr:"التمييز بين المسؤولية والمساءلة، وأخذ زمام المبادرة بدل انتظار التعليمات، وتحمّل تبعات النتائج والوفاء بالالتزامات.",dEn:"Distinguish responsibility from accountability, show initiative instead of waiting for instructions, own outcomes and follow through on commitments.",
+  outAr:"التمييز بين المسؤولية والمساءلة\nأخذ المبادرة دون انتظار التوجيه\nالالتزام بإجراء عملي واحد لتعزيز التملّك في العمل اليومي",outEn:"Tell responsibility from accountability\nTake initiative without being told\nCommit to one practical ownership action"},
+ {id:"BG-102",trk:"core",ar:"بحرة واحدة: قوة العمل المشترك",en:"One Bahra: The Power of Working Together",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"ورشة قصيرة",durEn:"Short workshop",hrs:2,seats:25,taken:0,active:true,order:2,
+  dAr:"تعزيز العمل الجماعي ووحدة المنظمة، وفهم أثر عمل كل موظف على بقية الإدارات، وكسر الحواجز بين الأقسام.",dEn:"Strengthen teamwork and organizational unity, understand how each role affects other departments, and break down silos.",
+  outAr:"إدراك الترابط بين الإدارات\nتمييز السلوكيات التي تصنع العزلة بين الأقسام\nتحديد إجراء واحد لتحسين التعاون مع فريق آخر",outEn:"See interdepartmental dependencies\nSpot behaviours that create silos\nIdentify one action to improve collaboration"},
+ {id:"BG-103",trk:"core",ar:"التواصل الفعّال في بيئة العمل",en:"Communicating Effectively at Work",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"ورشة قصيرة",durEn:"Short workshop",hrs:3,seats:25,taken:0,active:true,order:3,
+  dAr:"تحسين التواصل الشفهي والكتابي، وتنمية الإصغاء الفعّال، وتقليل سوء الفهم، وتكييف أسلوب التواصل حسب الموقف والمخاطَب.",dEn:"Improve verbal and written communication, develop active listening, reduce misunderstandings and adapt style to the person and situation.",
+  outAr:"توصيل التعليمات بوضوح واحترام\nممارسة الإصغاء الفعّال\nتكييف أسلوب التواصل مع المواقف المختلفة",outEn:"Convey instructions clearly and respectfully\nPractise active listening\nAdapt communication to the situation"},
+ {id:"BG-104",trk:"core",ar:"الذكاء العاطفي: فهم الذات وفهم الآخرين",en:"Emotional Intelligence: Understanding Yourself and Others",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"ورشة قصيرة",durEn:"Short workshop",hrs:3,seats:25,taken:0,active:true,order:4,
+  dAr:"تنمية الوعي الذاتي، والتعرّف على المحفّزات الانفعالية، وضبط ردود الفعل تحت الضغط، وفهم وجهات نظر الآخرين.",dEn:"Develop self-awareness, recognise emotional triggers, manage reactions under pressure and understand others' perspectives.",
+  outAr:"تحديد المحفّزات الانفعالية الشخصية\nضبط رد الفعل في المواقف الضاغطة\nبناء علاقات مهنية أقوى",outEn:"Identify your emotional triggers\nManage reactions under pressure\nBuild stronger professional relationships"},
+ {id:"BG-105",trk:"core",ar:"إدارة الوقت والإنتاجية الشخصية",en:"Time Management and Personal Productivity",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"ورشة قصيرة",durEn:"Short workshop",hrs:2,seats:25,taken:0,active:true,order:5,
+  dAr:"تحسين ترتيب الأولويات، والتمييز بين العاجل والمهم، وتقليل التأخير غير الضروري، وبناء عادات تخطيط يومي فعّالة.",dEn:"Improve prioritisation, tell urgent from important, cut unnecessary delays and build effective daily planning habits.",
+  outAr:"التمييز بين العاجل والمهم\nالتعامل مع المشتّتات\nإعداد خطة شخصية لتحسين الإنتاجية",outEn:"Separate urgent from important\nHandle distractions\nPrepare a personal productivity plan"},
+ {id:"BG-106",trk:"core",ar:"كايزن: تحسينات صغيرة ونتائج كبيرة",en:"Kaizen: Small Improvements, Big Results",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"ورشة قصيرة",durEn:"Short workshop",hrs:3,seats:25,taken:0,active:true,order:6,
+  dAr:"التعريف بالتحسين المستمر، واكتشاف الهدر وأوجه القصور في مواقع العمل، وتطبيق دورة خطّط–نفّذ–افحص–تصرّف.",dEn:"Introduce continuous improvement, spot waste and inefficiency in the workplace, and apply the Plan–Do–Check–Act cycle.",
+  outAr:"اكتشاف الهدر في موقع العمل\nتطبيق دورة خطّط–نفّذ–افحص–تصرّف\nرفع فرصة تحسين واحدة على الأقل لمبادرة كايزن",outEn:"Spot workplace waste\nApply the PDCA cycle\nSubmit at least one improvement opportunity"},
+ {id:"BG-107",trk:"core",ar:"التفكير الناقد واتخاذ القرار الأفضل",en:"Critical Thinking and Better Decision-Making",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"ورشة قصيرة",durEn:"Short workshop",hrs:3,seats:25,taken:0,active:true,order:7,
+  dAr:"تنمية القدرة على فصل الحقائق عن الافتراضات، وتحليل المشكلات بمنهجية، وتقييم البدائل، واتخاذ قرارات مبنية على الأدلة.",dEn:"Separate fact from assumption, examine problems systematically, evaluate alternatives and decide on evidence.",
+  outAr:"فصل الحقائق عن الافتراضات\nتقييم الحلول البديلة\nتطبيق إطار منظّم لاتخاذ القرار على مشكلة عمل حقيقية",outEn:"Separate fact from assumption\nEvaluate alternatives\nApply a structured decision framework to a real problem"},
+ {id:"BG-201",trk:"sup",ar:"المشرف الفعّال: الأدوار والمسؤوليات والتوقعات",en:"The Effective Supervisor: Roles, Responsibilities and Expectations",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"ورشة ممتدة",durEn:"Extended workshop",hrs:4,seats:20,taken:0,active:true,order:8,
+  dAr:"توضيح مسؤوليات المشرف القيادية، والتمييز بين الإشراف وأداء العمل الفني، وترسيخ ممارسات الإدارة اليومية الفعّالة.",dEn:"Clarify the supervisor's leadership responsibilities, distinguish supervising from doing technical work, and establish effective daily management practices.",
+  outAr:"التمييز بين الإشراف والتنفيذ الفني\nترسيخ ممارسات إدارة يومية فعّالة\nإعداد قائمة فحص شخصية لفاعلية الإشراف",outEn:"Tell supervising from doing\nEstablish daily management practices\nPrepare a personal supervisory checklist"},
+ {id:"BG-202",trk:"sup",ar:"القيادة بالقدوة وبناء المصداقية",en:"Leading by Example and Building Credibility",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"ورشة قصيرة",durEn:"Short workshop",hrs:3,seats:20,taken:0,active:true,order:9,
+  dAr:"بيان أثر سلوك القائد على سلوك الموظفين، وتحقيق الاتساق بين القول والفعل، وتعزيز العدالة والنزاهة وبناء الثقة.",dEn:"Show how leaders shape employee behaviour, align words with actions, strengthen fairness and integrity, and build trust.",
+  outAr:"تحقيق الاتساق بين القول والفعل\nتعزيز العدالة في التعامل\nصياغة التزام قيادي شخصي بسلوكيات محدّدة",outEn:"Align words with actions\nStrengthen fairness\nWrite a personal leadership commitment"},
+ {id:"BG-203",trk:"sup",ar:"التدريب الموجّه لرفع أداء الموظفين",en:"Coaching Employees for Better Performance",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"ورشة ممتدة",durEn:"Extended workshop",hrs:4,seats:20,taken:0,active:true,order:10,
+  dAr:"التمييز بين التدريب الموجّه والتوجيه المباشر، وتنمية مهارات السؤال والإصغاء، وإدارة محادثات تدريب منظّمة.",dEn:"Distinguish coaching from directing, develop questioning and listening skills, and run structured coaching conversations.",
+  outAr:"التمييز بين التدريب الموجّه والتوجيه\nتحديد احتياجات تطوير الموظف\nإعداد خطة تدريب لأحد أعضاء الفريق",outEn:"Tell coaching from directing\nIdentify development needs\nPrepare a coaching plan for a team member"},
+ {id:"BG-204",trk:"sup",ar:"تقديم التغذية الراجعة البنّاءة",en:"Giving Constructive Feedback",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"ورشة قصيرة",durEn:"Short workshop",hrs:3,seats:20,taken:0,active:true,order:11,
+  dAr:"أهمية التغذية الراجعة في وقتها، والفصل بين الملاحظة والحكم، وتقدير الأداء الجيد، وإيصال احتياجات التحسين باحترام.",dEn:"The value of timely feedback, separating observation from judgment, recognising good performance and raising improvement needs respectfully.",
+  outAr:"الفصل بين الملاحظة والحكم\nتقدير الأداء الجيد صراحةً\nإدارة محادثة تغذية راجعة بمنهج منظّم",outEn:"Separate observation from judgment\nRecognise good performance\nRun a structured feedback conversation"},
+ {id:"BG-205",trk:"sup",ar:"إدارة المحادثات والمواقف الصعبة في العمل",en:"Handling Difficult Conversations and Workplace Situations",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"ورشة ممتدة",durEn:"Extended workshop",hrs:4,seats:20,taken:0,active:true,order:12,
+  dAr:"معالجة قضايا الأداء والسلوك بمهنية، وإدارة الخلاف دون تصعيد، وضبط النفس، ومعرفة متى تُشرك إدارة الموارد البشرية.",dEn:"Address performance and conduct concerns professionally, manage conflict without escalation, stay composed, and know when to involve the People Department.",
+  outAr:"إدارة الخلاف دون تصعيد غير ضروري\nضبط النفس وتوضيح التوقعات\nمعرفة متى يُشرَك قسم الموارد البشرية",outEn:"Manage conflict without escalation\nStay composed and set expectations\nKnow when to involve the People Department"},
+ {id:"BG-206",trk:"sup",ar:"التفويض والتمكين والمساءلة",en:"Delegation, Empowerment and Accountability",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"ورشة قصيرة",durEn:"Short workshop",hrs:3,seats:20,taken:0,active:true,order:13,
+  dAr:"تحديد المهام القابلة للتفويض، ومطابقتها بقدرات الموظفين، وتوضيح الصلاحيات، والمتابعة الفعّالة دون فقدان المساءلة.",dEn:"Identify tasks to delegate, match them to employee capability, communicate authority clearly, and follow up without losing accountability.",
+  outAr:"اختيار المهام المناسبة للتفويض\nتوضيح الصلاحية والدعم المطلوب\nإعداد خطة تفويض كاملة لمهمة محدّدة",outEn:"Choose the right tasks to delegate\nClarify authority and support\nBuild a delegation plan for one task"},
+ {id:"BG-207",trk:"sup",ar:"بناء فريق عالي الأداء",en:"Building a High-Performing Team",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"ورشة ممتدة",durEn:"Extended workshop",hrs:4,seats:20,taken:0,active:true,order:14,
+  dAr:"خصائص الفرق الفعّالة، وبناء أهداف واضحة، وتعزيز التعاون والثقة، وتقدير الإسهامات، وإدارة ديناميكيات الفريق.",dEn:"The traits of effective teams, setting clear goals, building collaboration and trust, recognising contributions and managing team dynamics.",
+  outAr:"وضع أهداف فريق واضحة\nتعزيز الثقة وتقدير الإسهامات\nإعداد خطة لتحسين أداء الفريق",outEn:"Set clear team goals\nBuild trust and recognise contributions\nPrepare a team improvement plan"},
+ {id:"BG-208",trk:"sup",ar:"حل المشكلات لمشرفي الخطوط الأمامية",en:"Problem-Solving for Frontline Supervisors",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"ورشة ممتدة",durEn:"Extended workshop",hrs:4,seats:20,taken:0,active:true,order:15,
+  dAr:"مهارات حل المشكلات بمنهجية، والتمييز بين العرض والسبب الجذري، وتطبيق الأسباب الخمسة ومخطط السبب والأثر.",dEn:"Structured problem-solving, telling symptoms from root causes, and applying the 5 Whys and fishbone methods.",
+  outAr:"التمييز بين العرَض والسبب الجذري\nتطبيق الأسباب الخمسة ومخطط السبب والأثر\nإعداد تحليل سبب جذري وخطة إجراءات تصحيحية",outEn:"Tell symptoms from root causes\nApply 5 Whys and fishbone\nProduce a root-cause analysis and action plan"},
+ {id:"BG-301",trk:"lead",ar:"التفكير الاستراتيجي واستشراف الأعمال",en:"Strategic Thinking and Business Foresight",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"برنامج يوم كامل",durEn:"Full-day program",hrs:6,seats:15,taken:0,active:true,order:16,
+  dAr:"تجاوز التفكير التشغيلي اليومي، وتحليل تطورات السوق والقطاع، واستشراف الفرص والمخاطر، وبناء أولويات بعيدة المدى.",dEn:"Move beyond day-to-day operations, analyse market and industry developments, identify future opportunities and risks, and set longer-term priorities.",
+  outAr:"تحليل تطورات السوق والقطاع\nتقييم السيناريوهات البديلة\nإعداد تحليل للفرص والمخاطر للإدارة خلال سنتين إلى ثلاث",outEn:"Analyse market developments\nAssess alternative scenarios\nPrepare a 2–3 year opportunity and risk analysis"},
+ {id:"BG-302",trk:"lead",ar:"ترجمة الاستراتيجية إلى تنفيذ",en:"Translating Strategy into Execution",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"برنامج يوم كامل",durEn:"Full-day program",hrs:6,seats:15,taken:0,active:true,order:17,
+  dAr:"تحويل الأهداف الاستراتيجية إلى خطط تنفيذية، وبناء مؤشرات قابلة للقياس، ومواءمة الموارد والمسؤوليات والمتابعة.",dEn:"Convert strategic objectives into departmental plans, set measurable KPIs, align resources and responsibilities, and monitor progress.",
+  outAr:"تحويل الأهداف إلى مبادرات تنفيذية\nبناء مؤشرات أداء قابلة للقياس\nإعداد خطة تنفيذ لتسعين يوماً للإدارة",outEn:"Turn objectives into initiatives\nSet measurable KPIs\nBuild a 90-day departmental execution plan"},
+ {id:"BG-303",trk:"lead",ar:"نموذج EFQM والتميّز المؤسسي",en:"EFQM and Organizational Excellence",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"برنامج يوم كامل",durEn:"Full-day program",hrs:6,seats:15,taken:0,active:true,order:18,
+  dAr:"التعريف بنموذج EFQM، وفهم العلاقة بين التوجّه والتنفيذ والنتائج، وتقييم نقاط القوة وفرص التحسين المؤسسية.",dEn:"Introduce the EFQM Model, understand Direction–Execution–Results, and assess organizational strengths and improvement opportunities.",
+  outAr:"فهم أركان نموذج EFQM\nإجراء تقييم أولي لممارسات مختارة\nتحديد فرص تحسين ذات أولوية لمجلس التميّز",outEn:"Understand the EFQM pillars\nRun a preliminary assessment\nPrioritise improvement opportunities"},
+ {id:"BG-304",trk:"lead",ar:"المالية لغير الماليين",en:"Finance for Non-Financial Managers",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"برنامج يوم كامل",durEn:"Full-day program",hrs:6,seats:15,taken:0,active:true,order:19,
+  dAr:"فهم القوائم المالية والموازنات والربحية والتدفق النقدي، وقراءة المؤشرات المالية، وتقييم القرارات من منظور مالي.",dEn:"Understand financial statements, budgets, profitability and cash flow; read key indicators; and assess decisions financially.",
+  outAr:"قراءة القوائم المالية الأساسية\nتفسير المؤشرات المالية الرئيسية\nتقييم الأثر المالي لقرار إداري",outEn:"Read basic financial statements\nInterpret key indicators\nEvaluate the financial impact of a decision"},
+ {id:"BG-305",trk:"lead",ar:"قيادة التغيير والتحوّل المؤسسي",en:"Leading Organizational Change and Transformation",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"برنامج يوم كامل",durEn:"Full-day program",hrs:6,seats:15,taken:0,active:true,order:20,
+  dAr:"فهم أثر التغيير على الموظفين والعمليات، وتشخيص مصادر المقاومة، والتواصل الفعّال، وبناء خطط إشراك أصحاب المصلحة.",dEn:"Understand how change affects people and operations, diagnose resistance, communicate effectively and build stakeholder engagement plans.",
+  outAr:"تشخيص مصادر مقاومة التغيير\nالتواصل الفعّال حول التغيير\nإعداد خطة لإدارة التغيير بمقاييس نجاح واضحة",outEn:"Diagnose sources of resistance\nCommunicate change effectively\nPrepare a change plan with success measures"},
+ {id:"BG-306",trk:"lead",ar:"إدارة المواهب والتخطيط للإحلال الوظيفي",en:"Talent Management and Succession Planning",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"ورشة ممتدة",durEn:"Extended workshop",hrs:5,seats:15,taken:0,active:true,order:21,
+  dAr:"تحديد الوظائف الحرجة واحتياجات المواهب، وتقييم جاهزية الموظفين، وبناء مسارات إحلال تقلّل الاعتماد على الأفراد.",dEn:"Identify critical positions and talent needs, assess readiness, and build succession pipelines that reduce dependency on individuals.",
+  outAr:"تحديد الوظائف الحرجة في الإدارة\nتقييم جاهزية الموظفين وإمكاناتهم\nإعداد خطة إحلال أولية مع ضوابط السرّية",outEn:"Identify critical positions\nAssess employee readiness\nDraft a succession plan with confidentiality safeguards"},
+ {id:"BG-307",trk:"lead",ar:"إدارة الأداء المؤسسي عبر مؤشرات الأداء",en:"Managing Organizational Performance Through KPIs",dateAr:"",dateEn:"",mode:"hybrid",modeAr:"",modeEn:"",durAr:"برنامج يوم كامل",durEn:"Full-day program",hrs:6,seats:15,taken:0,active:true,order:22,
+  dAr:"ربط الاستراتيجية بالأداء، وتصميم مؤشرات ذات معنى، والتمييز بين المؤشرات القائدة والمتأخرة، وقراءة لوحات المتابعة.",dEn:"Connect strategy to performance, design meaningful indicators, tell leading from lagging KPIs, and read dashboards.",
+  outAr:"تصميم مؤشرات أداء ذات معنى\nالتمييز بين المؤشرات القائدة والمتأخرة\nإعداد بطاقة أداء أولية للإدارة",outEn:"Design meaningful indicators\nTell leading from lagging KPIs\nPrepare a departmental scorecard"}
 ];
 const DEF_CONTENT={
  /* مواقع العمل — تُستخدم في نموذج التسجيل وفي خريطة المسجّلين */
@@ -1438,8 +1521,7 @@ const DEF_CONTENT={
  hero:{kick:{ar:"أكاديمية بحرة · إدارة التدريب الفني — مجموعة بحرة إلكتريك",en:"Bahra Academy · Technical Training — Bahra Electric Group"},
    title:{ar:"نبني مهارات\nمنسوبي بحرة إلكتريك",en:"We build the skills\nof Bahra Electric people"},
    lead:{ar:"برامج تدريب تقني ومهني مخصّصة لمنسوبي مجموعة بحرة إلكتريك في الإلكترونيات الصناعية والتحكم وأنظمة الكابلات والسلامة المهنية. التسجيل بالرقم الوظيفي فقط.",en:"Technical and vocational programs for Bahra Electric employees in industrial electronics, control, cable systems and occupational safety. Enrollment by employee ID only."}},
- figs:[{n:"2023",ar:"سنة التأسيس",en:"Established"},{n:"10",ar:"برامج تدريبية",en:"Programs"},
-   {n:"3,064",ar:"ساعة تدريبية منجزة",en:"Training hours"},{n:"127",ar:"موظفاً تم تدريبهم",en:"Employees trained"}],
+ figs:[{n:"2023",ar:"سنة التأسيس",en:"Established"},{n:"22",ar:"برنامجاً تدريبياً",en:"Programs"},{n:"0",ar:"ساعة تدريبية منجزة",en:"Training hours"},{n:"0",ar:"موظفاً تم تدريبهم",en:"Employees trained"}],
  vision:{ar:"أن تكون أكاديمية بحرة الذراع التدريبي الأول لمجموعة بحرة إلكتريك، ومصدراً موثوقاً للفنّي المتخصص الماهر داخل المصانع بما يتماشى مع مستهدفات رؤية المملكة 2030.",en:"To be the primary training arm of Bahra Electric Group and a trusted source of skilled specialist technicians, aligned with Vision 2030."},
  mission:{ar:"تقديم برامج تدريب تقني ومهني عالية الجودة لمنسوبي المجموعة وفق المعايير الدولية، وسدّ فجوات المهارات في المصانع، وقياس أثر التدريب على الأداء والإنتاجية.",en:"Delivering high-quality technical programs to group employees against international standards, closing plant skill gaps and measuring training impact."},
  progIntro:{ar:"برامج تدريبية لمنسوبي مجموعة بحرة إلكتريك لدعم النمو المهني وصقل المهارات الفنية. التسجيل متاح بالرقم الوظيفي.",en:"Programs for Bahra Electric employees. Enrollment with your employee ID."},
@@ -1462,12 +1544,8 @@ const DEF_CONTENT={
     {ar:"سياسة التقييم والاختبارات",en:"Assessment & exams",dAr:"تقييم قبلي وبعدي لكل برنامج، وتقرير أثر يُرسل لمدير الإدارة بعد انتهاء التدريب.",dEn:"Pre and post assessment per program, with an impact report sent to the employee's manager."},
     {ar:"سياسة السلامة في المعامل",en:"Laboratory safety",dAr:"اشتراطات السلامة ومعدّات الوقاية الشخصية وإجراءات الطوارئ داخل معامل التدريب.",dEn:"Safety requirements, PPE and emergency procedures in the training labs."},
     {ar:"سياسة إصدار الشهادات",en:"Certificate issuance",dAr:"ضوابط إصدار شهادات إتمام البرامج وإضافتها لملف الموظف التدريبي.",dEn:"Rules for issuing completion certificates and adding them to the employee training record."}]},
- news:[
-  {ar:"فتح التسجيل في برامج النصف الثاني من عام 2026",en:"Second-half 2026 registration opens",dAr:"أعلنت أكاديمية بحرة بدء استقبال طلبات التسجيل من منسوبي المجموعة في برامج النصف الثاني، وتشمل برامج فنية وإدارية وبرامج السلامة المهنية.",dEn:"Registration is open to group employees for technical, management and safety programs.",t:"03 يونيو 2026"},
-  {ar:"اعتماد خطة التدريب السنوية لمنسوبي المجموعة",en:"Annual training plan approved",dAr:"اعتمدت إدارة التدريب الفني الخطة السنوية بعد تحديث بيانات المهارات والجدارات لكل عامل بالمصانع وتحديد فجوات المهارات.",dEn:"The annual plan was approved after updating skill records and identifying gaps.",t:"18 مايو 2026"},
-  {ar:"انطلاق أعمال معايرة أجهزة القياس في معامل التدريب",en:"Training-lab calibration begins",dAr:"بدأت الأكاديمية أعمال معايرة العدّادات وأجهزة القياس في معامل التدريب للحفاظ على صحة القراءات وجودة التدريب العملي.",dEn:"Calibration of meters and instruments began to preserve accuracy.",t:"29 أبريل 2026"}],
- reports:[{ar:"تقرير التدريب السنوي 2024",en:"Annual training report 2024",dAr:"ملخّص البرامج المنفّذة وأعداد المتدربين وساعات التدريب ومؤشرات الأثر لعام 2024.",dEn:"Programs delivered, trainee numbers, hours and impact indicators for 2024.",t:"2024"},
-   {ar:"تقرير التدريب السنوي 2025",en:"Annual training report 2025",dAr:"ملخّص البرامج المنفّذة وأعداد المتدربين وساعات التدريب ومؤشرات الأثر لعام 2025.",dEn:"Programs delivered, trainee numbers, hours and impact indicators for 2025.",t:"2025"}],
+ news:[],
+ reports:[],
  team:[
   {n:"هشام نبيه أبو يوسف السعيد",rAr:"مدير الأكاديمية ومدير التدريب الفني",rEn:"Academy & Technical Training Director",dAr:"الإشراف على الأكاديمية وإدارة التدريب",dEn:"Academy oversight and training management",e:"hesham.nabeih@bahra-cables.com",x:"2700"},
   {n:"براء خالد سعد الفران",rAr:"مشرف برنامج الإلكترونيات الصناعية والتحكم",rEn:"Industrial Electronics Supervisor",dAr:"تدريس المواد الفنية والنظرية والإشراف عليها",dEn:"Teaching and supervising technical subjects",e:"",x:""},
@@ -1527,24 +1605,162 @@ let C=clone(DEF_CONTENT), P=clone(DEF_PROGRAMS);
 function chevrons(){let s="";for(let i=0;i<22;i++){const o=i*17;
   s+=`<path d="M${120+o} -40 L${330+o} 300 L${120+o} 640" fill="none" stroke="var(--chev)" stroke-opacity="${(0.9-i*0.033).toFixed(3)}" stroke-width="1.4" style="animation-delay:${i*40}ms;opacity:var(--chevO)"/>`;}
   return s;}
+/* =========================================================
+   أغلفة البرامج التلقائية — رسم خطّي هادئ بلون المسار
+   ========================================================= */
+const TRACK_ART={
+ /* حلقة أشخاص — لجميع الموظفين */
+ core:c=>`
+  <g stroke="${c}" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="translate(300,112)" opacity=".55">
+      <circle r="66" stroke-width="1.4" opacity=".4" stroke-dasharray="5 7"/>
+      <g stroke-width="2.1">
+        <g transform="translate(0,-58)"><circle r="11"/><path d="M-17 23 a17 15 0 0 1 34 0"/></g>
+        <g transform="translate(55,-18)"><circle r="11"/><path d="M-17 23 a17 15 0 0 1 34 0"/></g>
+        <g transform="translate(34,47)"><circle r="11"/><path d="M-17 23 a17 15 0 0 1 34 0"/></g>
+        <g transform="translate(-34,47)"><circle r="11"/><path d="M-17 23 a17 15 0 0 1 34 0"/></g>
+        <g transform="translate(-55,-18)"><circle r="11"/><path d="M-17 23 a17 15 0 0 1 34 0"/></g>
+      </g>
+    </g>
+    <g opacity=".3" stroke-width="5" stroke-linecap="round">
+      <path d="M28 184 h86"/><path d="M28 206 h52"/>
+    </g>
+  </g>`,
+ /* قائد أمام فريقه ودرجات صاعدة — الإشراف */
+ sup:c=>`
+  <g stroke="${c}" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <g opacity=".58" stroke-width="2.2">
+      <g transform="translate(286,78)"><circle r="14"/><path d="M-22 30 a22 19 0 0 1 44 0"/></g>
+      <g transform="translate(226,106)" opacity=".7"><circle r="10"/><path d="M-16 22 a16 14 0 0 1 32 0"/></g>
+      <g transform="translate(346,106)" opacity=".7"><circle r="10"/><path d="M-16 22 a16 14 0 0 1 32 0"/></g>
+    </g>
+    <g opacity=".4" stroke-width="2.2">
+      <path d="M34 200 h50 v-26 h50 v-26 h50 v-26 h50"/>
+    </g>
+    <g fill="${c}" stroke="none" opacity=".45">
+      <circle cx="84" cy="174" r="4.4"/><circle cx="134" cy="148" r="4.4"/><circle cx="184" cy="122" r="4.4"/>
+    </g>
+  </g>`,
+ /* بوصلة واتجاه — الإدارة العليا */
+ lead:c=>`
+  <g stroke="${c}" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="translate(298,110)">
+      <circle r="66" stroke-width="2.2" opacity=".55"/>
+      <circle r="54" stroke-width="1.3" opacity=".32"/>
+      <g opacity=".45" stroke-width="1.5">
+        <path d="M0 -66 V-54"/><path d="M0 54 V66"/><path d="M-66 0 H-54"/><path d="M54 0 H66"/>
+      </g>
+      <path d="M0 -40 L17 0 L0 40 L-17 0 Z" stroke-width="2.2" opacity=".6"/>
+      <path d="M0 -40 L17 0 L0 0 Z" fill="${c}" stroke="none" opacity=".5"/>
+      <circle r="4.4" fill="${c}" stroke="none" opacity=".6"/>
+    </g>
+    <g opacity=".35" stroke-width="1.8">
+      <path d="M26 176 h94"/><path d="M26 198 h150"/>
+    </g>
+  </g>`,
+ /* كابل مقطوع + مسار دارة */
+ tech:c=>`
+  <g stroke="${c}" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="translate(298,112)">
+      <circle r="62" stroke-width="2.2" opacity=".55"/>
+      <circle r="47" stroke-width="1.6" opacity=".4"/>
+      <circle r="31" stroke-width="1.6" opacity=".4"/>
+      <circle r="15" stroke-width="2.2" opacity=".55"/>
+      <circle r="5.5" fill="${c}" stroke="none" opacity=".6"/>
+      <g opacity=".45" stroke-width="1.5">
+        <path d="M0 -62 V-47"/><path d="M0 47 V62"/><path d="M-62 0 H-47"/><path d="M47 0 H62"/>
+      </g>
+    </g>
+    <g opacity=".42" stroke-width="1.8">
+      <path d="M24 176 H92 L118 150 H182"/>
+      <path d="M24 146 H70 L96 120 H140"/>
+      <path d="M24 206 H130 L150 186 H196"/>
+    </g>
+    <g fill="${c}" stroke="none" opacity=".5">
+      <circle cx="182" cy="150" r="4.6"/><circle cx="140" cy="120" r="4.6"/><circle cx="196" cy="186" r="4.6"/>
+    </g>
+  </g>`,
+ /* خوذة سلامة */
+ safe:c=>`
+  <g stroke="${c}" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".55">
+    <g transform="translate(292,116)">
+      <path d="M-78 30 a78 74 0 0 1 156 0" stroke-width="2.4"/>
+      <path d="M-92 30 h184 a6 6 0 0 1 6 6 v7 a6 6 0 0 1 -6 6 h-184 a6 6 0 0 1 -6 -6 v-7 a6 6 0 0 1 6 -6z" stroke-width="2.4"/>
+      <path d="M-26 -42 a56 56 0 0 1 52 0" stroke-width="1.7" opacity=".7"/>
+      <path d="M0 -48 V30" stroke-width="1.7" opacity=".55"/>
+      <path d="M-40 -30 V30" stroke-width="1.5" opacity=".4"/>
+      <path d="M40 -30 V30" stroke-width="1.5" opacity=".4"/>
+    </g>
+    <g opacity=".5" stroke-width="1.6">
+      <path d="M26 190 h78"/><path d="M26 208 h44"/>
+    </g>
+  </g>`,
+ /* كرة أرضية + خطوط نص */
+ lang:c=>`
+  <g stroke="${c}" fill="none" stroke-linecap="round" opacity=".55">
+    <g transform="translate(300,112)">
+      <circle r="64" stroke-width="2.2"/>
+      <path d="M-64 0 H64" stroke-width="1.5" opacity=".7"/>
+      <path d="M-56 -30 H56" stroke-width="1.3" opacity=".5"/>
+      <path d="M-56 30 H56" stroke-width="1.3" opacity=".5"/>
+      <ellipse rx="27" ry="64" stroke-width="1.6" opacity=".7"/>
+      <ellipse rx="51" ry="64" stroke-width="1.3" opacity=".45"/>
+    </g>
+    <g stroke-width="5" opacity=".38" stroke-linecap="round">
+      <path d="M30 88 h118"/><path d="M30 112 h92"/><path d="M30 136 h140"/><path d="M30 160 h74"/>
+    </g>
+  </g>`,
+ /* مسار صاعد */
+ mgmt:c=>`
+  <g stroke="${c}" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M42 190 L126 138 L206 162 L292 86 L368 44" stroke-width="2.6" opacity=".55"/>
+    <path d="M332 44 H368 V80" stroke-width="2.2" opacity=".55"/>
+    <g fill="${c}" stroke="none" opacity=".55">
+      <circle cx="126" cy="138" r="6"/><circle cx="206" cy="162" r="6"/><circle cx="292" cy="86" r="6"/>
+    </g>
+    <g stroke-width="8" opacity=".16" stroke-linecap="round">
+      <path d="M42 206 V196"/><path d="M126 206 V168"/><path d="M206 206 V186"/><path d="M292 206 V116"/><path d="M368 206 V78"/>
+    </g>
+  </g>`,
+ /* شبكة عقد */
+ digi:c=>`
+  <g stroke="${c}" fill="none" stroke-linecap="round">
+    <g opacity=".34" stroke-width="1.5">
+      <path d="M86 68 L188 118 L300 74 L358 146 L246 186 L140 160 Z"/>
+      <path d="M188 118 L246 186"/><path d="M188 118 L358 146"/><path d="M86 68 L140 160"/>
+      <path d="M300 74 L246 186"/>
+    </g>
+    <g fill="${c}" stroke="none">
+      <circle cx="86" cy="68" r="5" opacity=".5"/><circle cx="188" cy="118" r="7.5" opacity=".62"/>
+      <circle cx="300" cy="74" r="5" opacity=".5"/><circle cx="358" cy="146" r="5" opacity=".5"/>
+      <circle cx="246" cy="186" r="6.5" opacity=".55"/><circle cx="140" cy="160" r="5" opacity=".5"/>
+    </g>
+    <g opacity=".2" stroke-width="1.3">
+      <circle cx="188" cy="118" r="20"/><circle cx="188" cy="118" r="33"/>
+    </g>
+  </g>`
+};
 function plate(trk,seed){
-  const c=(TRACKS[trk]||TRACKS.tech).c;let art="";
-  if(trk==="tech"){for(let i=1;i<=5;i++)art+=`<circle cx="120" cy="105" r="${i*17}" fill="none" stroke="${c}" stroke-opacity="${(.85-i*.11).toFixed(2)}" stroke-width="2"/>`;
-    art+=`<circle cx="120" cy="105" r="9" fill="${c}"/>`;
-    for(let i=0;i<9;i++)art+=`<rect x="${230+i*20}" y="${45+((i+seed)%4)*16}" width="10" height="${70-((i+seed)%4)*12}" rx="2" fill="${c}" fill-opacity="${.18+((i+seed)%4)*.1}"/>`;}
-  else if(trk==="safe"){for(let i=0;i<14;i++)art+=`<path d="M${-40+i*34} 225 L${10+i*34} 0" stroke="${c}" stroke-opacity=".2" stroke-width="12"/>`;
-    art+=`<path d="M200 60 L248 148 L152 148 Z" fill="none" stroke="${c}" stroke-width="3.4" stroke-linejoin="round"/><rect x="197" y="90" width="6" height="30" rx="3" fill="${c}"/><circle cx="200" cy="131" r="3.6" fill="${c}"/>`;}
-  else if(trk==="lang"){for(let i=0;i<5;i++)art+=`<rect x="70" y="${58+i*22}" width="${240-i*36}" height="6" rx="3" fill="${c}" fill-opacity="${(.7-i*.11).toFixed(2)}"/>`;
-    art+=`<path d="M300 66 q42 0 42 46 t-42 46" fill="none" stroke="${c}" stroke-opacity=".5" stroke-width="3"/>`;}
-  else if(trk==="mgmt"){const pts=[[90,155],[160,90],[240,120],[320,58]];
-    pts.forEach((p,i)=>{art+=`<circle cx="${p[0]}" cy="${p[1]}" r="9" fill="${c}"/>`;
-      if(i)art+=`<path d="M${pts[i-1][0]} ${pts[i-1][1]} L${p[0]} ${p[1]}" stroke="${c}" stroke-opacity=".5" stroke-width="2.4"/>`;});
-    for(let i=0;i<4;i++)art+=`<rect x="${80+i*76}" y="178" width="52" height="6" rx="3" fill="${c}" fill-opacity=".25"/>`;}
-  else{for(let r=0;r<4;r++)for(let q=0;q<8;q++){const x=70+q*40,y=56+r*34;
-    art+=`<circle cx="${x}" cy="${y}" r="3.4" fill="${c}" fill-opacity="${(q+r+seed)%3?.35:.85}"/>`;
-    if(q<7&&((q+r+seed)%3===0))art+=`<path d="M${x} ${y} L${x+40} ${y+((r%2)?-34:34)}" stroke="${c}" stroke-opacity=".3" stroke-width="1.6"/>`;}}
+  const t=TRACKS[trk]||TRACKS.tech, c=t.c, u=(trk||"tech")+"-"+(seed||0);
+  const art=(TRACK_ART[trk]||TRACK_ART.tech)(c);
   return `<svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-   <rect width="400" height="225" fill="var(--plate)"/><g>${art}</g></svg>`;
+   <defs>
+     <linearGradient id="bg-${u}" x1="0" y1="0" x2="1" y2="1">
+       <stop offset="0" stop-color="#ffffff"/>
+       <stop offset=".55" stop-color="${c}" stop-opacity=".055"/>
+       <stop offset="1" stop-color="${c}" stop-opacity=".16"/></linearGradient>
+     <radialGradient id="gl-${u}" cx=".74" cy=".2" r=".72">
+       <stop offset="0" stop-color="#ffffff" stop-opacity=".85"/>
+       <stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
+     <pattern id="gr-${u}" width="25" height="25" patternUnits="userSpaceOnUse">
+       <path d="M25 0 V25 M0 25 H25" stroke="${c}" stroke-opacity=".07" stroke-width="1"/></pattern>
+   </defs>
+   <rect width="400" height="225" fill="url(#bg-${u})"/>
+   <rect width="400" height="225" fill="url(#gr-${u})"/>
+   <rect width="400" height="225" fill="url(#gl-${u})"/>
+   ${art}
+   <rect y="219" width="400" height="6" fill="${c}" opacity=".85"/>
+  </svg>`;
 }
 function imgOf(p){
   if(p.imgUrl)return `<img src="${esc(p.imgUrl)}" alt="" loading="lazy">`;
@@ -1601,6 +1817,55 @@ function modeLabel(p){
   const custom=EN()?(p.modeEn||""):(p.modeAr||"");
   return custom.trim()||(EN()?M.en:M.ar);
 }
+/* ---------- مواد البرنامج: روابط خارجية بلا حدود مساحة ---------- */
+const MAT_KIND=u=>{
+  const s=String(u||"").toLowerCase();
+  if(/youtube\.|youtu\.be|vimeo\./.test(s))return "video";
+  if(/\.pdf(\?|$)/.test(s))return "pdf";
+  if(/docs\.google\.com\/presentation|\.pptx?(\?|$)/.test(s))return "slides";
+  if(/docs\.google\.com\/spreadsheets|\.xlsx?(\?|$)|\.csv(\?|$)/.test(s))return "sheet";
+  if(/docs\.google\.com\/document|\.docx?(\?|$)/.test(s))return "doc";
+  if(/drive\.google\.com\/drive\/folders|\/sites\/.*\/forms|folders?\//.test(s))return "folder";
+  if(/drive\.google\.com|sharepoint|onedrive|dropbox|1drv\.ms/.test(s))return "file";
+  return "link";
+};
+const MAT_LABEL=()=>({
+  video:[EN()?"Video":"فيديو","#c8102e"], pdf:[EN()?"PDF":"PDF","#9d0c23"],
+  slides:[EN()?"Slides":"عرض","#b06a16"], sheet:[EN()?"Sheet":"جدول","#0f8a6a"],
+  doc:[EN()?"Document":"مستند","#1b4392"], folder:[EN()?"Folder":"مجلد","#5a3f9e"],
+  file:[EN()?"File":"ملف","#2457b4"],
+  link:[EN()?"Link":"رابط","#3d4c66"]});
+const MAT_ICON={
+  video:`<svg viewBox="0 0 24 24" fill="none"><rect x="2.6" y="5" width="18.8" height="14" rx="2.4" stroke="currentColor" stroke-width="1.8"/><path d="M10 9.4l5 2.6-5 2.6z" fill="currentColor"/></svg>`,
+  pdf:`<svg viewBox="0 0 24 24" fill="none"><path d="M6.5 2.8h7l4.8 4.8v13.6H6.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M13.3 2.8v5h5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.4 14.6h5.2M9.4 17.4h3.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>`,
+  slides:`<svg viewBox="0 0 24 24" fill="none"><rect x="2.8" y="4.2" width="18.4" height="12.6" rx="1.8" stroke="currentColor" stroke-width="1.8"/><path d="M12 16.8v3.2M8.6 20h6.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+  sheet:`<svg viewBox="0 0 24 24" fill="none"><rect x="3.2" y="3.6" width="17.6" height="16.8" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3.2 9h17.6M9.4 9v11.4M3.2 14.8h17.6" stroke="currentColor" stroke-width="1.6"/></svg>`,
+  doc:`<svg viewBox="0 0 24 24" fill="none"><path d="M6.5 2.8h7l4.8 4.8v13.6H6.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M13.3 2.8v5h5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.4 12.4h5.2M9.4 15.6h5.2M9.4 18.4h3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>`,
+  folder:`<svg viewBox="0 0 24 24" fill="none"><path d="M2.8 6.4a1.6 1.6 0 011.6-1.6h4.4l2 2.4h8.8a1.6 1.6 0 011.6 1.6v9.6a1.6 1.6 0 01-1.6 1.6H4.4a1.6 1.6 0 01-1.6-1.6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`,
+  file:`<svg viewBox="0 0 24 24" fill="none"><path d="M6.5 2.8h7l4.8 4.8v13.6H6.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M13.3 2.8v5h5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 11.6v6M9.4 15l2.6 2.6L14.6 15" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  link:`<svg viewBox="0 0 24 24" fill="none"><path d="M10 13.6a4 4 0 006 .5l2.6-2.6a4 4 0 10-5.7-5.7l-1.5 1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M14 10.4a4 4 0 00-6-.5L5.4 12.5a4 4 0 105.7 5.7l1.5-1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`};
+/* يقرأ الحقل النصّي: سطر لكل مادة "الاسم | الرابط" */
+function matList(p){
+  return String(p.mats||"").split(/\r?\n/).map(l=>l.trim()).filter(Boolean).map(l=>{
+    const i=l.lastIndexOf("|");
+    let name=i>0?l.slice(0,i).trim():"", url=i>0?l.slice(i+1).trim():l;
+    if(!/^(https?:)?\/\//i.test(url))return null;
+    if(!name)name=url.replace(/^https?:\/\//,"").split("/")[0];
+    return {name,url,kind:MAT_KIND(url)};
+  }).filter(Boolean);
+}
+function matBlock(p){
+  const m=matList(p);
+  if(!m.length)return "";
+  const L=MAT_LABEL();
+  return `<h3 style="font-size:1rem;margin:0 0 10px">${EN()?"Program materials":"مواد البرنامج"}</h3>
+   <div class="mats">${m.map(x=>{const k=L[x.kind]||L.link;
+     return `<a class="mat" href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">
+       <span class="mi-ic" style="color:${k[1]}">${MAT_ICON[x.kind]||MAT_ICON.link}</span>
+       <span class="mt"><b>${esc(x.name)}</b><span>${esc(k[0])}</span></span>
+       <svg class="go" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M9 7h8v8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+     </a>`;}).join("")}</div>`;
+}
 function modeBadge(p,cls){
   const k=modeOf(p);
   return `<span class="mode ${k}${cls?" "+cls:""}">${MODE_ICONS[k]}<b>${esc(modeLabel(p))}</b></span>`;
@@ -1615,7 +1880,7 @@ function pcard(p){
    <div class="plate">${imgOf(p)}<span class="trk">${esc(pick(tk,"ar","en"))}</span>${flag}<span class="pid">${esc(p.id)}</span>${modeBadge(p,"on-plate")}</div>
    <div class="pbody"><h3>${esc(pick(p,"ar","en"))}</h3>
     <div class="meta">
-     <span class="mi"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 3v4M16 3v4M3.5 10h17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>${esc(pick(p,"dateAr","dateEn"))}</span>
+     ${pick(p,"dateAr","dateEn")?`<span class="mi"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 3v4M16 3v4M3.5 10h17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>${esc(pick(p,"dateAr","dateEn"))}</span>`:`<span class="mi soon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5V12l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>${EN()?"Date to be announced":"الموعد يُعلن لاحقاً"}</span>`}
      <span class="mi">${esc(pick(p,"durAr","durEn"))}</span>
      <span class="mi">${esc(p.hrs||0)} ${EN()?"hrs":"ساعة"}</span></div>
     <p>${esc(pick(p,"dAr","dEn"))}</p>
@@ -2436,12 +2701,12 @@ function showDetail(id){
   $("#dTitle").textContent=pick(p,"ar","en");
   $("#dSub").textContent=p.id+" · "+pick(tk,"ar","en");
   const outs=(EN()?(p.outEn||p.outAr):(p.outAr||"")).split("\n").filter(Boolean);
-  $("#dBody").innerHTML=`<div style="border-radius:var(--r);overflow:hidden;position:relative;aspect-ratio:16/6;margin-bottom:20px">${imgOf(p)}</div>
+  $("#dBody").innerHTML=`<div class="dplate">${imgOf(p)}</div>
    <div class="mode-strip">${modeBadge(p,"big")}
      <span class="mh">${esc(EN()?MODES()[modeOf(p)].hintEn:MODES()[modeOf(p)].hintAr)}</span></div>
    <p style="color:var(--ink-2);margin:0 0 18px">${esc(pick(p,"dAr","dEn"))}</p>
    <div class="summary">
-    ${[[EN()?"Dates":"الفترة",pick(p,"dateAr","dateEn")],
+    ${[[EN()?"Dates":"الفترة",pick(p,"dateAr","dateEn")||(EN()?"To be announced":"يُعلن لاحقاً")],
       [EN()?"Type":"نوع البرنامج",pick(p,"durAr","durEn")],[EN()?"Hours":"عدد الساعات",(p.hrs||0)+""],
       [EN()?"Seats":"المقاعد",(p.seats||"—")+""]].map(r=>`<div class="srow"><span class="k">${esc(r[0])}</span><span class="v">${esc(r[1])}</span></div>`).join("")}
    </div>
@@ -2449,6 +2714,7 @@ function showDetail(id){
      <div class="plist" style="margin-bottom:20px">${outs.map(o=>`<div class="prow">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4.5 12.5l5 5 10-11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <div><b style="font-weight:500">${esc(o)}</b></div></div>`).join("")}</div>`:""}
+   ${matBlock(p)}
    <button class="btn btn-p" style="width:100%" data-enroll="${esc(p.id)}">${EN()?"Enroll in this program":"التسجيل في هذا البرنامج"}</button>`;
   closeAll();$("#dov").classList.add("open");document.body.style.overflow="hidden";
 }
@@ -2513,7 +2779,7 @@ let MYROLE="owner",MYEMAIL="",ADMINS=null;
 
 /* صلاحيات الأدوار — ما الذي يراه كل دور */
 const ROLE_TABS={
-  owner:["dash","reqs","progs","ann","emps","certs","ideas","sat","reports","content","people","inbox","users","set"],
+  owner:["dash","reqs","progs","ann","emps","certs","ideas","sat","reports","content","people","inbox","users","health","set"],
   editor:["dash","reqs","progs","ann","emps","certs","ideas","sat","reports","content","people","inbox"],
   viewer:["dash","reqs","certs","ideas","sat","reports"]
 };
@@ -2616,6 +2882,7 @@ function admin(){
     people:[EN()?"Team & news":"الفريق والأخبار",panePeople],
     inbox:[EN()?"Inbox & media":"الرسائل والصور",paneInbox],
     users:[EN()?"Admin users":"مستخدمو الإدارة",paneUsers],
+    health:[EN()?"Diagnostics":"التشخيص",paneHealth],
     set:[EN()?"Settings":"الإعدادات",paneSet]};
   const allowed=ROLE_TABS[MYROLE]||ROLE_TABS.viewer;
   if(!allowed.includes(aTab))aTab=allowed[0];
@@ -2639,6 +2906,160 @@ function admin(){
 /* =========================================================
    مستخدمو الإدارة — من يدخل البوابة وبأي صلاحية
    ========================================================= */
+/* =========================================================
+   صفحة التشخيص — تفحص كل ما تعتمد عليه المنصة وتقول ما الناقص
+   ========================================================= */
+const HEALTH_TABLES=[
+  ["content",        "محتوى الصفحات",      "Page content",       "supabase_setup.sql"],
+  ["programs",       "البرامج",            "Programs",           "supabase_setup.sql"],
+  ["registrations",  "طلبات التسجيل",      "Registrations",      "supabase_setup.sql"],
+  ["messages",       "الرسائل",            "Messages",           "supabase_setup.sql"],
+  ["feedback",       "استبيان الرضا",      "Satisfaction",       "supabase_update_2.sql"],
+  ["ideas",          "الأفكار (LEAP)",     "Ideas (LEAP)",       "supabase_update_2.sql"],
+  ["employees",      "دليل الموظفين",      "Employee directory", "supabase_update_4.sql"],
+  ["certificates",   "الشهادات",           "Certificates",       "supabase_update_4.sql"],
+  ["announcements",  "الإعلانات",          "Announcements",      "supabase_update_5.sql"],
+  ["admins",         "مستخدمو الإدارة",    "Admin users",        "supabase_update_5.sql"]
+];
+const HEALTH_COLS=[
+  ["registrations","manager_no","المدير المباشر في الطلبات","Manager on registrations","supabase_update_6.sql"],
+  ["registrations","site",      "موقع العمل في الطلبات",   "Location on registrations","supabase_update_7.sql"],
+  ["employees",    "site",      "الموقع في دليل الموظفين",  "Location on employees",    "supabase_update_7.sql"],
+  ["ideas",        "form",      "نموذج LEAP الكامل",       "Full LEAP form",           "supabase_update_3.sql"]
+];
+/* ---------- نسخة احتياطية كاملة لكل شيء ---------- */
+async function backupAll(btn){
+  const old=btn?btn.textContent:"";
+  if(btn){btn.disabled=true;btn.innerHTML='<span class="spin" style="border-color:var(--line);border-top-color:var(--blue-600)"></span>';}
+  const g=async f=>{try{return await f()}catch(e){return []}};
+  const [regs_,certs_,emps_,ideas_,fb_,msgs_,anns_,adms_]=await Promise.all([
+    g(()=>API.listRegs()), g(()=>API.listCertificates()), g(()=>API.listEmployees()),
+    g(()=>API.listIdeas()), g(()=>API.listFeedback()), g(()=>API.listMessages()),
+    g(()=>API.listAnnouncements()), g(()=>API.listAdmins())]);
+  const pack={
+    _meta:{platform:"Bahra Academy",takenAt:new Date().toISOString(),
+      by:MYEMAIL||"",mode:API.mode,version:2},
+    content:C, programs:P,
+    registrations:regs_, certificates:certs_, employees:emps_,
+    ideas:ideas_, feedback:fb_, messages:msgs_, announcements:anns_,
+    admins:adms_.map(u=>({email:u.email,name:u.name,role:u.role,status:u.status}))
+  };
+  const out=JSON.stringify(pack,null,1);
+  const fn="bla-backup-"+new Date().toISOString().slice(0,10)+".json";
+  await dl(out,fn,"application/json");
+  if(btn){btn.disabled=false;btn.textContent=old;}
+  const n=regs_.length+certs_.length+emps_.length+ideas_.length+fb_.length+msgs_.length+anns_.length;
+  toast(EN()?`Backup saved — ${n} record(s).`:`تم حفظ النسخة — ${n} سجلاً.`);
+}
+async function paneHealth(){
+  $("#aPane").innerHTML=`<div style="text-align:center;padding:70px"><span class="spin" style="border-color:var(--line);border-top-color:var(--blue-600)"></span>
+    <div style="margin-top:14px;color:var(--muted);font-size:.875rem">${EN()?"Running checks…":"جارٍ الفحص…"}</div></div>`;
+  const R=[];            // {k, ok, label, note, fix}
+  const add=(k,ok,label,note,fix)=>R.push({k,ok,label,note,fix:fix||""});
+
+  /* 1) وضع التشغيل */
+  const MODES_AR={supabase:"Supabase",gas:"Google Apps Script",artifact:"تخزين المعاينة",local:"المتصفح فقط"};
+  add("mode", API.mode==="supabase"||API.mode==="gas",
+    EN()?"Backend":"الخادم الخلفي",
+    MODES_AR[API.mode]||API.mode,
+    API.mode==="local"?(EN()?"Nothing is saved — fill SUPABASE_URL and SUPABASE_KEY at the top of the file."
+                             :"لا يُحفظ شيء — املأ SUPABASE_URL و SUPABASE_KEY في أعلى الملف."):"");
+
+  /* 2) الاتصال */
+  let online=false;
+  try{ await API.listAnnouncements(); online=true; }
+  catch(e){ try{ await API.load(); online=true; }catch(_){} }
+  add("conn", online, EN()?"Connection":"الاتصال بقاعدة البيانات",
+    online?(EN()?"Reachable":"يستجيب"):(EN()?"No response":"لا يستجيب"),
+    online?"":(EN()?"Check the project URL and the anon key, and that the project is not paused."
+                   :"تأكّد من رابط المشروع ومفتاح anon، وأن المشروع غير موقوف."));
+
+  /* 3) الجداول */
+  const miss=[];
+  if(API.mode==="supabase"&&online){
+    for(const [t,ar,en,fix] of HEALTH_TABLES){
+      let ok=false,n=null;
+      try{ const r=await sb(t+"?select=*&limit=1"); ok=true; }catch(e){ ok=false; }
+      add("t:"+t, ok, EN()?en:ar, ok?(EN()?"Ready":"جاهز"):(EN()?"Missing":"غير موجود"),
+          ok?"":(EN()?("Run "+fix):("نفّذ "+fix)));
+      if(!ok&&miss.indexOf(fix)<0)miss.push(fix);
+    }
+    /* 4) الأعمدة المضافة لاحقاً */
+    for(const [t,c,ar,en,fix] of HEALTH_COLS){
+      let ok=false;
+      try{ await sb(t+"?select="+c+"&limit=1"); ok=true; }catch(e){ ok=false; }
+      add("c:"+t+"."+c, ok, EN()?en:ar, ok?(EN()?"Ready":"جاهز"):(EN()?"Column missing":"العمود ناقص"),
+          ok?"":(EN()?("Run "+fix):("نفّذ "+fix)));
+      if(!ok&&miss.indexOf(fix)<0)miss.push(fix);
+    }
+    /* 5) مخزن الصور */
+    let buck=false;
+    try{ const r=await fetch(SB_BASE+"/storage/v1/object/list/program-images",
+        {method:"POST",headers:sbHeaders(),body:JSON.stringify({prefix:"",limit:1})});
+      buck=r.ok; }catch(e){}
+    add("bucket", buck, EN()?"Image storage":"مخزن صور البرامج",
+      buck?(EN()?"Ready":"جاهز"):(EN()?"Bucket not found":"المخزن غير موجود"),
+      buck?"":(EN()?"Create a public bucket named program-images.":"أنشئ مخزناً عاماً باسم program-images."));
+  }
+
+  /* 6) المحتوى والبيانات */
+  const progs=activePrograms().length;
+  add("progs", progs>0, EN()?"Published programs":"برامج منشورة", String(progs),
+      progs?"":(EN()?"Add a program, or run supabase_programs_2027.sql.":"أضف برنامجاً أو نفّذ supabase_programs_2027.sql."));
+  let emps=[],regs2=[],adm=[];
+  try{emps=await API.listEmployees();}catch(_){}
+  try{regs2=await API.listRegs();}catch(_){}
+  try{adm=await API.listAdmins();}catch(_){}
+  add("emps", emps.length>0, EN()?"Employee directory":"دليل الموظفين",
+      emps.length?`${emps.length} ${EN()?"employee(s)":"موظفاً"}`:(EN()?"Empty":"فارغ"),
+      emps.length?"":(EN()?"Any employee number is accepted until you import the directory."
+                          :"أي رقم وظيفي يُقبل حتى تستورد الدليل."));
+  const withMgr=emps.filter(e=>e.managerNo).length, withSite=emps.filter(e=>e.site).length;
+  if(emps.length){
+    add("empmgr", withMgr===emps.length, EN()?"Manager on every employee":"رقم المدير لكل موظف",
+      `${withMgr}/${emps.length}`, withMgr===emps.length?"":(EN()?"Re-import with the manager-number column."
+                                                                :"أعد الاستيراد مع عمود رقم المدير."));
+    add("empsite", withSite===emps.length, EN()?"Location on every employee":"الموقع لكل موظف",
+      `${withSite}/${emps.length}`, withSite===emps.length?"":(EN()?"Re-import with the location-id column."
+                                                                  :"أعد الاستيراد مع عمود معرّف الموقع."));
+  }
+  add("admins", adm.length>0, EN()?"Admin users":"مستخدمو الإدارة",
+      adm.length?`${adm.length} ${EN()?"account(s)":"حساباً"}`:(EN()?"Open to anyone who can sign in":"مفتوح لأي حساب يدخل"),
+      adm.length?"":(EN()?"Add yourself to lock the portal down.":"أضف نفسك ليُقفل الوصول."));
+
+  /* 7) تقدير المساحة */
+  const bytes=JSON.stringify({C,P}).length + regs2.length*700 + emps.length*300;
+  const mb=(bytes/1048576);
+  add("size", mb<400, EN()?"Database usage (estimate)":"استهلاك قاعدة البيانات (تقديري)",
+      (mb<1?(Math.round(mb*1024)+" KB"):(mb.toFixed(1)+" MB"))+" / 500 MB",
+      mb<400?"":(EN()?"Approaching the free limit — archive old registrations."
+                     :"تقترب من الحدّ المجاني — أرشِف الطلبات القديمة."));
+
+  /* ---------- العرض ---------- */
+  const okN=R.filter(x=>x.ok).length, bad=R.filter(x=>!x.ok);
+  const pill=x=>x.ok
+    ? `<span class="hok"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4.5 12.5l5 5 10-11" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`
+    : `<span class="hno"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 7v6.2M12 17h.01" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/></svg></span>`;
+  $("#aPane").innerHTML=`
+   <div class="hhero ${bad.length?"warn":"good"}">
+     <div class="hn">${okN}<span>/${R.length}</span></div>
+     <div><h3>${bad.length?(EN()?"Some checks need attention":"بعض الفحوصات تحتاج انتباهك")
+                           :(EN()?"Everything is in order":"كل شيء سليم")}</h3>
+       <p>${bad.length?(EN()?`${bad.length} item(s) below are not ready.`:`${bad.length} بنداً أدناه غير جاهز.`)
+                      :(EN()?"The platform is fully wired and ready to use.":"المنصة مكتملة الربط وجاهزة للاستخدام.")}</p></div>
+     <button class="chip" id="hRerun">${EN()?"Run again":"إعادة الفحص"}</button>
+   </div>
+   ${miss.length?`<div class="wl-note" style="margin-bottom:20px">
+     <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5v5.5M12 16.4h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+     <span>${EN()?"Run these files in the Supabase SQL editor, in order: ":"نفّذ هذه الملفات في محرّر SQL بالترتيب: "}
+       <b dir="ltr">${esc(miss.join("  ←  "))}</b></span></div>`:""}
+   <div class="hlist">${R.map(x=>`<div class="hrow ${x.ok?"":"bad"}">
+      ${pill(x)}
+      <div class="hl"><b>${esc(x.label)}</b>${x.fix?`<span>${esc(x.fix)}</span>`:""}</div>
+      <div class="hv">${esc(x.note)}</div></div>`).join("")}</div>`;
+  $("#hRerun").onclick=paneHealth;
+}
+
 async function paneUsers(){
   $("#aPane").innerHTML=`<div style="text-align:center;padding:60px"><span class="spin" style="border-color:var(--line);border-top-color:var(--blue-600)"></span></div>`;
   try{ADMINS=await API.listAdmins();}catch(e){ADMINS=lget("bla_admins",[]);}
@@ -3235,6 +3656,11 @@ function progEditor(id){
    <div class="g2">${f(EN()?"Training hours":"عدد الساعات","hrs","num")}${f(EN()?"Display order":"ترتيب العرض","order","num")}</div>
    <div class="g2">${f(EN()?"Total seats":"إجمالي المقاعد","seats","num")}${f(EN()?"Seats taken":"المقاعد المشغولة","taken","num")}</div>
    <div class="g2">${f("مخرجات البرنامج (سطر لكل مخرج)","outAr","ta")}${f("Outcomes (one per line)","outEn","ta")}</div>
+   <div class="field"><label>${EN()?"Program materials — one per line":"مواد البرنامج — سطر لكل مادة"}</label>
+     <textarea rows="4" data-w="mats" dir="ltr" placeholder="دليل المتدرب | https://drive.google.com/file/d/...">${esc(w.mats||"")}</textarea>
+     <div class="hint">${EN()
+       ?"Format: name | link. Host the files on Google Drive, SharePoint or YouTube and paste the share link — nothing is uploaded here, so there is no size limit."
+       :"الصيغة: الاسم | الرابط. ارفع الملفات على Google Drive أو SharePoint أو YouTube والصق رابط المشاركة — لا يُرفع شيء هنا، فلا حدّ للحجم."}</div></div>
    <div class="field"><label><input type="checkbox" id="pactive" ${w.active!==false?"checked":""} style="width:auto;margin-inline-end:8px">${EN()?"Published on the website":"منشور في الموقع"}</label></div>
    <div class="field"><label><input type="checkbox" id="pmand" ${w.mandatory?"checked":""} style="width:auto;margin-inline-end:8px">${EN()?"Mandatory programme — tracked in the compliance report":"برنامج إلزامي — يُتابَع في تقرير الالتزام"}</label></div>
    <div style="display:flex;gap:10px"><button class="btn btn-g" id="peCancel">${EN()?"Cancel":"إلغاء"}</button>
@@ -3437,9 +3863,15 @@ function paneSet(){
          :"تغيير المعرّف يفصل التسجيلات السابقة عن الموقع — غيّر الاسم بدل المعرّف."}</div></div></div>
    <div class="ebox"><div class="eh"><b>${EN()?"Backup":"النسخ الاحتياطي"}</b></div><div class="ec">
      <p style="font-size:.8125rem;color:var(--muted);margin:0 0 12px">${EN()
-       ?"Downloads every page text and program as one JSON file you can keep or restore from."
-       :"ينزّل كل نصوص الصفحات والبرامج في ملف JSON واحد تحتفظ به أو تستعيد منه."}</p>
-     <button class="chip" id="expAll">${EN()?"Download a backup":"تنزيل نسخة احتياطية"}</button></div></div>
+       ?"A full backup contains every record on the platform: content, programs, registrations, certificates, employees, ideas, satisfaction, messages, announcements and admin users."
+       :"النسخة الكاملة تضم كل سجلات المنصة: المحتوى والبرامج وطلبات التسجيل والشهادات والموظفين والأفكار والاستبيانات والرسائل والإعلانات ومستخدمي الإدارة."}</p>
+     <div style="display:flex;gap:10px;flex-wrap:wrap">
+       <button class="btn btn-s" id="expFull" style="padding:10px 20px;font-size:.875rem">${
+         EN()?"Download a full backup":"تنزيل نسخة كاملة"}</button>
+       <button class="chip" id="expAll">${EN()?"Content and programs only":"المحتوى والبرامج فقط"}</button></div>
+     <div class="hint" style="margin-top:10px">${EN()
+       ?"Keep a copy monthly. Supabase also keeps its own daily backups on the free plan."
+       :"احتفظ بنسخة شهرياً. وSupabase يحتفظ بنسخ يومية خاصة به في الخطة المجانية."}</div></div></div>
    ${savebar()}</div>`;
   bindPane();
   /* محرّر المواقع */
@@ -3469,6 +3901,7 @@ function paneSet(){
     W.sites=clone(DEF_CONTENT.sites);dirty=true;rerender();
     toast(EN()?"Review then publish.":"راجع ثم اضغط نشر التغييرات.");
   };
+  $("#expFull").onclick=e=>backupAll(e.currentTarget);
   $("#expAll").onclick=async()=>{
     const out=JSON.stringify({content:C,programs:P},null,2),fn="bla-content.json";
     try{const dl=(window.claude&&claude.use)?await claude.use("downloads").catch(()=>null):null;
@@ -5280,3 +5713,5 @@ boot();
 </script>
 </body>
 </html>
+
+</body></html>
