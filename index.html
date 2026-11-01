@@ -2,6 +2,45 @@
 
 .session-tag{display:inline-flex;align-items:center;width:max-content;max-width:100%;margin:0 0 9px;padding:3px 9px;border:1px solid var(--line);border-radius:99px;background:var(--panel);color:var(--blue-800);font-size:.6875rem;font-weight:700;line-height:1.5}
 .fgrid>.fcol{min-width:0}
+/* Compact course-details dialog and polished delivery-mode badges */
+@keyframes detailEnter{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes modeGlow{0%,100%{opacity:.16;transform:scale(.96)}50%{opacity:.42;transform:scale(1.045)}}
+@keyframes modeDot{0%,100%{opacity:.7;transform:scale(.88)}50%{opacity:1;transform:scale(1.12)}}
+#dov{padding:24px}
+#dov .modal.wide{max-width:860px;max-height:calc(100dvh - 48px);display:flex;flex-direction:column;overflow:hidden;border:1px solid rgba(105,137,190,.28);border-radius:16px;box-shadow:0 28px 90px -24px rgba(4,17,43,.72);animation:detailEnter .26s var(--ease)}
+#dov .mhead{flex:none;padding:19px 26px;background:linear-gradient(135deg,var(--blue-800),#1d4b91)}
+#dov .mhead .x{inset-block-start:16px;inset-inline-end:18px}
+#dov .mbody{overflow-y:auto;overscroll-behavior:contain;padding:20px 24px 24px;scrollbar-gutter:stable}
+#dov .dplate{height:180px;aspect-ratio:auto;margin-bottom:14px;border-radius:12px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+#dov .mode-strip{gap:12px;margin-bottom:14px;padding:11px 14px;border-color:rgba(105,137,190,.25);background:linear-gradient(135deg,var(--panel),var(--card))}
+#dov .mode-strip .mh{color:var(--ink-2);line-height:1.65}
+#dov .summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:16px}
+#dov .summary .srow{padding:9px 13px;min-width:0}
+#dov .summary .srow:nth-child(odd){border-inline-end:1px solid var(--line-2)}
+#dov .summary .srow:last-child{grid-column:1/-1;border-inline-end:0}
+#dov .course-sessions{margin:16px 0 18px}
+#dov .course-brief{margin:18px 0}
+#dov .mbody>[data-enroll]{box-shadow:0 12px 28px -14px var(--red-600)}
+.mode.big{position:relative;z-index:0;padding:8px 14px;gap:8px;border-width:1px;font-size:.8125rem;box-shadow:0 8px 22px -14px currentColor}
+.mode.big::before{content:"";position:absolute;inset:-5px;border-radius:inherit;z-index:-1;filter:blur(7px);pointer-events:none;animation:modeGlow 2.8s ease-in-out infinite}
+.mode.big::after{content:"";width:6px;height:6px;flex:none;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor;pointer-events:none;animation:modeDot 2.8s ease-in-out infinite}
+.mode.big svg{width:17px;height:17px}
+.mode.big.onsite{background:linear-gradient(135deg,#f0f5ff,#dce9ff);color:#174b9c;border-color:#9dbceb}
+.mode.big.onsite::before{background:#6b9de8}
+.mode.big.online{background:linear-gradient(135deg,#effbf6,#d8f4e8);color:#087053;border-color:#91d5bd}
+.mode.big.online::before{background:#49c69c}
+.mode.big.hybrid{background:linear-gradient(135deg,#fff9e8,#f7e8b6);color:#765807;border-color:#ddc465}
+.mode.big.hybrid::before{background:#d9b845}
+.mode.on-plate{bottom:12px;right:12px;padding:5px 11px;border:1px solid rgba(255,255,255,.58);box-shadow:0 7px 20px -9px rgba(7,25,56,.62);backdrop-filter:blur(10px)}
+.mode.on-plate.onsite{background:linear-gradient(135deg,rgba(247,250,255,.96),rgba(218,232,255,.94));color:#173f7d;border-color:rgba(116,155,216,.42)}
+.mode.on-plate.online{background:linear-gradient(135deg,rgba(20,151,113,.97),rgba(7,112,83,.97));color:#fff;border-color:rgba(255,255,255,.25)}
+:root[data-theme="dark"] .mode.big.onsite{background:linear-gradient(135deg,#172b4b,#193861);color:#b5d0ff;border-color:#345c96}
+:root[data-theme="dark"] .mode.big.online{background:linear-gradient(135deg,#11372f,#124b3d);color:#8ce8c8;border-color:#2c745d}
+:root[data-theme="dark"] .mode.big.hybrid{background:linear-gradient(135deg,#3c3218,#50421c);color:#f0d67d;border-color:#766128}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mode.big.onsite{background:linear-gradient(135deg,#172b4b,#193861);color:#b5d0ff;border-color:#345c96}:root:not([data-theme="light"]) .mode.big.online{background:linear-gradient(135deg,#11372f,#124b3d);color:#8ce8c8;border-color:#2c745d}:root:not([data-theme="light"]) .mode.big.hybrid{background:linear-gradient(135deg,#3c3218,#50421c);color:#f0d67d;border-color:#766128}}
+@media(max-width:620px){#dov{padding:12px}#dov .modal.wide{max-height:calc(100dvh - 24px);border-radius:14px}#dov .mhead{padding:17px 18px}#dov .mhead .x{inset-block-start:14px;inset-inline-end:14px}#dov .mbody{padding:16px;scrollbar-gutter:auto}#dov .dplate{height:138px}#dov .summary{grid-template-columns:1fr}#dov .summary .srow:nth-child(odd){border-inline-end:0}#dov .summary .srow:last-child{grid-column:auto}#dov .mode-strip{align-items:flex-start;padding:11px 12px}.mode.big{font-size:.78rem;padding:7px 12px}}
+@media(prefers-reduced-motion:reduce){#dov .modal.wide,.mode.big::before,.mode.big::after{animation:none}}
+html.no-motion #dov .modal.wide,html.no-motion .mode.big::before,html.no-motion .mode.big::after{animation:none}
 /* ===== 2026–2027 training plan and complete Word briefs ===== */
 .plan-overview{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:24px 26px;margin-bottom:26px}
 .plan-overview .plan-kicker{color:var(--red-600);font-size:.6875rem;font-weight:700;letter-spacing:.08em;margin-bottom:6px}
@@ -2762,6 +2801,7 @@ function showDetail(id){
    ${matBlock(p)}
    <button class="btn btn-p" style="width:100%" data-enroll="${esc(p.id)}">${EN()?"Continue to registration":"متابعة إلى التسجيل"}</button>`;
   closeAll();$("#dov").classList.add("open");document.body.style.overflow="hidden";
+  const detailBody=$("#dov .mbody");detailBody.scrollTop=0;requestAnimationFrame(()=>detailBody.scrollTop=0);
 }
 $("#c_send").onclick=()=>{
   let ok=true;["#c_fn","#c_ln"].forEach(s=>{const el=$(s),f=el.closest(".field");
