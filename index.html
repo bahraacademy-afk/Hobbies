@@ -1147,7 +1147,7 @@ window.BLA_CONFIG = {
     <span id="topNote"></span>
   </div>
   <div class="tlinks">
-    <a href="#record"><span class="ar">سجلّي التدريبي</span><span class="en">My record</span></a>
+    <a href="#record"><span class="ar">الدورات المسجل بها</span><span class="en">My courses</span></a>
     <a href="#center"><span class="ar">مركز الأكاديمية</span><span class="en">Academy center</span></a>
     <a href="#contact"><span class="ar">الدعم الفني</span><span class="en">Support</span></a>
     <a href="#admin"><span class="ar">بوابة الإدارة</span><span class="en">Admin portal</span></a>
@@ -1396,12 +1396,12 @@ window.BLA_CONFIG = {
   </div></section>
 </section>
 
-<!-- MY RECORD -->
+<!-- MY COURSES -->
 <section class="view" id="v-record">
   <div class="phero"><div class="tile"></div><svg class="chev" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice"></svg>
     <div class="wrap"><div class="crumb"><a href="#home"><span class="ar">الرئيسية</span><span class="en">Home</span></a> ›
-      <span class="ar">سجلّي التدريبي</span><span class="en">My training record</span></div>
-      <h1><span class="ar">سجلّي التدريبي</span><span class="en">My training record</span></h1>
+      <span class="ar">الدورات المسجل بها</span><span class="en">My registered courses</span></div>
+      <h1><span class="ar">الدورات المسجل بها</span><span class="en">My registered courses</span></h1>
       <p class="pd"><span class="ar">اطّلع على تسجيلاتك وحالتها وشهاداتك برقمك الوظيفي.</span>
         <span class="en b">See your enrollments, their status and your certificates using your employee number.</span></p></div></div>
   <section class="sec"><div class="wrap"><div class="wizwrap" id="recTop"><div id="recBody"></div></div></div></section>
@@ -1452,7 +1452,7 @@ window.BLA_CONFIG = {
         <a href="#contact"><span class="ar">تواصل معنا</span><span class="en">Contact us</span></a>
         <a href="#" id="regLink2"><span class="ar">التسجيل في برنامج</span><span class="en">Enroll</span></a>
         <a href="#admin"><span class="ar">بوابة الإدارة</span><span class="en">Admin portal</span></a>
-        <a href="#record"><span class="ar">سجلّي التدريبي والشهادات</span><span class="en">My record & certificates</span></a>
+        <a href="#record"><span class="ar">الدورات المسجل بها والشهادات</span><span class="en">My courses & certificates</span></a>
         <a href="#survey"><span class="ar">قياس رضا المتدربين</span><span class="en">Satisfaction survey</span></a>
         <a href="#about"><span class="ar">سياسات الأكاديمية</span><span class="en">Policies</span></a></div>
       <div class="fcol"><h4><span class="ar">النشرة الإخبارية</span><span class="en">Newsletter</span></h4>
@@ -5853,7 +5853,7 @@ function drawCerts(){
 }
 
 /* =========================================================
-   سجلّي التدريبي — صفحة الموظف الذاتية + التحقّق من الشهادات
+   الدورات المسجل بها — صفحة الموظف الذاتية + التحقّق من الشهادات
    ========================================================= */
 let RECD=null;
 function recInit(){
@@ -5866,11 +5866,11 @@ function recForm(){
   $("#recBody").innerHTML=`<div class="fcard" style="max-width:560px;margin:0 auto">
     <div class="field"><label>${EN()?"Your employee number":"رقمك الوظيفي"} <i>*</i></label>
       <input id="recEmp" dir="ltr" inputmode="numeric" maxlength="10" placeholder="10457">
-      <div class="hint">${EN()?"Your record is built from the requests you submitted on this platform."
-        :"يُبنى سجلّك من الطلبات التي قدّمتها عبر هذه المنصة."}</div>
+      <div class="hint">${EN()?"Your course list is built from the requests you submitted on this platform."
+        :"تُعرض الدورات المسجل بها بناءً على الطلبات التي قدّمتها عبر هذه المنصة."}</div>
       <div class="err">${EN()?"Enter a valid employee number":"أدخل رقماً وظيفياً صحيحاً"}</div>
       <div class="vfy" id="rec_vfy"></div></div>
-    <button class="btn btn-p" id="recGo" style="width:100%">${EN()?"Show my record":"عرض سجلّي"}</button></div>`;
+    <button class="btn btn-p" id="recGo" style="width:100%">${EN()?"Show my courses":"عرض الدورات المسجل بها"}</button></div>`;
   bindVerify("#recEmp","#rec_vfy");
   $("#recGo").onclick=recLoad;
   $("#recEmp").addEventListener("keydown",e=>{if(e.key==="Enter")recLoad();});
@@ -5886,9 +5886,9 @@ async function recLoad(){
     API.listRegsByEmp(no).catch(()=>[]),
     API.listCertificates(no).catch(()=>[]),
     API.findEmployee(no).catch(()=>null)]); }catch(_){}
-  b.disabled=false;b.textContent=EN()?"Show my record":"عرض سجلّي";
+  b.disabled=false;b.textContent=EN()?"Show my courses":"عرض الدورات المسجل بها";
   if(!regs.length&&!certs.length&&!emp){
-    toast(EN()?"No record found for this number.":"لا يوجد سجل لهذا الرقم الوظيفي.");return;
+    toast(EN()?"No registered courses found for this number.":"لا توجد دورات مسجل بها لهذا الرقم الوظيفي.");return;
   }
   RECD={no,regs,certs,emp};CERTS=certs;recRender();
 }
@@ -5923,7 +5923,7 @@ function recRender(){
          EN()?"No certificates yet. A certificate is issued once you complete a program."
              :"لا توجد شهادات بعد — تُصدر الشهادة عند إتمامك أحد البرامج."}</div>`}</div></div>
 
-   <div class="ebox"><div class="eh"><b>${EN()?"My enrollment history":"سجل تسجيلاتي"}</b></div>
+   <div class="ebox"><div class="eh"><b>${EN()?"My registered courses":"الدورات المسجل بها"}</b></div>
      <div class="ec" style="padding:0"><div class="tblwrap" style="border:0"><table class="at" style="min-width:640px">
        <thead><tr><th>${EN()?"Reference":"المرجع"}</th><th>${EN()?"Program":"البرنامج"}</th>
          <th>${EN()?"Submitted":"تاريخ الطلب"}</th><th>${EN()?"Status":"الحالة"}</th></tr></thead><tbody>
