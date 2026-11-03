@@ -1501,7 +1501,8 @@ window.BLA_CONFIG = {
       </div>
       <div class="field"><label><span class="ar">موقع العمل</span><span class="en">Work location</span> <i>*</i></label>
         <select id="f_site"></select>
-        <div class="hint"><span class="ar">المدينة التي تعمل بها — تُستخدم لتخطيط أماكن انعقاد البرامج.</span><span class="en">The city you work in — used to plan where programs are held.</span></div></div>
+        <div class="hint"><span class="ar">المدينة أو البلد الذي تعمل به — يُستخدم لتخطيط أماكن انعقاد البرامج.</span><span class="en">The city or country you work in — used to plan where programs are held.</span></div>
+        <div class="err"><span class="ar">اختر موقع العمل</span><span class="en">Select your work location</span></div></div>
       <div class="g2">
         <div class="field"><label><span class="ar">رقم الجوال</span><span class="en">Mobile</span></label><input id="f_phone" dir="ltr" placeholder="05XXXXXXXX"></div>
         <div class="field"><label><span class="ar">البريد الإلكتروني</span><span class="en">Email</span></label><input id="f_email" type="email" dir="ltr"></div>
@@ -1614,7 +1615,14 @@ const DEF_CONTENT={
   {id:"hail",   ar:"حائل",            en:"Hail",            lat:27.5114, lng:41.7208},
   {id:"qassim", ar:"القصيم — بريدة",  en:"Qassim — Buraydah",lat:26.3260, lng:43.9750},
   {id:"arar",   ar:"عرعر",            en:"Arar",            lat:30.9753, lng:41.0381},
-  {id:"jouf",   ar:"الجوف — سكاكا",   en:"Al Jouf — Sakaka", lat:29.9697, lng:40.2064}
+  {id:"jouf",   ar:"الجوف — سكاكا",   en:"Al Jouf — Sakaka", lat:29.9697, lng:40.2064},
+  {id:"uae",    ar:"الإمارات",        en:"United Arab Emirates", lat:23.4241, lng:53.8478},
+  {id:"india",  ar:"الهند",           en:"India",               lat:20.5937, lng:78.9629},
+  {id:"iraq",   ar:"العراق",          en:"Iraq",                lat:33.2232, lng:43.6793},
+  {id:"europe", ar:"أوروبا",          en:"Europe",              lat:54.5260, lng:15.2551},
+  {id:"usa",    ar:"الولايات المتحدة الأمريكية", en:"USA",       lat:37.0902, lng:-95.7129},
+  {id:"egypt",  ar:"مصر",             en:"Egypt",               lat:26.8206, lng:30.8025},
+  {id:"syria",  ar:"سوريا",           en:"Syria",               lat:34.8021, lng:38.9968}
  ],
  topNote:{ar:"منصة تدريب داخلية — لمنسوبي مجموعة بحرة إلكتريك فقط",en:"Internal training platform — for Bahra Electric employees only"},
  hero:{kick:{ar:"أكاديمية بحرة · إدارة التدريب الفني — مجموعة بحرة إلكتريك",en:"Bahra Academy · Technical Training — Bahra Electric Group"},
@@ -1700,15 +1708,14 @@ let C=clone(DEF_CONTENT), P=clone(DEF_PROGRAMS);
 const OFFICIAL_COURSE_FIELDS=["brief","briefAr","sessions","sess","dateAr","dateEn"];
 const LEGACY_COURSE_IDS=new Set(["BG-101", "BG-102", "BG-103", "BG-104", "BG-105", "BG-106", "BG-107", "BG-201", "BG-202", "BG-203", "BG-204", "BG-205", "BG-206", "BG-207", "BG-208", "BG-301", "BG-302", "BG-303", "BG-304", "BG-305", "BG-306", "BG-307"]);
 function mergeCourseData(remote){
+  /* القائمة المحفوظة هي المرجع: لا نعيد إضافة برنامج حذفه المشرف. */
   const rows=Array.isArray(remote)?remote:[];
-  const merged=DEF_PROGRAMS.map(d=>{
-    const r=rows.find(x=>x&&x.id===d.id)||{};
+  return rows.filter(r=>r&&r.id&&!LEGACY_COURSE_IDS.has(r.id)).map(r=>{
+    const d=DEF_PROGRAMS.find(x=>x.id===r.id)||{};
     const p=Object.assign({},d,r);
     OFFICIAL_COURSE_FIELDS.forEach(k=>{if(d[k]!==undefined)p[k]=clone(d[k]);});
     return p;
   });
-  rows.forEach(r=>{if(r&&r.id&&!LEGACY_COURSE_IDS.has(r.id)&&!DEF_PROGRAMS.some(d=>d.id===r.id))merged.push(r);});
-  return merged;
 }
 
 /* =========================================================
@@ -2374,37 +2381,47 @@ const API={
     if(MODE==="supabase"){
       const c=await sb("content?key=eq.site&select=data");
       const pr=await sb("programs?select=data&order=ord.asc");
-      return {content:(c&&c[0]&&c[0].data)||null,programs:(pr&&pr.length)?pr.map(x=>x.data):null};
+      return {content:(c&&c[0]&&c[0].data)||null,programs:Array.isArray(pr)?pr.map(x=>x.data):null};
     }
-    if(MODE==="gas"){const d=await gas("getAll");return {content:d.content||null,programs:(d.programs&&d.programs.length)?d.programs:null};}
+    if(MODE==="gas"){const d=await gas("getAll");return {content:d.content||null,programs:Array.isArray(d.programs)?d.programs:null};}
     if(MODE==="artifact"){
       const db=await DB();if(!db)return null;
       let content=null,programs=null;
       try{const s=await db.doc("content/site").get();if(s.exists&&s.data()&&s.data().data)content=s.data().data;}catch(e){}
-      try{const s=await db.collection("programs").get();const r=s.docs.map(d=>d.data());if(r.length)programs=r;}catch(e){}
+      try{const s=await db.collection("programs").get();programs=s.docs.map(d=>d.data());}catch(e){}
       return {content,programs};
     }
     return {content:lget("bla_content",null),programs:lget("bla_programs",null)};
   },
   async saveContent(c){
-    lset("bla_content",c);
-    if(MODE==="supabase")return sb("content",{method:"POST",headers:UP,
-      body:JSON.stringify([{key:"site",data:c,updated_at:new Date().toISOString()}])});
-    if(MODE==="gas")return gas("saveContent",{content:c});
-    if(MODE==="artifact"){const db=await DB();if(db)return db.doc("content/site").set({data:c,updatedAt:new Date().toISOString()});}
+    if(MODE==="supabase"){
+      const r=await sb("content",{method:"POST",headers:UP,
+        body:JSON.stringify([{key:"site",data:c,updated_at:new Date().toISOString()}])});
+      lset("bla_content",c);return r;
+    }
+    if(MODE==="gas"){const r=await gas("saveContent",{content:c});lset("bla_content",c);return r;}
+    if(MODE==="artifact"){const db=await DB();if(db){const r=await db.doc("content/site").set({data:c,updatedAt:new Date().toISOString()});lset("bla_content",c);return r;}}
+    lset("bla_content",c);return true;
   },
   async saveProgram(p){
-    lset("bla_programs",P);
-    if(MODE==="supabase")return sb("programs",{method:"POST",headers:UP,
-      body:JSON.stringify([{id:p.id,ord:+p.order||99,data:p}])});
-    if(MODE==="gas")return gas("saveProgram",{program:p});
-    if(MODE==="artifact"){const db=await DB();if(db)return db.collection("programs").doc(p.id).set(p);}
+    if(MODE==="supabase"){
+      const r=await sb("programs",{method:"POST",headers:UP,
+        body:JSON.stringify([{id:p.id,ord:+p.order||99,data:p}])});
+      lset("bla_programs",P);return r;
+    }
+    if(MODE==="gas"){const r=await gas("saveProgram",{program:p});lset("bla_programs",P);return r;}
+    if(MODE==="artifact"){const db=await DB();if(db){const r=await db.collection("programs").doc(p.id).set(p);lset("bla_programs",P);return r;}}
+    lset("bla_programs",P);return true;
   },
   async deleteProgram(id){
-    lset("bla_programs",P);
-    if(MODE==="supabase")return sb("programs?id=eq."+encodeURIComponent(id),{method:"DELETE"});
+    if(MODE==="supabase"){
+      const r=await sb("programs?id=eq."+encodeURIComponent(id)+"&select=id",{method:"DELETE",headers:{Prefer:"return=representation"}});
+      if(!Array.isArray(r)||!r.length)throw new Error("program was not deleted");
+      return r;
+    }
     if(MODE==="gas")return gas("deleteProgram",{id});
     if(MODE==="artifact"){const db=await DB();if(db)return db.collection("programs").doc(id).delete();}
+    lset("bla_programs",P.filter(p=>p.id!==id));return true;
   },
   async seedPrograms(list){
     if(MODE==="supabase")return sb("programs",{method:"POST",headers:UP,
@@ -2607,7 +2624,15 @@ const API={
       headers:{apikey:CFG.SUPABASE_KEY,"Content-Type":"application/json"},
       body:JSON.stringify({email,password})});
     let j={};try{j=await r.json();}catch(_){}
-    if(!r.ok)throw new Error(j.msg||j.error_description||j.error||("signup "+r.status));
+    if(!r.ok){
+      const raw=String(j.msg||j.error_description||j.error||("signup "+r.status));
+      const wait=raw.match(/only request this after\s+(\d+)\s+seconds/i);
+      if(wait)throw new Error("SIGNUP_RATE_LIMIT:"+wait[1]);
+      if(/already|registered|exists/i.test(raw))throw new Error("SIGNUP_EXISTS");
+      if(/password.*(?:at least|should be)/i.test(raw))throw new Error("SIGNUP_WEAK_PASSWORD");
+      if(/invalid.*email|unable to validate email/i.test(raw))throw new Error("SIGNUP_INVALID_EMAIL");
+      throw new Error("SIGNUP_FAILED");
+    }
     return {ok:true,needsConfirm:!(j.access_token||(j.user&&j.user.confirmed_at))};
   },
   async touchAdmin(email){
@@ -2810,7 +2835,7 @@ function openModal(pre){
     const el=$("#"+id);el.value="";el.closest(".field").classList.remove("bad")});
   const sel=$("#f_site");
   if(sel){sel.innerHTML=siteList().map(x=>`<option value="${esc(x.id)}">${esc(siteName(x))}</option>`).join("");
-    sel.dataset.touched="0";
+    sel.closest(".field").classList.remove("bad");sel.dataset.touched="0";
     if(!sel.dataset.bound){sel.dataset.bound="1";
       sel.addEventListener("change",()=>{sel.dataset.touched="1";});}}
   const me=$("#f_mno").closest(".field").querySelector(".err");
@@ -2873,6 +2898,9 @@ $("#toReview").onclick=()=>{
   if(mno&&mno===emp){mf.classList.add("bad");
     mf.querySelector(".err").textContent=EN()?"A manager cannot be the employee themselves."
       :"لا يمكن أن يكون المدير هو الموظف نفسه.";ok=false;}
+  const siteField=$("#f_site").closest(".field");
+  if(!$("#f_site").value||!siteById($("#f_site").value)){siteField.classList.add("bad");ok=false;}
+  else siteField.classList.remove("bad");
   if(!ok)return;
   const p=P.find(x=>x.id===$("#f_prog").value)||P[0];
   const si=seatInfo(p);
@@ -2891,7 +2919,7 @@ $("#toReview").onclick=()=>{
 $("#backStep").onclick=()=>{$("#subErr").classList.remove("show");$("#mStep2").style.display="none";$("#mStep1").style.display="block";};
 $("#submitReg").onclick=async()=>{
   const b=$("#submitReg");b.disabled=true;b.innerHTML='<span class="spin"></span>';
-  const ref="BLA-"+new Date().getFullYear()+"-"+Math.floor(1000+Math.random()*9000);
+  const ref="BLA-"+new Date().getFullYear()+"-"+Math.floor(100000+Math.random()*900000);
   const rec=Object.assign({status:"new"},draft,{ref,createdAt:new Date().toISOString()});
   try{ await API.addReg(rec); }
   catch(e){
@@ -2903,7 +2931,12 @@ $("#submitReg").onclick=async()=>{
         :"أنت مسجّل مسبقاً في هذا البرنامج. للتعديل تواصل مع إدارة التدريب الفني.";
       return;
     }
-    const a=lget("bla_regs",[]);a.push(rec);lset("bla_regs",a);
+    b.disabled=false;b.innerHTML=EN()?"Confirm and submit":"تأكيد وإرسال الطلب";
+    const eb=$("#subErr");eb.classList.add("show");
+    eb.textContent=EN()
+      ?"The request could not be sent to the database, so it was not submitted. Check your connection and try again, or contact Technical Training."
+      :"تعذّر إرسال الطلب إلى قاعدة البيانات، لذلك لم يُرسل. تحقق من الاتصال وحاول مجدداً، أو تواصل مع إدارة التدريب الفني.";
+    return;
   }
   b.disabled=false;b.innerHTML=EN()?"Confirm and submit":"تأكيد وإرسال الطلب";
   $("#doneRef").textContent=ref;
@@ -2981,15 +3014,22 @@ function showDetail(id){
   closeAll();$("#dov").classList.add("open");document.body.style.overflow="hidden";
   const detailBody=$("#dov .mbody");detailBody.scrollTop=0;requestAnimationFrame(()=>detailBody.scrollTop=0);
 }
-$("#c_send").onclick=()=>{
+$("#c_send").onclick=async()=>{
   let ok=true;["#c_fn","#c_ln"].forEach(s=>{const el=$(s),f=el.closest(".field");
     if(!el.value.trim()){f.classList.add("bad");ok=false}else f.classList.remove("bad")});
   const em=$("#c_em"),ef=em.closest(".field");
   if(!/^\S+@\S+\.\S+$/.test(em.value)){ef.classList.add("bad");ok=false}else ef.classList.remove("bad");
   if(!ok)return;
-  API.addMessage({name:$("#c_fn").value.trim()+" "+$("#c_ln").value.trim(),email:em.value.trim(),
-    phone:$("#c_ph").value.trim(),type:$("#c_rs").value,msg:$("#c_msg").value.trim(),
-    createdAt:new Date().toISOString()}).catch(()=>{});
+  const b=$("#c_send");b.disabled=true;b.innerHTML='<span class="spin"></span>';
+  try{
+    await API.addMessage({name:$("#c_fn").value.trim()+" "+$("#c_ln").value.trim(),email:em.value.trim(),
+      phone:$("#c_ph").value.trim(),type:$("#c_rs").value,msg:$("#c_msg").value.trim(),
+      createdAt:new Date().toISOString()});
+  }catch(e){
+    b.disabled=false;b.textContent=EN()?"Send request":"إرسال الطلب";
+    toast(EN()?"Your message was not sent. Your entries are still here; please try again.":"لم تُرسل رسالتك؛ ما زالت بياناتك موجودة. حاول مجدداً.");return;
+  }
+  b.disabled=false;b.textContent=EN()?"Send request":"إرسال الطلب";
   toast(EN()?"Your request has been sent.":"تم إرسال طلبك بنجاح.");
   ["#c_fn","#c_ln","#c_em","#c_ph","#c_msg"].forEach(s=>$(s).value="");
 };
@@ -3010,17 +3050,14 @@ $("#s_send").onclick=async()=>{
   const p=P.find(x=>x.id===$("#s_prog").value)||{};
   const rec=Object.assign({programId:p.id||"",programAr:p.ar||"",empNo:$("#s_emp").value.trim(),
     note:$("#s_note").value.trim(),createdAt:new Date().toISOString()},RATE);
-  let saved=true;
   try{await API.addFeedback(rec);}catch(e){
-    const m=String(e&&e.message||"");
-    if(/409|23505|duplicate/i.test(m)){
-      b.disabled=false;b.innerHTML=EN()?"Submit evaluation":"إرسال التقييم";
-      eb.classList.add("show");
-      eb.textContent=EN()?"You have already evaluated this program."
-        :"سبق أن قيّمت هذا البرنامج. شكراً لك.";
-      return;
-    }
-    const a=lget("bla_fb",[]);a.push(rec);lset("bla_fb",a);saved=false;
+    const m=String(e&&e.message||""),duplicate=/409|23505|duplicate/i.test(m);
+    b.disabled=false;b.innerHTML=EN()?"Submit evaluation":"إرسال التقييم";
+    eb.classList.add("show");
+    eb.textContent=duplicate
+      ?(EN()?"You have already evaluated this program.":"سبق أن قيّمت هذا البرنامج. شكراً لك.")
+      :(EN()?"The evaluation was not sent. Your answers are still here; please try again.":"لم يُرسل التقييم؛ ما زالت إجاباتك موجودة. حاول مجدداً.");
+    return;
   }
   b.disabled=false;b.innerHTML=EN()?"Submit evaluation":"إرسال التقييم";
   $("#survCard").style.display="none";$("#survDone").style.display="block";
@@ -3373,6 +3410,9 @@ function userRows(){
    :`<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:34px">${
      EN()?"No admin accounts listed yet.":"لا توجد حسابات إدارية مسجّلة بعد."}</td></tr>`;
 }
+let userRateTimer=null;
+const activeOwners=()=>(ADMINS||[]).filter(x=>x&&x.role==="owner"&&String(x.status||"active")!=="disabled");
+const isLastActiveOwner=u=>!!u&&u.role==="owner"&&String(u.status||"active")!=="disabled"&&activeOwners().length===1;
 function userAdd(){
   const R=EN()?ROLE_EN:ROLE_AR;
   $("#peTitle").textContent=EN()?"Add an admin":"إضافة مستخدم للإدارة";
@@ -3382,12 +3422,12 @@ function userAdd(){
      :"هنا يحدث أمران: يُنشأ حساب دخول، ويُمنح البريد دوراً. إذا كان للبريد حساب مسبقاً، اترك كلمة المرور فارغة ليُمنح الدور فقط."}</div>
    <div class="g2">
      <div class="field"><label>${EN()?"Email":"البريد الإلكتروني"} <i>*</i></label>
-       <input id="u_em" type="email" dir="ltr" placeholder="name@bahra-cables.com">
+       <input id="u_em" type="email" dir="ltr" autocomplete="email" placeholder="name@bahra-cables.com">
        <div class="err">${EN()?"Enter a valid email":"أدخل بريداً صحيحاً"}</div></div>
-     <div class="field"><label>${EN()?"Full name":"الاسم"}</label><input id="u_nm"></div></div>
+     <div class="field"><label>${EN()?"Full name":"الاسم"}</label><input id="u_nm" autocomplete="name"></div></div>
    <div class="g2">
      <div class="field"><label>${EN()?"Temporary password":"كلمة مرور مؤقتة"}</label>
-       <input id="u_pw" type="text" dir="ltr" autocomplete="off">
+       <input id="u_pw" type="password" dir="ltr" autocomplete="new-password">
        <div class="hint">${EN()?"At least 6 characters. Leave empty if the account already exists."
          :"٦ أحرف على الأقل. اتركها فارغة إذا كان الحساب موجوداً."}</div></div>
      <div class="field"><label>${EN()?"Role":"الدور"}</label><select id="u_rl">
@@ -3396,39 +3436,54 @@ function userAdd(){
        <option value="owner">${esc(R.owner)}</option></select></div></div>
    <div class="field"><label>${EN()?"Note (optional)":"ملاحظة (اختياري)"}</label>
      <input id="u_nt" placeholder="${EN()?"e.g. Training coordinator":"مثل: منسّق التدريب"}"></div>
-   <div id="u_msg"></div>
+   <div id="u_msg" aria-live="polite"></div>
    <div class="wnav">
      <button class="btn btn-g" id="u_cancel">${EN()?"Cancel":"إلغاء"}</button>
      <button class="btn btn-p" id="u_save" style="flex:1">${EN()?"Add admin":"إضافة"}</button></div>`;
-  $("#u_cancel").onclick=closeAll;
+  const resetButton=()=>{const b=$("#u_save");if(b){b.disabled=false;b.textContent=EN()?"Add admin":"إضافة";}};
+  const message=(text,bad=true)=>{const m=$("#u_msg");if(m)m.innerHTML=`<div class="vfy show ${bad?"no":"yes"}" style="margin-bottom:14px">${esc(text)}</div>`;};
+  const cooldown=seconds=>{
+    let left=Math.max(1,Math.min(3600,+seconds||1));clearInterval(userRateTimer);
+    const tick=()=>{
+      const b=$("#u_save");if(!b){clearInterval(userRateTimer);userRateTimer=null;return;}
+      if(left<=0){clearInterval(userRateTimer);userRateTimer=null;resetButton();
+        message(EN()?"You can try again now. Your entries are still here.":"يمكنك المحاولة الآن؛ ما زالت البيانات المدخلة محفوظة في النموذج.",false);return;}
+      b.disabled=true;b.textContent=EN()?`Retry in ${left}s`:`إعادة المحاولة بعد ${left} ثانية`;
+      message(EN()?`Too many account-creation requests. Wait ${left} second(s), then try again. No account was created.`
+        :`تم تجاوز الحد المؤقت لطلبات إنشاء الحسابات. انتظر ${left} ثانية ثم أعد المحاولة؛ لم يُنشأ أي حساب.`);
+      left--;
+    };
+    tick();userRateTimer=setInterval(tick,1000);
+  };
+  $("#u_cancel").onclick=()=>{clearInterval(userRateTimer);userRateTimer=null;closeAll();};
   $("#u_save").onclick=async()=>{
-    const em=$("#u_em").value.trim().toLowerCase(), pw=$("#u_pw").value, f=$("#u_em").closest(".field");
+    clearInterval(userRateTimer);userRateTimer=null;
+    const em=$("#u_em").value.trim().toLowerCase(),pw=$("#u_pw").value,f=$("#u_em").closest(".field");
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){f.classList.add("bad");return;}
     f.classList.remove("bad");
     const b=$("#u_save");b.disabled=true;b.innerHTML='<span class="spin"></span>';
-    let note="";
+    let note="",authCreated=false;
     if(pw){
-      if(pw.length<6){b.disabled=false;b.textContent=EN()?"Add admin":"إضافة";
-        toast(EN()?"Password must be at least 6 characters.":"كلمة المرور ٦ أحرف على الأقل.");return;}
-      try{const r=await API.createAuthUser(em,pw);
-        if(r.needsConfirm)note=EN()?"A confirmation email was sent to this address."
-                                   :"أُرسل بريد تأكيد إلى هذا العنوان.";}
+      if(pw.length<6){resetButton();toast(EN()?"Password must be at least 6 characters.":"كلمة المرور ٦ أحرف على الأقل.");return;}
+      try{const r=await API.createAuthUser(em,pw);authCreated=true;
+        if(r.needsConfirm)note=EN()?"A confirmation email was sent to this address.":"أُرسل بريد تأكيد إلى هذا العنوان.";}
       catch(e){
-        const msg=String(e.message||"");
-        if(/already|registered|exists/i.test(msg))note=EN()?"The account already existed — role granted."
-                                                          :"الحساب موجود مسبقاً — تم منح الدور فقط.";
-        else{b.disabled=false;b.textContent=EN()?"Add admin":"إضافة";
-          $("#u_msg").innerHTML=`<div class="vfy show no" style="margin-bottom:14px">${esc(msg)}</div>`;return;}
+        const msg=String(e.message||""),wait=msg.match(/^SIGNUP_RATE_LIMIT:(\d+)$/);
+        if(wait){cooldown(wait[1]);return;}
+        if(msg==="SIGNUP_EXISTS")note=EN()?"The account already existed — only the role will be granted.":"الحساب موجود مسبقاً — سيُمنح الدور فقط.";
+        else{resetButton();message(msg==="SIGNUP_INVALID_EMAIL"
+          ?(EN()?"The email address was rejected. Check it and try again.":"رفُض البريد الإلكتروني؛ تحقق منه وحاول مجدداً.")
+          :(EN()?"The sign-in account could not be created. No role was granted. Check the details and try again.":"تعذّر إنشاء حساب الدخول، ولم يُمنح أي دور. تحقق من البيانات وحاول مجدداً."));return;}
       }
     }
-    const u={email:em,name:$("#u_nm").value.trim(),role:$("#u_rl").value,
-      status:"active",note:$("#u_nt").value.trim()};
-    try{await API.saveAdmin(u);}
-    catch(e){b.disabled=false;b.textContent=EN()?"Add admin":"إضافة";
-      toast(EN()?"Could not save.":"تعذّر الحفظ.");return;}
+    const u={email:em,name:$("#u_nm").value.trim(),role:$("#u_rl").value,status:"active",note:$("#u_nt").value.trim()};
+    try{await API.saveAdmin(u);}catch(e){
+      resetButton();message(authCreated
+        ?(EN()?"The sign-in account was created, but the role was not granted. To retry, keep the email and leave the password empty.":"أُنشئ حساب الدخول، لكن لم يُمنح الدور. لإعادة المحاولة أبقِ البريد واترك كلمة المرور فارغة.")
+        :(EN()?"The role was not granted. Your entries are still here; try again.":"لم يُمنح الدور؛ ما زالت بياناتك موجودة. حاول مجدداً."));return;
+    }
     ADMINS=(ADMINS||[]).filter(x=>x.email!==em).concat([u]);
-    closeAll();paneUsers();
-    toast(note||(EN()?"Admin added.":"تمت إضافة المستخدم."));
+    closeAll();paneUsers();toast(note||(EN()?"Admin added.":"تمت إضافة المستخدم."));
   };
   closeAll();$("#pov").classList.add("open");document.body.style.overflow="hidden";
 }
@@ -3437,8 +3492,8 @@ document.addEventListener("click",async e=>{
   if(rl){
     const [em,role]=rl.dataset.urole.split("|");
     const u=(ADMINS||[]).find(x=>x.email===em);if(!u||u.role===role)return;
-    if(em===MYEMAIL&&role!=="owner"&&!confirm(EN()
-      ?"This lowers your own access. Continue?":"هذا يخفّض صلاحيتك أنت. هل تريد المتابعة؟"))return;
+    if(isLastActiveOwner(u)&&role!=="owner"){toast(EN()?"You cannot demote the last active owner. Add another owner first.":"لا يمكن تخفيض صلاحية آخر مالك نشط. أضف مالكاً آخر أولاً.");return;}
+    if(em===MYEMAIL&&role!=="owner"&&!confirm(EN()?"This lowers your own access. Continue?":"هذا يخفّض صلاحيتك أنت. هل تريد المتابعة؟"))return;
     const prev=u.role;u.role=role;userRows();
     try{await API.saveAdmin(u);}catch(_){u.role=prev;userRows();toast(EN()?"Update failed.":"تعذّر التحديث.");return;}
     if(em===MYEMAIL){MYROLE=role;admin();return;}
@@ -3448,16 +3503,18 @@ document.addEventListener("click",async e=>{
   if(st){
     const u=(ADMINS||[]).find(x=>x.email===st.dataset.ust);if(!u)return;
     if(u.email===MYEMAIL){toast(EN()?"You cannot disable your own account.":"لا يمكنك إيقاف حسابك أنت.");return;}
-    const prev=u.status||"active";
-    u.status=prev==="disabled"?"active":"disabled";userRows();
+    if(isLastActiveOwner(u)){toast(EN()?"You cannot disable the last active owner.":"لا يمكن إيقاف آخر مالك نشط.");return;}
+    const prev=u.status||"active";u.status=prev==="disabled"?"active":"disabled";userRows();
     try{await API.saveAdmin(u);}catch(_){u.status=prev;userRows();toast(EN()?"Update failed.":"تعذّر التحديث.");}
     return;
   }
-  const dl2=e.target.closest("[data-udel]");
-  if(!dl2)return;
+  const dl2=e.target.closest("[data-udel]");if(!dl2)return;
+  const em=dl2.dataset.udel,u=(ADMINS||[]).find(x=>x.email===em);
+  if(em===MYEMAIL){toast(EN()?"You cannot remove your own access.":"لا يمكنك حذف صلاحية حسابك أنت.");return;}
+  if(isLastActiveOwner(u)){toast(EN()?"You cannot remove the last active owner.":"لا يمكن حذف آخر مالك نشط.");return;}
   if(!confirm(EN()?"Remove this admin's access?":"إلغاء صلاحية هذا المستخدم؟"))return;
-  try{await API.deleteAdmin(dl2.dataset.udel);}catch(_){toast(EN()?"Delete failed.":"تعذّر الحذف.");return;}
-  ADMINS=(ADMINS||[]).filter(x=>x.email!==dl2.dataset.udel);userRows();
+  try{await API.deleteAdmin(em);}catch(_){toast(EN()?"Delete failed.":"تعذّر الحذف.");return;}
+  ADMINS=(ADMINS||[]).filter(x=>x.email!==em);userRows();
 });
 
 /* =========================================================
@@ -3813,7 +3870,8 @@ function drawReqs(){
 document.addEventListener("click",async e=>{
   const d=e.target.closest("[data-delreg]");
   if(d){ if(!confirm(EN()?"Delete this record?":"حذف هذا الطلب نهائياً؟"))return;
-    const ref=d.dataset.delreg;try{await API.deleteReg(ref)}catch(_){toast(EN()?"Delete failed.":"تعذّر الحذف.")}
+    const ref=d.dataset.delreg;
+    try{await API.deleteReg(ref);}catch(_){toast(EN()?"Delete failed; the request is still listed.":"تعذّر الحذف؛ ما زال الطلب موجوداً.");return;}
     regs=regs.filter(r=>r.ref!==ref);drawReqs();return;}
   const c=e.target.closest("[data-cycle]");
   if(c){ const ref=c.dataset.cycle,r=regs.find(x=>x.ref===ref);if(!r)return;
@@ -3829,8 +3887,11 @@ document.addEventListener("click",async e=>{
            toast(EN()?("Certificate issued: "+ct.certNo):("تم إصدار الشهادة: "+ct.certNo)); }
       catch(err){ toast(EN()?"Could not issue the certificate.":"تعذّر إصدار الشهادة."); }
     }
+    const oldStatus=r.status,oldCert=r.certNo;
     r.status=next;
-    try{await API.setRegStatus(ref,next,extra)}catch(_){}
+    try{await API.setRegStatus(ref,next,extra);}catch(_){
+      r.status=oldStatus;r.certNo=oldCert;drawReqs();
+      toast(EN()?"Status was not changed. Check the connection and try again.":"لم تتغير الحالة. تحقق من الاتصال وحاول مجدداً.");return;}
     drawReqs();return;}
   const rc=e.target.closest("[data-regcert]");
   if(rc){ const no=rc.dataset.regcert;
@@ -3875,14 +3936,27 @@ async function paneProgs(){
          <button class="del" data-delprog="${esc(p.id)}">${EN()?"Delete":"حذف"}</button></td></tr>`).join("")}
    </tbody></table></div>`;
   $("#addProg").onclick=()=>progEditor(null);
-  $("#aPane").addEventListener("click",async e=>{
-    const ed=e.target.closest("[data-edit]");if(ed)return progEditor(ed.dataset.edit);
-    const dl=e.target.closest("[data-delprog]");
-    if(dl){ if(!confirm(EN()?"Delete this program?":"حذف هذا البرنامج نهائياً؟"))return;
-      const id=dl.dataset.delprog;P=P.filter(p=>p.id!==id);
-      try{await API.deleteProgram(id)}catch(_){toast(EN()?"Delete failed.":"تعذّر الحذف.")}
-      renderSite();paneProgs();}
-  });
+  const progPane=$("#aPane");
+  if(progPane.dataset.progBound!=="1"){
+    progPane.dataset.progBound="1";
+    progPane.addEventListener("click",async e=>{
+      const ed=e.target.closest("[data-edit]");if(ed)return progEditor(ed.dataset.edit);
+      const dl=e.target.closest("[data-delprog]");
+      if(dl){
+        if(!confirm(EN()?"Delete this program permanently?":"حذف هذا البرنامج نهائياً؟"))return;
+        const id=dl.dataset.delprog;dl.disabled=true;
+        try{
+          await API.deleteProgram(id);
+          P=P.filter(p=>p.id!==id);lset("bla_programs",P);
+          renderSite();await paneProgs();
+          toast(EN()?"Program deleted.":"تم حذف البرنامج نهائياً.");
+        }catch(err){
+          dl.disabled=false;
+          toast(EN()?"Delete failed. The program was not removed.":"تعذّر الحذف؛ لم يُحذف البرنامج. تحقق من الصلاحيات ثم حاول مجدداً.");
+        }
+      }
+    });
+  }
 }
 function progEditor(id){
   const isNew=!id;
@@ -3970,10 +4044,18 @@ function progEditor(id){
   $("#peSave").onclick=async()=>{
     w.active=$("#pactive").checked;w.mandatory=$("#pmand").checked;
     if(!w.id||!w.ar){toast(EN()?"Code and Arabic title are required.":"رمز البرنامج والاسم بالعربي مطلوبان.");return;}
+    if(P.some(x=>x.id===w.id&&x.id!==id)){
+      toast(EN()?"This program code is already in use.":"رمز البرنامج مستخدم مسبقاً؛ اختر رمزاً مختلفاً.");return;}
     const b=$("#peSave");b.disabled=true;b.innerHTML='<span class="spin"></span>';
-    if(!isNew&&w.id!==id){P=P.filter(x=>x.id!==id);try{await API.deleteProgram(id)}catch(_){}}
-    const i=P.findIndex(x=>x.id===w.id);if(i>=0)P[i]=w;else P.push(w);
-    try{await API.saveProgram(w);}catch(e){toast(EN()?"Saved locally only.":"تم الحفظ محلياً فقط.");}
+    const previous=clone(P);
+    try{
+      if(!isNew&&w.id!==id){await API.deleteProgram(id);P=P.filter(x=>x.id!==id);}
+      const i=P.findIndex(x=>x.id===w.id);if(i>=0)P[i]=w;else P.push(w);
+      await API.saveProgram(w);
+    }catch(e){
+      P=previous;b.disabled=false;b.textContent=EN()?"Save program":"حفظ البرنامج";
+      toast(EN()?"Program was not saved. Your edits are still in the form.":"لم يُحفظ البرنامج؛ ما زالت تعديلاتك موجودة في النموذج.");return;
+    }
     b.disabled=false;b.textContent=EN()?"Save program":"حفظ البرنامج";
     closeAll();renderSite();paneProgs();toast(EN()?"Program saved.":"تم حفظ البرنامج.");
   };
@@ -4002,7 +4084,7 @@ function shrink(file,max,qual){return new Promise(res=>{
 function toDataURL(blob){return new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result);f.readAsDataURL(blob)})}
 
 /* ---------- generic content editor ---------- */
-function startEdit(){W=clone(C);dirty=false;}
+function startEdit(){W=clone(C);W.sites=clone(siteList());dirty=false;}
 function bindPane(){
   $("#aPane").addEventListener("input",e=>{const el=e.target.closest("[data-w]");if(!el)return;
     setPath(W,el.dataset.w,el.value);dirty=true;const st=$("#saveState");if(st)st.textContent=EN()?"Unsaved changes":"تغييرات غير محفوظة";});
@@ -4022,8 +4104,11 @@ const savebar=()=>`<div class="savebar"><span class="st" id="saveState">${dirty?
   <button class="btn btn-p" id="saveBtn" style="padding:11px 28px;font-size:.875rem">${EN()?"Publish changes":"نشر التغييرات"}</button></div>`;
 async function saveContent(){
   const b=$("#saveBtn");b.disabled=true;b.innerHTML='<span class="spin"></span>';
-  C=clone(W);let ok=false;
-  try{await API.saveContent(C);ok=API.mode!=="local";}catch(e){toast(EN()?"Publish failed — saved locally.":"تعذّر النشر — حُفظ محلياً.");}
+  const previous=C;C=clone(W);let ok=false;
+  try{await API.saveContent(C);ok=API.mode!=="local";}catch(e){
+    C=previous;dirty=true;b.disabled=false;b.textContent=EN()?"Publish changes":"نشر التغييرات";
+    $("#saveState").textContent=EN()?"Publish failed — changes not saved":"تعذّر النشر — التغييرات غير محفوظة";
+    toast(EN()?"Publish failed. Your edits remain in the editor.":"تعذّر النشر؛ ما زالت تعديلاتك في المحرر.");return;}
   b.disabled=false;b.textContent=EN()?"Publish changes":"نشر التغييرات";dirty=false;
   $("#saveState").textContent=EN()?"All changes saved":"كل التغييرات محفوظة";
   renderSite();toast(ok?(EN()?"Content published.":"تم نشر التغييرات على الموقع."):(EN()?"Saved locally only.":"تم الحفظ محلياً فقط."));
@@ -4327,7 +4412,11 @@ async function paneReports(){
 const KSA_PATH="M116.9 354.5 L115.7 354.5 L112.4 351 L110.5 348.5 L108.5 346.8 L99.6 343.3 L98.3 341.1 L99.8 338.9 L100.6 341.1 L102.3 342.3 L109.7 345.5 L117.9 352.3 L119.4 352.9 L116.9 354.5 Z M354.6 798.8 L358.2 799 L356.6 797.3 L356.3 796.5 L358 794.2 L363 799.1 L362.9 804.8 L362.5 806.1 L361.2 804.9 L360.2 803.7 L359.8 802.4 L358.5 801 L353.4 801.9 L350.4 800.4 L345.9 795.5 L344.7 792 L346.6 791.3 L348.6 789.6 L349.7 786.8 L348.6 784 L351.3 784.4 L352.8 787.4 L352.9 794 L353.4 795.5 L352.6 797 L354.6 798.8 Z M821.5 681.8 L810.4 683.4 L799.8 685.1 L787.8 686.8 L773.3 689 L762.1 690.6 L745.6 693.1 L730.8 695.2 L717 697.2 L703 699.3 L691.2 701.1 L684.2 703.1 L675.9 707.5 L663.2 714.3 L650.2 721.3 L643.6 724.8 L636.6 734.1 L633 738.7 L626.5 747.2 L621.6 753.6 L615.9 761.1 L613.4 768 L609.5 778.4 L606.1 781.1 L600.6 784.4 L595.5 786.8 L587.6 786.6 L583.2 780.1 L578.4 773.3 L576 770.6 L574 770.4 L566.1 771.3 L556.5 772.3 L545.4 771.2 L532.4 769.8 L520.3 768.7 L514.3 767.8 L506.4 763.3 L504.3 762.5 L502.2 762.3 L492.9 762.1 L483.5 762 L474.1 763.4 L465.2 762.9 L455.9 763.7 L452.5 765.4 L449 765.3 L446.6 766.8 L444.8 767.5 L442.3 766.2 L439.4 766.5 L435.2 765.4 L432.3 762.5 L429.8 760 L427.1 758.5 L424.1 757.7 L421.4 757.7 L418 759.3 L416 760.8 L410.8 765.7 L410.6 767.5 L413 770.5 L412.2 771.9 L409.1 773.7 L408.3 778.4 L407.8 781 L407.3 787.1 L408.6 792 L410.5 793.8 L410.6 795.9 L409.6 800.1 L406.8 801.3 L404.8 805.3 L403.4 807.2 L401.2 809.3 L392.5 816.4 L392 812.3 L389.3 806.2 L389.1 801.9 L387.8 797.6 L385.4 794.3 L381 790.9 L380.5 786.2 L377.3 781.6 L373.1 777.8 L370.6 771 L368.9 761.8 L357.7 749.8 L343.5 738.8 L339.2 732.5 L332.1 719.8 L328.6 709.7 L319.1 698.1 L318.8 693.7 L317.3 688.3 L315.1 682.2 L313.9 677.4 L304.3 656.5 L301.3 653.2 L298.6 648.5 L297.9 644.9 L297.1 643 L290.5 639.5 L284.1 630.7 L265.5 616.7 L256.2 615.4 L249 610.4 L243.6 603.8 L237.9 592.6 L227.8 580.5 L219.4 563.2 L222.1 556.9 L221.9 552.6 L219.2 545.1 L216.3 539.4 L214.3 534 L216 526.1 L216.5 517.4 L218.2 512.8 L219.4 507.7 L217.9 497.5 L215 492.1 L215.3 488.4 L212.1 486.6 L209.4 482.6 L212.1 482.7 L207.3 477.2 L205.4 474.2 L203.6 466.7 L201.2 461 L193.6 448 L189.9 440.1 L181.7 430 L172.8 422.4 L167.2 419 L164.5 415.9 L159.8 415.7 L154.8 411.3 L151.2 411.2 L146.9 410.5 L141.7 401.9 L137.3 393.8 L129.9 383.3 L131.7 380.6 L133.9 376.1 L132.9 370.4 L131.7 366.4 L128.5 359.2 L117.8 341.3 L114.9 338.7 L110.4 335.7 L107.7 327.8 L106.3 320.9 L98.9 317.5 L86.5 292.4 L79.1 283.6 L76.2 277.7 L67.8 268 L63.8 258.3 L55.2 249.4 L47.8 234.1 L36.5 218.6 L31.6 215.9 L20 214.8 L15 213.7 L10.4 217.1 L10.1 212.8 L13.3 206.8 L17.7 194.4 L18.7 183.4 L25.7 151 L35.7 152.6 L43.9 154.1 L55.9 156.1 L68.3 158.2 L75.5 159.4 L77.9 158.9 L88 150.9 L97.1 143.7 L102.5 135 L107.7 126.5 L110 124.7 L118.1 123.2 L130.9 120.6 L143.5 118.1 L144.3 117.3 L147.4 110.5 L151.1 101.8 L151.9 100.9 L152.8 100.1 L161.8 95.2 L167.2 92.2 L159.5 83.6 L152.1 75.4 L143.8 66.2 L136.9 59.1 L126.3 48.5 L119.6 41.4 L131.6 38.1 L144.5 34.6 L157.6 30.9 L173.4 26.6 L185.7 23.2 L204.2 18.1 L213.1 15.6 L214.8 15 L221.7 8.9 L232.2 10.6 L247.8 13.2 L262.9 15.6 L278.9 18.5 L284.1 20.9 L299.4 29.4 L309.5 35 L321.2 41.6 L335.8 49.7 L345.7 55.3 L358.7 62.5 L368.6 70.7 L381.4 81.1 L395.2 92.5 L406.6 101.4 L422.4 113.6 L438.1 125.6 L453.2 137.4 L465.5 146.9 L480.8 158.8 L482.1 159.2 L497.6 160.6 L518.6 162.4 L539.7 164.2 L558.7 165.9 L566.9 164.2 L575.8 165.3 L588 166.8 L595.2 167.8 L609 169.6 L613.2 177.5 L614.7 182.9 L616.1 188.2 L620.1 193 L629.5 192.9 L637.8 192.9 L648 192.7 L656.3 192.6 L658.8 197.4 L660 202.2 L664.8 213.6 L671.7 222.5 L673.2 225.7 L674.4 230.6 L673.2 232.4 L672.7 234.5 L677.8 239.4 L686.4 243.5 L689.6 244.5 L693.3 246.4 L690.4 249.2 L695.5 255.8 L701.2 262.3 L707.4 263.9 L715.8 273.9 L728.3 280.4 L736 288.9 L735.3 289.1 L733 288.2 L730.3 287.1 L729.4 288.1 L729.4 291.7 L730.3 295.9 L734.1 299.5 L737.7 302.1 L739 307.1 L736.2 317.8 L735.3 317.7 L733.5 316.8 L731.5 316.6 L730.4 317.2 L732.8 324.9 L735 330.8 L737.8 335.4 L740.2 342.2 L742.1 345.1 L750.3 352.4 L752.6 358.4 L755 369.7 L760.1 376 L762.9 380.9 L766.6 384.9 L769 390.6 L772.3 394.9 L774.2 396 L776.7 396.4 L780.1 396.4 L783.9 395.4 L788.1 394.3 L791.5 396.4 L794.9 396.2 L795.2 398.2 L793 401 L790.2 407.9 L794.2 409.1 L797.9 409.6 L800.8 410.7 L802.3 410.7 L802.3 412.2 L802.4 418.8 L803.5 421.3 L805.1 423.6 L807.7 426.9 L810.2 430.3 L812.9 433.7 L815.4 437 L817.9 440.4 L820.6 443.8 L823.1 447.1 L825.7 450.4 L828.2 453.8 L830.9 457.2 L833.4 460.5 L835.9 463.9 L838.6 467.2 L841.1 470.6 L843.7 473.9 L846.2 477.3 L848.4 480.1 L852.2 480.6 L853.6 480.8 L857.1 481.2 L862.5 482 L869.7 482.9 L878.1 484.1 L887.6 485.3 L897.7 486.6 L908.1 488.1 L918.5 489.5 L928.4 490.8 L937.9 492.1 L946.4 493.2 L953.5 494.2 L959.1 494.9 L962.6 495.4 L963.8 495.5 L967.5 496.1 L971.3 491.8 L974.7 497.6 L977.6 502.4 L981.4 509.1 L985.6 516.1 L989.7 522.8 L992.5 527.8 L991 533 L989.3 538.7 L987.7 544.3 L985.8 550 L984.1 555.7 L982.4 561.4 L980.8 567.1 L979.1 572.7 L977.2 578.4 L975.5 584.1 L973.9 589.8 L972.2 595.4 L970.5 601.1 L968.8 606.8 L967 612.4 L965.3 618.1 L963.6 623.7 L961.6 630.6 L956.5 632.4 L948.6 635.3 L940.6 638.3 L932.5 641.2 L924.4 644.2 L916.3 647.1 L908.4 650.1 L900.4 653 L892.3 656 L884.2 658.9 L876.1 661.8 L868.2 664.8 L860.1 667.7 L852.1 670.6 L844 673.6 L836.1 676.5 L828 679.4 L821.5 681.8 Z M102.6 337.6 L100.1 336.5 L100.3 332.5 L102 330.3 L101.8 333.3 L102.6 336.5 L102.6 337.6 Z";
 const KSA={W:1000,H:825,MINLON:34.4,MAXLAT:32.3,COS:0.911762,K:51.2513};
 const ksaXY=(lng,lat)=>[ (lng-KSA.MINLON)*KSA.COS*KSA.K, (KSA.MAXLAT-lat)*KSA.K ];
-const siteList=()=>(C.sites&&C.sites.length?C.sites:DEF_CONTENT.sites);
+const siteList=()=>{
+  const current=Array.isArray(C.sites)?C.sites.filter(x=>x&&x.id):[];
+  /* نُبقي تعديلات الإدارة ونضيف أي موقع افتراضي جديد غير موجود. */
+  return current.concat(DEF_CONTENT.sites.filter(d=>!current.some(x=>x.id===d.id)));
+};
 const siteById=id=>siteList().find(s=>s.id===id)||null;
 const siteName=s=>EN()?(s.en||s.ar):s.ar;
 /* اسم قصير للخريطة — أول جزء قبل الشرطة */
@@ -4352,8 +4441,10 @@ function mapReport(){
   const max=rows[0].n;
   const R_MIN=11, R_MAX=42;
   const rOf=n=>R_MIN+(R_MAX-R_MIN)*Math.sqrt(n/max);
+  /* تبقى المواقع الدولية في القائمة والتقرير، وتُرسم داخل خريطة السعودية فقط عند انطباق نطاقها. */
+  const mapRows=rows.filter(x=>Number.isFinite(+x.s.lat)&&Number.isFinite(+x.s.lng)&&+x.s.lat>=16&&+x.s.lat<=33&&+x.s.lng>=34&&+x.s.lng<=56);
   /* الأكبر يُرسم أولاً حتى لا يحجب الأصغر */
-  const draw=rows.slice().sort((a,b)=>b.n-a.n)
+  const draw=mapRows.slice().sort((a,b)=>b.n-a.n)
     .map(x=>{const [cx,cy]=ksaXY(x.s.lng,x.s.lat);return {...x,cx,cy,r:rOf(x.n)};});
   /* الرقم يُخفى إذا ابتلعت فقاعةٌ أكبر مركزَ هذه الفقاعة */
   draw.forEach((x,i)=>{
@@ -4736,15 +4827,19 @@ document.addEventListener("click",async e=>{
   const cy=e.target.closest("[data-icyc]");
   if(cy){const ref=cy.dataset.icyc,i=ideas.find(x=>x.ref===ref);if(!i)return;
     const order=["new","study","approved","done","rejected"];
-    i.status=order[(order.indexOf(i.status||"new")+1)%order.length];
-    try{await API.setIdeaStatus(ref,i.status)}catch(_){}
+    const oldStatus=i.status||"new";
+    i.status=order[(order.indexOf(oldStatus)+1)%order.length];
+    try{await API.setIdeaStatus(ref,i.status);}catch(_){
+      i.status=oldStatus;drawIdeas();
+      toast(EN()?"Status was not changed. Try again.":"لم تتغير الحالة؛ حاول مجدداً.");return;}
     drawIdeas();return;}
   const op=e.target.closest("[data-iopen]");
   if(op){ideaOpen(op.dataset.iopen);return;}
   const dl2=e.target.closest("[data-idel]");
   if(dl2){if(!confirm(EN()?"Delete this idea?":"حذف هذه الفكرة؟"))return;
     const ref=dl2.dataset.idel;
-    try{await API.deleteIdea(ref)}catch(_){}
+    try{await API.deleteIdea(ref);}catch(_){
+      toast(EN()?"Delete failed; the idea is still listed.":"تعذّر الحذف؛ ما زالت الفكرة موجودة.");return;}
     ideas=ideas.filter(x=>x.ref!==ref);drawIdeas();}
 });
 
@@ -5282,14 +5377,18 @@ async function lsubmit(){
   }
   lstep=LEAP_STEPS.length;lreview();
   const b=$("#lSubmit");b.disabled=true;b.innerHTML='<span class="spin"></span>';
-  const ref="LEAP-"+new Date().getFullYear()+"-"+Math.floor(1000+Math.random()*9000);
+  const ref="LEAP-"+new Date().getFullYear()+"-"+Math.floor(100000+Math.random()*900000);
   const rec={ref,title:lv("title"),name:lv("owner"),empNo:lv("empNo"),dept:lv("dept"),
     category:(Array.isArray(LD.categories)?LD.categories:[]).map(c=>{
       const o=LEAP_CATS.find(x=>x[0]===c);return o?o[1]:c}).join("، "),
     descr:lv("oneSentence"),benefit:lv("finBenefit"),status:"new",
     form:JSON.parse(JSON.stringify(LD)),createdAt:new Date().toISOString()};
-  try{ await API.addIdea(rec); }
-  catch(e){ const a=lget("bla_ideas",[]);a.push(rec);lset("bla_ideas",a); }
+  try{await API.addIdea(rec);}catch(e){
+    b.disabled=false;b.textContent=EN()?"Submit idea":"إرسال الفكرة";
+    const eb=$("#lErr");eb.classList.add("show");
+    eb.textContent=EN()?"The idea was not sent. Your draft is still saved; check the connection and try again.":"لم تُرسل الفكرة؛ ما زالت مسودتك محفوظة. تحقق من الاتصال وحاول مجدداً.";
+    return;
+  }
   b.disabled=false;
   ldraftClear();
   $("#leapBody").innerHTML=`<div class="wpane" style="text-align:center">
