@@ -1713,7 +1713,12 @@ function mergeCourseData(remote){
   return rows.filter(r=>r&&r.id&&!LEGACY_COURSE_IDS.has(r.id)).map(r=>{
     const d=DEF_PROGRAMS.find(x=>x.id===r.id)||{};
     const p=Object.assign({},d,r);
-    OFFICIAL_COURSE_FIELDS.forEach(k=>{if(d[k]!==undefined)p[k]=clone(d[k]);});
+    /* المحفوظ في قاعدة البيانات هو المرجع؛ القيم المضمّنة تكمل الحقول الناقصة فقط */
+    OFFICIAL_COURSE_FIELDS.forEach(k=>{
+      const v=r[k];
+      const empty=v===undefined||v===null||v===""||(Array.isArray(v)&&!v.length);
+      if(empty&&d[k]!==undefined)p[k]=clone(d[k]);
+    });
     return p;
   });
 }
@@ -2331,9 +2336,37 @@ const SBA={
       body:JSON.stringify({email,password})});
     const j=await r.json();
     if(!r.ok||!j.access_token)throw new Error(j.error_description||j.msg||j.error||"login failed");
-    this.token=j.access_token;this.email=email;return true;
+    this.token=j.access_token;this.email=email;this.keep(j);return true;
   },
-  signOut(){this.token="";this.email="";}
+  /* جلسة الدخول تنتهي بعد ساعة — نحفظ رمز التجديد ونجدّدها تلقائياً */
+  get refreshToken(){try{return localStorage.getItem("bla_sb_refresh")||""}catch(e){return ""}},
+  get expiresAt(){try{return +localStorage.getItem("bla_sb_exp")||0}catch(e){return 0}},
+  keep(j){try{
+    if(j.refresh_token)localStorage.setItem("bla_sb_refresh",j.refresh_token);
+    const exp=j.expires_at?j.expires_at*1000:(Date.now()+((+j.expires_in||3600)*1000));
+    localStorage.setItem("bla_sb_exp",String(exp));}catch(e){}},
+  _rf:null,
+  refresh(){
+    if(this._rf)return this._rf;
+    const rt=this.refreshToken;
+    if(!rt)return Promise.resolve(false);
+    this._rf=fetch(SB_BASE+"/auth/v1/token?grant_type=refresh_token",{method:"POST",
+        headers:{"Content-Type":"application/json",apikey:CFG.SUPABASE_KEY},
+        body:JSON.stringify({refresh_token:rt})})
+      .then(async r=>{const j=await r.json().catch(()=>({}));
+        if(!r.ok||!j.access_token)return false;
+        this.token=j.access_token;this.keep(j);return true;})
+      .catch(()=>false)
+      .finally(()=>{this._rf=null;});
+    return this._rf;
+  },
+  async ensure(){
+    if(!this.token)return;
+    const exp=this.expiresAt;
+    if(exp&&Date.now()>exp-60000){if(!(await this.refresh()))this.signOut();}
+  },
+  signOut(){this.token="";this.email="";
+    try{localStorage.removeItem("bla_sb_refresh");localStorage.removeItem("bla_sb_exp");}catch(e){}}
 };
 function sbHeaders(extra){
   return Object.assign({apikey:CFG.SUPABASE_KEY,
@@ -2341,14 +2374,28 @@ function sbHeaders(extra){
     "Content-Type":"application/json"},extra||{});
 }
 async function sb(path,opts){
-  const o=Object.assign({},opts||{});
-  o.headers=sbHeaders(o.headers);
-  const r=await fetch(SB_BASE+"/rest/v1/"+path,o);
+  await SBA.ensure();
+  const send=()=>{const o=Object.assign({},opts||{});o.headers=sbHeaders((opts||{}).headers);
+    return fetch(SB_BASE+"/rest/v1/"+path,o);};
+  let r=await send();
+  /* جلسة منتهية: نجدّدها ونعيد المحاولة، وإن تعذّر نكمل كزائر بدل أن نعرض بيانات قديمة */
+  if(r.status===401&&SBA.token){
+    if(!(await SBA.refresh()))SBA.signOut();
+    r=await send();
+  }
   if(!r.ok){let t="";try{t=(await r.json()).message||""}catch(e){}
-    if(r.status===401||r.status===403)SBA.signOut();
+    if(r.status===401)SBA.signOut();
     throw new Error("supabase "+r.status+" "+t);}
   if(r.status===204)return null;
   const txt=await r.text();return txt?JSON.parse(txt):null;
+}
+/* تعديل/حذف يتأكد أن السجل تغيّر فعلاً في قاعدة البيانات — بدل نجاح صامت لا يحفظ شيئاً */
+async function sbChange(table,col,val,opts){
+  const o=Object.assign({},opts||{});
+  o.headers=Object.assign({},o.headers||{},{Prefer:"return=representation"});
+  const r=await sb(table+"?"+col+"=eq."+encodeURIComponent(val)+"&select="+col,o);
+  if(!Array.isArray(r)||!r.length)throw new Error("supabase: no row changed in "+table);
+  return null;
 }
 const UP={Prefer:"resolution=merge-duplicates,return=minimal"};
 const empMap=e=>({empNo:String(e.emp_no),nameAr:e.name_ar,nameEn:e.name_en,email:e.email,site:e.site,
@@ -2430,6 +2477,11 @@ const API={
     if(MODE==="artifact"){const db=await DB();if(!db)return;for(const p of list)await db.collection("programs").doc(p.id).set(p);}
     else lset("bla_programs",list);
   },
+  /* عدد المقاعد فقط (حجم صغير) — لتحديث شريط المقاعد دون إعادة تحميل الصفحة */
+  async seats(){
+    if(MODE==="supabase")return sb("programs?select=id,taken:data->taken,seats:data->seats");
+    return null;
+  },
   /* ---- enrollment requests ---- */
   async addReg(rec){
     if(MODE==="supabase")return sb("registrations",{method:"POST",headers:{Prefer:"return=minimal"},
@@ -2451,8 +2503,8 @@ const API={
     return lget("bla_regs",[]).slice().reverse();
   },
   async setRegStatus(ref,status,extra){
-    if(MODE==="supabase")return sb("registrations?ref=eq."+encodeURIComponent(ref),{method:"PATCH",
-      headers:{Prefer:"return=minimal"},body:JSON.stringify(Object.assign({status},extra||{}))});
+    if(MODE==="supabase")return sbChange("registrations","ref",ref,{method:"PATCH",
+      body:JSON.stringify(Object.assign({status},extra||{}))});
     if(MODE==="gas")return gas("setRegStatus",{ref,status,extra:extra||{}});
     if(MODE==="artifact"){const db=await DB();if(db)return db.collection("registrations").doc(ref).update(Object.assign({status},extra||{}));}
     const a=lget("bla_regs",[]);const r=a.find(x=>x.ref===ref);
@@ -2460,7 +2512,7 @@ const API={
   },
   async deleteReg(ref){
     lset("bla_regs",lget("bla_regs",[]).filter(r=>r.ref!==ref));
-    if(MODE==="supabase")return sb("registrations?ref=eq."+encodeURIComponent(ref),{method:"DELETE"});
+    if(MODE==="supabase")return sbChange("registrations","ref",ref,{method:"DELETE"});
     if(MODE==="gas")return gas("deleteReg",{ref});
     if(MODE==="artifact"){const db=await DB();if(db)return db.collection("registrations").doc(ref).delete();}
   },
@@ -2513,22 +2565,20 @@ const API={
     return lget("bla_ideas",[]).slice().reverse();
   },
   async setIdeaStatus(ref,status){
-    if(MODE==="supabase")return sb("ideas?ref=eq."+encodeURIComponent(ref),{method:"PATCH",
-      headers:{Prefer:"return=minimal"},body:JSON.stringify({status})});
+    if(MODE==="supabase")return sbChange("ideas","ref",ref,{method:"PATCH",body:JSON.stringify({status})});
     if(MODE==="gas")return gas("setIdeaStatus",{ref,status});
     if(MODE==="artifact"){const db=await DB();if(db)return db.collection("ideas").doc(ref).update({status});}
     const a=lget("bla_ideas",[]);const x=a.find(y=>y.ref===ref);if(x){x.status=status;lset("bla_ideas",a);}
   },
   async saveIdeaMeta(ref,patch){
-    if(MODE==="supabase")return sb("ideas?ref=eq."+encodeURIComponent(ref),{method:"PATCH",
-      headers:{Prefer:"return=minimal"},body:JSON.stringify(patch)});
+    if(MODE==="supabase")return sbChange("ideas","ref",ref,{method:"PATCH",body:JSON.stringify(patch)});
     if(MODE==="gas")return gas("saveIdeaMeta",{ref,patch});
     if(MODE==="artifact"){const db=await DB();if(db)return db.collection("ideas").doc(ref).update(patch);}
     const a=lget("bla_ideas",[]);const x=a.find(y=>y.ref===ref);
     if(x){Object.assign(x,patch);lset("bla_ideas",a);}
   },
   async deleteIdea(ref){
-    if(MODE==="supabase")return sb("ideas?ref=eq."+encodeURIComponent(ref),{method:"DELETE"});
+    if(MODE==="supabase")return sbChange("ideas","ref",ref,{method:"DELETE"});
     if(MODE==="gas")return gas("deleteIdea",{ref});
     if(MODE==="artifact"){const db=await DB();if(db)return db.collection("ideas").doc(ref).delete();}
     lset("bla_ideas",lget("bla_ideas",[]).filter(y=>y.ref!==ref));
@@ -2566,7 +2616,7 @@ const API={
   },
   async deleteEmployee(no){
     lset("bla_emps",lget("bla_emps",[]).filter(e=>String(e.empNo)!==String(no)));
-    if(MODE==="supabase")return sb("employees?emp_no=eq."+encodeURIComponent(no),{method:"DELETE"});
+    if(MODE==="supabase")return sbChange("employees","emp_no",no,{method:"DELETE"});
     if(MODE==="gas")return gas("deleteEmployee",{no});
     if(MODE==="artifact"){const db=await DB();if(db)return db.collection("employees").doc(String(no)).delete();}
   },
@@ -2588,7 +2638,7 @@ const API={
   },
   async deleteAnnouncement(id){
     lset("bla_ann",lget("bla_ann",[]).filter(x=>x.id!==id));
-    if(MODE==="supabase")return sb("announcements?id=eq."+encodeURIComponent(id),{method:"DELETE"});
+    if(MODE==="supabase")return sbChange("announcements","id",id,{method:"DELETE"});
     if(MODE==="gas")return gas("deleteAnnouncement",{id});
     if(MODE==="artifact"){const db=await DB();if(db)return db.collection("announcements").doc(id).delete();}
   },
@@ -2613,7 +2663,7 @@ const API={
   async deleteAdmin(email){
     email=String(email||"").toLowerCase();
     lset("bla_admins",lget("bla_admins",[]).filter(x=>x.email!==email));
-    if(MODE==="supabase")return sb("admins?email=eq."+encodeURIComponent(email),{method:"DELETE"});
+    if(MODE==="supabase")return sbChange("admins","email",email,{method:"DELETE"});
     if(MODE==="gas")return gas("deleteAdmin",{email});
     if(MODE==="artifact"){const db=await DB();if(db)return db.collection("admins").doc(email).delete();}
   },
@@ -2689,7 +2739,7 @@ const API={
     return [];
   },
   async deleteMessage(id){
-    if(MODE==="supabase")return sb("messages?id=eq."+encodeURIComponent(id),{method:"DELETE"});
+    if(MODE==="supabase")return sbChange("messages","id",id,{method:"DELETE"});
     if(MODE==="gas")return gas("deleteMessage",{id});
     if(MODE==="artifact"){const db=await DB();if(db)return db.collection("messages").doc(String(id)).delete();}
   },
@@ -2697,6 +2747,7 @@ const API={
   canManageImages(){return MODE==="supabase"},
   async listImages(){
     if(MODE!=="supabase")return [];
+    await SBA.ensure();
     const r=await fetch(SB_BASE+"/storage/v1/object/list/program-images",{method:"POST",
       headers:sbHeaders(),body:JSON.stringify({prefix:"",limit:200,sortBy:{column:"created_at",order:"desc"}})});
     if(!r.ok)throw new Error("list failed "+r.status);
@@ -2707,6 +2758,7 @@ const API={
   },
   async deleteImage(name){
     if(MODE!=="supabase")return;
+    await SBA.ensure();
     const r=await fetch(SB_BASE+"/storage/v1/object/program-images/"+encodeURIComponent(name),
       {method:"DELETE",headers:sbHeaders()});
     if(!r.ok)throw new Error("delete failed "+r.status);
@@ -2714,6 +2766,7 @@ const API={
   /* ---- images ---- */
   async uploadImage(blob,name){
     if(MODE==="supabase"){
+      await SBA.ensure();
       const fn="p"+Date.now()+".jpg";
       const r=await fetch(SB_BASE+"/storage/v1/object/program-images/"+fn,{method:"POST",
         headers:{apikey:CFG.SUPABASE_KEY,Authorization:"Bearer "+(SBA.token||CFG.SUPABASE_KEY),
@@ -2734,6 +2787,33 @@ const API={
   }
 };
 
+/* يحدّث المقاعد المشغولة من قاعدة البيانات ويعيد رسم البطاقات إن تغيّر شيء */
+let seatBusy=false;
+async function refreshSeats(){
+  if(seatBusy)return;seatBusy=true;
+  try{
+    const rows=await API.seats();
+    if(!Array.isArray(rows))return;
+    let changed=false;
+    rows.forEach(r=>{const p=P.find(x=>x.id===r.id);if(!p)return;
+      const t=Math.max(0,+r.taken||0);
+      if((+p.taken||0)!==t){p.taken=t;changed=true;}
+      if(r.seats!=null&&(+p.seats||0)!==(+r.seats||0)){p.seats=+r.seats||0;changed=true;}});
+    if(changed){
+      const hp=$("#homeProgs");if(hp)hp.innerHTML=activePrograms().slice(0,3).map(pcard).join("");
+      renderProgs();
+      if($("#ov")&&$("#ov").classList.contains("open")&&$("#mStep1").style.display!=="none")updateSeatNotice();
+    }
+  }catch(e){}
+  finally{seatBusy=false;}
+}
+function startSeatSync(){
+  if(MODE!=="supabase")return;
+  setInterval(()=>{if(document.visibilityState==="visible")refreshSeats();},45000);
+  document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")refreshSeats();});
+  window.addEventListener("pageshow",e=>{if(e.persisted)refreshSeats();});
+}
+
 async function boot(){
   try{
     const d=await API.load();
@@ -2742,6 +2822,7 @@ async function boot(){
   }catch(e){ console.warn("load failed",e); }
   renderSite();
   annLoad();
+  startSeatSync();
   if(MODE==="artifact"){
     const db=await DB();if(!db)return;
     db.doc("content/site").onSnapshot(s=>{if(s.exists&&s.data()&&s.data().data){C=Object.assign(clone(DEF_CONTENT),s.data().data);renderSite();}},()=>{});
@@ -2939,6 +3020,10 @@ $("#submitReg").onclick=async()=>{
     return;
   }
   b.disabled=false;b.innerHTML=EN()?"Confirm and submit":"تأكيد وإرسال الطلب";
+  if(MODE==="supabase")refreshSeats();
+  else if(rec.status!=="waitlist"){const sp=P.find(x=>x.id===rec.programId);
+    if(sp){sp.taken=(+sp.taken||0)+1;const hp=$("#homeProgs");
+      if(hp)hp.innerHTML=activePrograms().slice(0,3).map(pcard).join("");renderProgs();}}
   $("#doneRef").textContent=ref;
   $("#doneMsg").textContent=rec.status==="waitlist"
     ?(EN()?`Thank you, ${rec.name}. You are on the waiting list for "${rec.programEn}". We will contact you if a seat opens.`
@@ -3092,7 +3177,10 @@ const canEdit=()=>MYROLE!=="viewer";
 async function resolveRole(){
   MYEMAIL=(SBA.email||"").toLowerCase();
   if(API.mode!=="supabase"){MYROLE="owner";return true;}
-  try{ADMINS=await API.listAdmins();}catch(e){ADMINS=[];}
+  try{ADMINS=await API.listAdmins();}catch(e){
+    /* انتهت الجلسة ⇒ نرجع لشاشة الدخول بدل فتح اللوحة بلا صلاحية حفظ */
+    if(!SBA.signedIn()){ADMINS=null;authed=false;MYROLE="owner";return false;}
+    ADMINS=[];}
   if(!ADMINS.length){MYROLE="owner";return true;}
   const me=ADMINS.find(u=>u.email===MYEMAIL);
   if(!me||String(me.status).toLowerCase()==="disabled"){MYROLE="";return false;}
@@ -3993,7 +4081,7 @@ function progEditor(id){
    <div class="g2">${f("نوع البرنامج (عربي)","durAr","t","برنامج قصير")}${f("Type (English)","durEn","t","Short")}</div>
    <div class="g2">${f(EN()?"Training hours":"عدد الساعات","hrs","num")}${f(EN()?"Display order":"ترتيب العرض","order","num")}</div>
    <div class="g2">${f(EN()?"Total seats":"إجمالي المقاعد","seats","num")}${f(EN()?"Seats taken":"المقاعد المشغولة","taken","num")}</div>
-   <div class="hint" style="margin:-8px 0 14px">${EN()?"Defaults: 20 on-site and 30 online. You can set a different capacity for each programme.":"القيم الافتراضية: 20 للحضوري و30 لعن بُعد، ويمكن تعديل العدد لكل برنامج."}</div>
+   <div class="hint" style="margin:-8px 0 14px">${EN()?"Defaults: 20 on-site and 30 online. You can set a different capacity for each programme.":"القيم الافتراضية: 20 للحضوري و30 لعن بُعد، ويمكن تعديل العدد لكل برنامج."}${API.mode==="supabase"?(EN()?" Seats taken are counted automatically from enrollment requests.":" المقاعد المشغولة تُحسب تلقائياً من طلبات التسجيل."):""}</div>
    <div class="g2">${f("مخرجات البرنامج (سطر لكل مخرج)","outAr","ta")}${f("Outcomes (one per line)","outEn","ta")}</div>
    <div class="field"><label>${EN()?"Program materials — one per line":"مواد البرنامج — سطر لكل مادة"}</label>
      <textarea rows="4" data-w="mats" dir="ltr" placeholder="دليل المتدرب | https://drive.google.com/file/d/...">${esc(w.mats||"")}</textarea>
@@ -4004,6 +4092,7 @@ function progEditor(id){
    <div class="field"><label><input type="checkbox" id="pmand" ${w.mandatory?"checked":""} style="width:auto;margin-inline-end:8px">${EN()?"Mandatory programme — tracked in the compliance report":"برنامج إلزامي — يُتابَع في تقرير الالتزام"}</label></div>
    <div style="display:flex;gap:10px"><button class="btn btn-g" id="peCancel">${EN()?"Cancel":"إلغاء"}</button>
      <button class="btn btn-p" id="peSave" style="flex:1">${EN()?"Save program":"حفظ البرنامج"}</button></div>`;
+  if(API.mode==="supabase"){const tk=$('[data-w="taken"]');if(tk){tk.readOnly=true;tk.tabIndex=-1;tk.style.opacity=".65";}}
   $("#peBody").addEventListener("input",e=>{const el=e.target.closest("[data-w]");if(!el)return;
     const v=el.type==="number"?(+el.value||0):el.value;setPath(w,el.dataset.w,v);});
   /* اختيار طريقة التقديم */
