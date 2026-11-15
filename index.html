@@ -2089,13 +2089,27 @@ function progById(id){
 }
 function courseWhen(x){
   const p=(x&&typeof x==="object"&&("sess" in x||"dateAr" in x))?x:progById(x&&(x.programId||x.id));
-  if(!p)return {iso:"",label:"",time:"",mode:"",session:""};
+  const empty={iso:"",label:"",labelAr:"",labelEn:"",time:"",
+               mode:"",modeAr:"",modeEn:"",session:"",sessionAr:"",sessionEn:""};
+  if(!p)return empty;
   const a=String(p.sess||"").split("|").map(s=>s.trim());
   const iso=/^\d{4}-\d{2}-\d{2}$/.test(a[0]||"")?a[0]:"";
   const time=(a[1]&&a[2])?(a[1]+" – "+a[2]):(a[1]||"");
-  return {iso, label:pick(p,"dateAr","dateEn")||"", time,
-          mode:modeLabel(p), session:pick(p,"sessionAr","sessionEn")||""};
+  const k=modeOf(p), M=MODES()[k]||{};
+  return {iso, time,
+    labelAr:p.dateAr||"", labelEn:p.dateEn||p.dateAr||"",
+    label:pick(p,"dateAr","dateEn")||"",
+    modeAr:(p.modeAr||"").trim()||M.ar||k, modeEn:(p.modeEn||"").trim()||M.en||k,
+    mode:modeLabel(p),
+    sessionAr:p.sessionAr||"", sessionEn:p.sessionEn||p.sessionAr||"",
+    session:pick(p,"sessionAr","sessionEn")||""};
 }
+/* حالة الطلب بالعربية والإنجليزية معاً — لملفات التصدير */
+const REG_ST_BI={
+  new:["جديد","New"], wait:["قيد المراجعة","Under review"], ok:["مقبول","Accepted"],
+  waitlist:["قائمة انتظار","Waiting list"], attended:["حضر","Attended"],
+  completed:["منجز","Completed"], absent:["لم يحضر","Did not attend"]};
+const stBi=s=>REG_ST_BI[s]||REG_ST_BI.new;
 function pcard(p){
   const tk=TRACKS[p.trk]||TRACKS.tech, s=seatInfo(p),igDelay=((p.order||0)%8)*-.35;
   const few=!s.full&&s.left!==null&&s.left<=3&&s.left>0;
@@ -4011,11 +4025,20 @@ document.addEventListener("click",async e=>{
     if(ct)certPrint(ct); else toast(EN()?"Certificate not found.":"لم يتم العثور على الشهادة.");}
 });
 async function csv(){
-  const head=["ref","name","empNo","dept","managerNo","managerName","phone","email",
-    "programId","program","courseDate","courseDateAr","courseTime","delivery","session","status","submittedAt"];
-  const body=regs.map(r=>{const w=courseWhen(r);
+  /* ترويسة ثنائية اللغة: المفتاح الإنجليزي ثم المقابل العربي */
+  const head=["ref / المرجع","name / الاسم","empNo / الرقم الوظيفي","dept / القسم",
+    "managerNo / رقم المدير","managerName / اسم المدير","phone / الجوال","email / البريد الإلكتروني",
+    "programId / رمز البرنامج","programAr / البرنامج بالعربية","programEn / Program in English",
+    "courseDate / تاريخ الانعقاد","courseDateAr / التاريخ بالعربية","courseDateEn / Date in English",
+    "courseTime / وقت الجلسة","deliveryAr / طريقة التقديم","deliveryEn / Delivery",
+    "sessionAr / الجلسة","sessionEn / Session",
+    "status / رمز الحالة","statusAr / الحالة","statusEn / Status",
+    "submittedAt / تاريخ تقديم الطلب"];
+  const body=regs.map(r=>{const w=courseWhen(r), p=progById(r.programId), st=stBi(r.status);
     return [r.ref,r.name,r.empNo,r.dept,r.managerNo,r.managerName,r.phone,r.email,
-      r.programId,r.programAr,w.iso,w.label,w.time,w.mode,w.session,r.status,r.createdAt]
+      r.programId, r.programAr||(p?p.ar:""), r.programEn||(p?p.en:""),
+      w.iso,w.labelAr,w.labelEn,w.time,w.modeAr,w.modeEn,w.sessionAr,w.sessionEn,
+      r.status,st[0],st[1],r.createdAt]
     .map(v=>`"${String(v==null?"":v).replace(/"/g,'""')}"`).join(",");});
   const out="\uFEFF"+[head.join(",")].concat(body).join("\r\n");
   const fn="bla-registrations-"+new Date().toISOString().slice(0,10)+".csv";
@@ -4523,12 +4546,14 @@ async function paneReports(){
   };
   $("#expAll2").onclick=backupJSON;
   $("#expProg").onclick=()=>{
-    const head=[EN()?"code":"الرمز",EN()?"program":"البرنامج",
-      EN()?"courseDate":"تاريخ الانعقاد",EN()?"courseDateText":"التاريخ بالنص",
-      EN()?"courseTime":"الوقت",EN()?"delivery":"التقديم",
-      EN()?"registered":"المسجلون",EN()?"seats":"المقاعد",EN()?"fill%":"نسبة الإشغال"];
+    const head=["code / الرمز","programAr / البرنامج بالعربية","programEn / Program in English",
+      "courseDate / تاريخ الانعقاد","courseDateAr / التاريخ بالعربية","courseDateEn / Date in English",
+      "courseTime / وقت الجلسة","deliveryAr / طريقة التقديم","deliveryEn / Delivery",
+      "sessionAr / الجلسة","sessionEn / Session",
+      "registered / المسجلون","seats / المقاعد","fill% / نسبة الإشغال"];
     dl(toCSV(head,byProg.map(x=>{const w=courseWhen(x.p);
-      return [x.p.id,pick(x.p,"ar","en"),w.iso,w.label,w.time,w.mode,x.n,x.seats,x.pct+"%"];})),
+      return [x.p.id,x.p.ar||"",x.p.en||"",w.iso,w.labelAr,w.labelEn,w.time,
+              w.modeAr,w.modeEn,w.sessionAr,w.sessionEn,x.n,x.seats,x.pct+"%"];})),
       "bla-programs-report.csv","text/csv");
   };
 }
@@ -4694,8 +4719,8 @@ function managersReport(){
         :`${noMgr} طلباً قُدّم قبل إضافة حقل المدير، لذلك لا يظهر في هذا التقرير.`}</div>`:""}
     </div>`;
   $("#mgrCsv").onclick=()=>dl(toCSV(
-    [EN()?"manager":"المدير",EN()?"managerNo":"رقم المدير",EN()?"employees":"موظفون",
-     EN()?"nominations":"ترشيحات",EN()?"completed":"منجز",EN()?"rate":"نسبة الإنجاز"],
+    ["manager / المدير","managerNo / رقم المدير","employees / موظفون",
+     "nominations / ترشيحات","completed / منجز","rate / نسبة الإنجاز"],
     list.map(m=>[m.name,m.no,m.people,m.reqs,m.done,m.rate+"%"])),"bla-managers-report.csv","text/csv");
 }
 /* ---------- تقرير الالتزام بالبرامج الإلزامية ---------- */
